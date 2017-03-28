@@ -51,7 +51,6 @@ export default class TreeStore {
     return true
   }
   filterNodes (keyworld, searchOptions) {
-    debugger
     const _filterNode = (val, node) => {
       if (!val) return true
       if (searchOptions.useEnglish) {
