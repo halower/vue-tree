@@ -1,4 +1,4 @@
-::: demo
+::: 示例
 ```html
 <template>
   <div style="width:300px;">
