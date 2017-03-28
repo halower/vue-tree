@@ -1,7 +1,9 @@
-### How to run demo 
+### How to run demo
 ```
- npm run dev
+npm run dev
 ```
+### 效果图
+ ![效果图](http://files.cnblogs.com/files/rohelm/jdfw.gif)
 ### 示例
 ```html
 <template>
