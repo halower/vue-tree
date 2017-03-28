@@ -117,7 +117,7 @@ export default {
         showCheckbox: true,  //是否支持多选
         search: {
           useInitial: true, //是否支持首字母搜索
-          useEnglish: false, //是否是因为搜索
+          useEnglish: false, //是否是英文搜索
           customFilter: null // 自定义节点过滤函数
         }
 
