@@ -1,3 +1,7 @@
+### How to run demo 
+```
+ npm run dev
+```
 ### 示例
 ```html
 <template>
