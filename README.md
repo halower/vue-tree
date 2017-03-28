@@ -3,6 +3,7 @@
 
 ### How to run demo
 ```
+npm install
 npm run dev
 ```
 ### 效果图
