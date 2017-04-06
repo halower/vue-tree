@@ -1,24 +1,23 @@
-
-### QQ交流群:255965810
-
-### How to run demo
-```
-npm install
-npm run dev
-```
-### 效果图
- ![效果图](http://files.cnblogs.com/files/rohelm/jdfw.gif)
-### 示例
+::: demo
 ```html
 <template>
   <div style="width:300px;">
     <tree ref ='tree' :treeData="treeData" :options="options" @node-click='handleNode'/>
+    <button @click='getselected'>selected</button>
   </div>
 </template>
 <script>
 import Tree from '../components/tree/tree.vue'
 export default {
   name: 'test',
+  methods: {
+    getselected () {
+      console.log(this.$refs.tree.getSelectedNodeIds())
+    },
+    handleNode (e) {
+      console.log(e)
+    }
+  },
   data () {
     return {
       options: {
@@ -110,18 +109,18 @@ export default {
 }
 </script>
 ```
-### 属性
-| 参数      | 说明    | 类型      | 可选值 | 默认值  |
-|---------- |-------- |---------- |---------- |---------- |
-|options     | 配置项 | Object | — | — |
+### props
+| 参数      | 说明          | 类型      | 可选值                           | 默认值  |
+|---------- |-------------- |---------- |--------------------------------  |-------- |
+| options | 树数据 | Object | — | — |
 | treeData | 指定节点对象数组 | Array[Object] | — | — |
 
 ```
      options: {
         showCheckbox: true,  //是否支持多选
         search: {
-          useInitial: true, //是否支持拼音首字母搜索
-          useEnglish: false, //是否是英文搜索
+          useInitial: true, //是否支持首字母搜索
+          useEnglish: false, //是否是因为搜索
           customFilter: null // 自定义节点过滤函数
         }
 
@@ -138,13 +137,15 @@ export default {
     }
 ```
 ### 方法
-| 方法名      | 说明    | 参数      |
-|---------- |-------- |---------- |
-| getSelectedNodeIds  | 若节点可被选择则返回目前被选中的节点Id所组成的数组 | 被选中的节点Id所组成的数组 |
-| getSelectedNodes  | 若节点可被选择则返回目前被选中的节点组成的数组 | 被选中的节点所组成的数组 |
+`Tree` 拥有如下方法，返回目前被选中的节点数组：
+| 方法名 | 说明 | 参数 |
+|------|--------|------|
+| getSelectedNodeIds | 若节点可被选择（即 `multiple` 为 `true`），<br>则返回目前被选中的节点Id所组成的数组 | — |
+| getSelectedNodes | 若节点可被选择（即 `multiple` 为 `true`），<br>则返回目前被选中的节点所组成的数组 | — |
 
-### 事件
-| 事件名称      | 说明    | 回调参数      |
+
+### Events
+| 事件名称      | 说明    | 回调参数      |
 |---------- |-------- |---------- |
 | node-click  | 节点被点击时的回调 | 共1个参数，节点组件本身。 |
 
