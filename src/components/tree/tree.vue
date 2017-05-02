@@ -36,6 +36,7 @@
     methods: {
       handlecheckedChange (node) {
         this.store.changeCheckStatus(node)
+        this.$emit('handlecheckedChange', node)
       },
       getSelectedNodes () {
         const allnodes = this.store.datas
