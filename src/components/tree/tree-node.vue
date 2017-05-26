@@ -3,7 +3,8 @@
     <li v-for='item in nodeData' v-show="item.visible" :class="[(item.children && item.children.length > 0) ? '':'leaf']">
       <i v-if="item.children && item.children.length > 0"  @click.stop='handleNodeExpand(item)' :class="[item.open? 'tree-open':'tree-close','icon']">
         </i>
-      <input type="checkbox" class="check" v-if="options.showCheckbox" v-model='item.checked' @click.stop="handlecheckedChange(item)" />
+      <input type="checkbox" class="check" :class="{notAllNodes:item.nodeSelectNotAll}" v-if="options.showCheckbox&&options.halfCheckedStatus" v-model='item.checked' @click.stop="handlecheckedChange(item)" />
+      <input type="checkbox" class="check" v-if="options.showCheckbox&&!options.halfCheckedStatus" v-model='item.checked' @click.stop="handlecheckedChange(item)" />
       <span @click="handleNode(item)" :class="{'node-selected':(item.checked && !options.showCheckbox) || item.searched }">{{item.label}}</span>
       <tree-node v-if="item.children && item.children.length > 0" :options="options" @handlecheckedChange="handlecheckedChange" v-show='item.open'
         :tree-data="item.children"></tree-node>
@@ -165,7 +166,7 @@ export default {
   .check {
     display: inline-block;
     position: relative;
-    top: 1px;
+    top: 4px;
   }
   
   .halo-tree .icon {
@@ -187,5 +188,18 @@ export default {
   width:14px;
   height:14px;
   background-image: url("/static/images/search.png");
+}
+.check.notAllNodes{
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  width: 13px;
+}
+.check.notAllNodes:before{
+  content: "";
+  display: inline-block;
+  width: 13px;
+  height:13px;
+  background-image: url("/static/images/half.png");
 }
 </style>

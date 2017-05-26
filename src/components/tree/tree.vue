@@ -31,11 +31,19 @@
     watch: {
       search: function (val) {
         this.store.filterNodes(val, this.options.search)
+      },
+      treeData: function(data){
+        this.store.root = data;
+        return data
       }
     },
     methods: {
       handlecheckedChange (node) {
+        if(this.options.halfCheckedStatus){
+          this.store.changeCheckHalfStatus(node)
+        }else{
         this.store.changeCheckStatus(node)
+        }
         this.$emit('handlecheckedChange', node)
       },
       getSelectedNodes () {
