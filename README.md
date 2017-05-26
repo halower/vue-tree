@@ -6,7 +6,7 @@
 ### How to run demo
 ```
 npm install
-npm run dev
+npm run dev or node build/dev-server
 ```
 ### 效果图
  ![效果图](http://files.cnblogs.com/files/rohelm/jdfw.gif)
@@ -25,7 +25,7 @@ export default {
     return {
       options: {
         showCheckbox: true,
-        halfCheckedStatus: true,//控制父框是否需要半钩状态
+        halfCheckedStatus: true,//控制父框是否需要半钩状态( lily7129 贡献代码)
         search: {
           useInitial: true,
           useEnglish: false,
@@ -131,7 +131,8 @@ export default {
 
 ```
      options: {
-        showCheckbox: true,  //是否支持多选
+        showCheckbox: true,  //是否支持多选,
+        halfCheckedStatus: true,//控制父框是否需要半钩状态,
         search: {
           useInitial: true, //是否支持拼音首字母搜索
           useEnglish: false, //是否是英文搜索
