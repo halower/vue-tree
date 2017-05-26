@@ -6,8 +6,10 @@
 ### How to run demo
 ```
 npm install
-npm run dev or node build/dev-server
+npm run dev 
 ```
+### 在线Demo
+![Demo](http://120.24.189.103:9008)
 ### 效果图
  ![效果图](http://files.cnblogs.com/files/rohelm/jdfw.gif)
 ### 示例
