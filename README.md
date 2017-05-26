@@ -146,7 +146,8 @@ export default {
       checked: false, //是否被选中
       parentId: null, //父级节点Id
       visible: true, //是否可见
-      searched: false, //是否是搜索值
+      searched: false, //是否是搜索值,
+      nodeSelectNotAll: false,//表示父框可以半钩状态
       children: [] //子节点
     }
 ```
