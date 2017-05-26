@@ -19,7 +19,7 @@ npm run dev
 <script>
 import Tree from '../components/tree/tree.vue'
 export default {
-  name: 'hello',
+  name: 'test',
   data () {
     return {
       options: {
