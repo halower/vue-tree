@@ -1,55 +1,55 @@
 const pinyin = require('chinese-to-pinyin')
 export default class TreeStore {
-  constructor (options) {
-    for (let option in options) {
-      if (options.hasOwnProperty(option)) {
-        this[option] = options[option]
-      }
-    }
-    this.datas = new Map()
-    const _traverseNodes = (root) => {
-      for (let node of root) {
-        this.datas.set(node.id, node)
-        if (node.children && node.children.length > 0) _traverseNodes(node.children)
-      }
-    }
-    _traverseNodes(this.root)
-  }
-
-  changeCheckStatus (node) {
-    const _traverseUp = (node) => {
-      if (node.checked && node.parentId) {
-        let parent = this.getNode(node.parentId)
-        parent.checked = this.sameSilibingChecked(node.parentId, node.id)
-        _traverseUp(parent)
-      } else {
-        if (!node.checked && node.parentId) {
-          let upparent = this.getNode(node.parentId)
-          upparent.checked = false
-          if (upparent.parentId) {
-            _traverseUp(upparent)
-          }
+    constructor(options) {
+        for (let option in options) {
+            if (options.hasOwnProperty(option)) {
+                this[option] = options[option]
+            }
         }
-      }
+        this.datas = new Map()
+        const _traverseNodes = (root) => {
+            for (let node of root) {
+                this.datas.set(node.id, node)
+                if (node.children && node.children.length > 0) _traverseNodes(node.children)
+            }
+        }
+        _traverseNodes(this.root)
     }
 
-    const _traverseDown = (node) => {
-      if (node.children && node.children.length > 0) {
-        for (let child of node.children) {
-          child.checked = node.checked
-          _traverseDown(child)
+    changeCheckStatus(node) {
+        const _traverseUp = (node) => {
+            if (node.checked && node.parentId) {
+                let parent = this.getNode(node.parentId)
+                parent.checked = this.sameSilibingChecked(node.parentId, node.id)
+                _traverseUp(parent)
+            } else {
+                if (!node.checked && node.parentId) {
+                    let upparent = this.getNode(node.parentId)
+                    upparent.checked = false
+                    if (upparent.parentId) {
+                        _traverseUp(upparent)
+                    }
+                }
+            }
         }
-      }
+
+        const _traverseDown = (node) => {
+            if (node.children && node.children.length > 0) {
+                for (let child of node.children) {
+                    child.checked = node.checked
+                    _traverseDown(child)
+                }
+            }
+        }
+        _traverseUp(node)
+        _traverseDown(node)
     }
-    _traverseUp(node)
-    _traverseDown(node)
-  }
     changeCheckHalfStatus(node) {
         let flag = false;
-        //Èç¹û¹´Ñ¡µÄÊÇ×Ó½Úµã£¬¸¸½ÚµãÄ¬ÈÏ´òÉÏ¹´
+        //å¦‚æœå‹¾é€‰çš„æ˜¯å­èŠ‚ç‚¹ï¼Œçˆ¶èŠ‚ç‚¹é»˜è®¤æ‰“ä¸Šå‹¾
         const _traverseUp = (node, flag) => {
             let parent = null;
-            if (node.checked) { //´ò¹³
+            if (node.checked) { //æ‰“é’©
                 if (node.parentId) {
                     parent = this.getNode(node.parentId)
                     if (flag) {
@@ -58,14 +58,14 @@ export default class TreeStore {
                         _traverseUp(parent, true)
                     } else {
                         parent.checked = true;
-                        parent.nodeSelectNotAll = this.sameSilibingHalfChecked(true, parent, node.parentId, node.id) === 'half' ? true : false; //·µ»ØtrueÔòÈ«¹³£¬falseÎª°ë¹³
+                        parent.nodeSelectNotAll = this.sameSilibingHalfChecked(true, parent, node.parentId, node.id) === 'half' ? true : false; //è¿”å›trueåˆ™å…¨é’©ï¼Œfalseä¸ºåŠé’©
                         _traverseUp(parent)
                     }
                 }
-            } else { //È¥¹³
+            } else { //å»é’©
                 if (node.parentId) {
                     parent = this.getNode(node.parentId)
-                    if (this.sameSilibingHalfChecked(false, parent, node.parentId, node.id) === "none") { //·µ»ØtrueÔòÈ«Ã»¹³£¬falseÎª°ë¹³
+                    if (this.sameSilibingHalfChecked(false, parent, node.parentId, node.id) === "none") { //è¿”å›trueåˆ™å…¨æ²¡é’©ï¼Œfalseä¸ºåŠé’©
                         parent.checked = false
                         parent.nodeSelectNotAll = false
                     } else {
@@ -78,7 +78,7 @@ export default class TreeStore {
         }
         const _traverseDown = (node) => {
             if (node.children && node.children.length > 0) {
-                if (node.nodeSelectNotAll) { //½ÚµãÃ»¹´Ñ¡
+                if (node.nodeSelectNotAll) { //èŠ‚ç‚¹æ²¡å‹¾é€‰
                     node.nodeSelectNotAll = false
                 }
                 for (let child of node.children) {
@@ -106,34 +106,34 @@ export default class TreeStore {
         let sbIds = []
         let currentNode = this.getNode(currentId)
         parent.children.forEach(x => {
-            if (!currentNode.parentSelectNotAll && x.id !== currentId) sbIds.push(x.id) //³ıÈ¥µ±Ç°½ÚµãµÄÊ£ÏÂ½Úµã
+            if (!currentNode.parentSelectNotAll && x.id !== currentId) sbIds.push(x.id) //é™¤å»å½“å‰èŠ‚ç‚¹çš„å‰©ä¸‹èŠ‚ç‚¹
         })
 
-        if (status) { //´ò¹³
+        if (status) { //æ‰“é’©
             if (sbIds.length !== 0) {
-                for (let id of sbIds) { //×Ó½ÚµãÖ»ÒªÓĞÒ»¸ö±»Ñ¡ÖĞÔò¸¸¿ò´òºÚ£¬È«Ñ¡´ò¹³£¬È«Ã»ÓĞ±»Ñ¡ÎŞ×´Ì¬
+                for (let id of sbIds) { //å­èŠ‚ç‚¹åªè¦æœ‰ä¸€ä¸ªè¢«é€‰ä¸­åˆ™çˆ¶æ¡†æ‰“é»‘ï¼Œå…¨é€‰æ‰“é’©ï¼Œå…¨æ²¡æœ‰è¢«é€‰æ— çŠ¶æ€
                     let node = this.getNode(id)
-                    if (!node.checked || node.parentSelectNotAll) { //½ÚµãÃ»¹´Ñ¡
-                        return "half" //±íÊ¾¸¸¿ò°ë¹³µÄ×´Ì¬
+                    if (!node.checked || node.parentSelectNotAll) { //èŠ‚ç‚¹æ²¡å‹¾é€‰
+                        return "half" //è¡¨ç¤ºçˆ¶æ¡†åŠé’©çš„çŠ¶æ€
                     }
                 }
             } else {
                 if (currentNode.parentSelectNotAll) {
-                    return "half" //±íÊ¾È«¹³µÄ×´Ì¬
+                    return "half" //è¡¨ç¤ºå…¨é’©çš„çŠ¶æ€
                 }
             }
-            return "all" //±íÊ¾È«¹³µÄ×´Ì¬
-        } else { //È¥¹³
+            return "all" //è¡¨ç¤ºå…¨é’©çš„çŠ¶æ€
+        } else { //å»é’©
             if (sbIds.length !== 0) {
-                for (let id of sbIds) { //×Ó½ÚµãÖ»ÒªÓĞÒ»¸ö±»Ñ¡ÖĞÔò¸¸¿ò´òºÚ£¬È«Ñ¡´ò¹³£¬È«Ã»ÓĞ±»Ñ¡ÎŞ×´Ì¬
+                for (let id of sbIds) { //å­èŠ‚ç‚¹åªè¦æœ‰ä¸€ä¸ªè¢«é€‰ä¸­åˆ™çˆ¶æ¡†æ‰“é»‘ï¼Œå…¨é€‰æ‰“é’©ï¼Œå…¨æ²¡æœ‰è¢«é€‰æ— çŠ¶æ€
                     let node = this.getNode(id)
-                    if (node.checked || node.parentSelectNotAll) { //ÓĞ½Úµã±»¹´Ñ¡£¬¸¸¿ò°ë¹³µÄ×´Ì¬
+                    if (node.checked || node.parentSelectNotAll) { //æœ‰èŠ‚ç‚¹è¢«å‹¾é€‰ï¼Œçˆ¶æ¡†åŠé’©çš„çŠ¶æ€
                         return "half"
                     }
                 }
             } else {
                 if (currentNode.parentSelectNotAll) {
-                    return "half" //±íÊ¾È«¹³µÄ×´Ì¬
+                    return "half" //è¡¨ç¤ºå…¨é’©çš„çŠ¶æ€
                 }
             }
             return "none"
@@ -145,65 +145,65 @@ export default class TreeStore {
         }
         return null
     }
-  isNullOrEmpty (world) {
-    if (world) {
-      return world.trim().length === 0
+    isNullOrEmpty(world) {
+        if (world) {
+            return world.trim().length === 0
+        }
+        return true
     }
-    return true
-  }
-  filterNodes (keyworld, searchOptions) {
-    const _filterNode = (val, node) => {
-      if (!val) return true
-      if (searchOptions.useEnglish) {
-        return node.label.indexOf(val) !== -1
-      } else {
-        return this.toPinYin(node.label, searchOptions.useInitial).indexOf(this.toPinYin(keyworld.toLowerCase(), searchOptions.useInitial, true)) !== -1
-      }
-    }
+    filterNodes(keyworld, searchOptions) {
+        const _filterNode = (val, node) => {
+            if (!val) return true
+            if (searchOptions.useEnglish) {
+                return node.label.indexOf(val) !== -1
+            } else {
+                return this.toPinYin(node.label, searchOptions.useInitial).indexOf(this.toPinYin(keyworld.toLowerCase(), searchOptions.useInitial, true)) !== -1
+            }
+        }
 
-    const _syncNodeStatus = (node) => {
-      if (node.parentId) {
-        let parentNode = this.getNode(node.parentId)
-        if (node.visible) {
-          parentNode.visible = node.visible
-          _syncNodeStatus(parentNode)
+        const _syncNodeStatus = (node) => {
+            if (node.parentId) {
+                let parentNode = this.getNode(node.parentId)
+                if (node.visible) {
+                    parentNode.visible = node.visible
+                    _syncNodeStatus(parentNode)
+                }
+            }
         }
-      }
+        let filterFunc = (searchOptions.customFilter && typeof(searchOptions.customFilter) === 'function') ? searchOptions.customFilter : _filterNode
+        this.datas.forEach(node => {
+            node.visible = filterFunc(keyworld, node)
+            node.searched = false
+            if (node.visible) {
+                if (!this.isNullOrEmpty(keyworld)) {
+                    node.searched = true
+                }
+                _syncNodeStatus(node)
+            }
+        })
     }
-    let filterFunc = (searchOptions.customFilter && typeof (searchOptions.customFilter) === 'function') ? searchOptions.customFilter : _filterNode
-    this.datas.forEach(node => {
-      node.visible = filterFunc(keyworld, node)
-      node.searched = false
-      if (node.visible) {
-        if (!this.isNullOrEmpty(keyworld)) {
-          node.searched = true
-        }
-        _syncNodeStatus(node)
-      }
-    })
-  }
-  getNode (key) {
-    return this.datas.get(key)
-  }
-  toPinYin (keyworld, useInitial) {
-    if (/^[a-zA-Z]/.test(keyworld)) {
-      return keyworld
+    getNode(key) {
+        return this.datas.get(key)
     }
-    let fullpinyin = pinyin(keyworld, {
-      filterChinese: true,
-      noTone: true
-    })
-    if (useInitial) {
-      let res = ''
-      fullpinyin.split(' ').forEach(w => {
-        if (!(/[a-zA-Z]/.test(w))) {
-          res += w
-        } else {
-          res += w.slice(0, 1)
+    toPinYin(keyworld, useInitial) {
+        if (/^[a-zA-Z]/.test(keyworld)) {
+            return keyworld
         }
-      })
-      return res
+        let fullpinyin = pinyin(keyworld, {
+            filterChinese: true,
+            noTone: true
+        })
+        if (useInitial) {
+            let res = ''
+            fullpinyin.split(' ').forEach(w => {
+                if (!(/[a-zA-Z]/.test(w))) {
+                    res += w
+                } else {
+                    res += w.slice(0, 1)
+                }
+            })
+            return res
         }
         return fullpinyin
-  }
+    }
 }
