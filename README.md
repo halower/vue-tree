@@ -1,4 +1,5 @@
-﻿### develop logs
+
+### develop logs
 - 2017-5-2: 支持下拉树, add combotree
 - 2017-5-26: 添加父节点半选状态框 by  lily7129 
 ### QQ交流群:255965810
