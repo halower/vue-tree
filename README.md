@@ -1,3 +1,4 @@
+
 ### develop logs
 - 2017-5-2: 支持下拉树, add combotree
 - 2017-5-26: 添加父节点半选状态框 by  lily7129 
@@ -6,7 +7,7 @@
 ### How to run demo
 ```
 npm install
-npm run dev
+npm run dev 
 ```
 ### 在线Demo
  [Demo](http://120.24.189.103:9008)
