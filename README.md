@@ -1,5 +1,6 @@
 ### develop logs
-2017-5-2: 支持下拉树, add combotree
+- 2017-5-2: 支持下拉树, add combotree
+- 2017-5-26: 添加父节点半选状态框 by  lily7129 
 ### QQ交流群:255965810
 
 ### How to run demo
@@ -7,6 +8,8 @@
 npm install
 npm run dev
 ```
+### 在线Demo
+ [Demo](http://120.24.189.103:9008)
 ### 效果图
  ![效果图](http://files.cnblogs.com/files/rohelm/jdfw.gif)
 ### 示例
@@ -24,7 +27,7 @@ export default {
     return {
       options: {
         showCheckbox: true,
-        halfCheckedStatus: true,//控制父框是否需要半钩状态
+        halfCheckedStatus: true,//控制父框是否需要半钩状态( lily7129 贡献代码)
         search: {
           useInitial: true,
           useEnglish: false,
@@ -130,7 +133,8 @@ export default {
 
 ```
      options: {
-        showCheckbox: true,  //是否支持多选
+        showCheckbox: true,  //是否支持多选,
+        halfCheckedStatus: true,//控制父框是否需要半钩状态,
         search: {
           useInitial: true, //是否支持拼音首字母搜索
           useEnglish: false, //是否是英文搜索
@@ -145,7 +149,8 @@ export default {
       checked: false, //是否被选中
       parentId: null, //父级节点Id
       visible: true, //是否可见
-      searched: false, //是否是搜索值
+      searched: false, //是否是搜索值,
+      nodeSelectNotAll: false,//表示父框可以半钩状态
       children: [] //子节点
     }
 ```
