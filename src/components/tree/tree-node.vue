@@ -3,8 +3,10 @@
     <li v-for='item in nodeData' v-show="item.visible" :class="[(item.children && item.children.length > 0) ? '':'leaf']">
       <i v-if="item.children && item.children.length > 0"  @click.stop='handleNodeExpand(item)' :class="[item.open? 'tree-open':'tree-close','icon']">
         </i>
-      <input type="checkbox" class="check" :class="{notAllNodes:item.nodeSelectNotAll}" v-if="options.showCheckbox&&options.halfCheckedStatus" v-model='item.checked' @click.stop="handlecheckedChange(item)" />
-      <input type="checkbox" class="check" v-if="options.showCheckbox&&!options.halfCheckedStatus" v-model='item.checked' @click.stop="handlecheckedChange(item)" />
+      <div class="inputCheck" :class="{notAllNodes:item.nodeSelectNotAll}" :style="{width:inputWidth+'px', height:inputWidth+'px'}">
+        <input type="checkbox" class="check" v-if="options.showCheckbox&&options.halfCheckedStatus" v-model='item.checked' @change="handlecheckedChange(item)" />
+      </div>
+      <input type="checkbox" class="check" v-if="options.showCheckbox&&!options.halfCheckedStatus" v-model='item.checked' @change="handlecheckedChange(item)" />
       <span @click="handleNode(item)" :class="{'node-selected':(item.checked && !options.showCheckbox) || item.searched }">{{item.label}}</span>
       <tree-node v-if="item.children && item.children.length > 0" :options="options" @handlecheckedChange="handlecheckedChange" v-show='item.open'
         :tree-data="item.children"></tree-node>
@@ -37,7 +39,22 @@ export default {
     }
     this.nodeData = (this.treeData || []).slice(0)
   },
+  computed:{
+    inputWidth: function(){
+      if(this.checkFirfox()){
+        return 14
+      }
+      return 13
+    }
+  },
   methods: {
+    checkFirfox(){
+      let u = navigator.userAgent
+        if (u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1){
+          return true
+        }
+        return false
+    },
     handleNodeExpand (node) {
       node.open = !node.open
     },
@@ -189,17 +206,27 @@ export default {
   height:14px;
   background-image: url("/static/images/search.png");
 }
-.check.notAllNodes{
+/*.check.notAllNodes{
   -webkit-appearance: none;
   -moz-appearance: none;
   -ms-appearance: none;
   width: 13px;
+}*/
+.inputCheck{
+  display: inline-block;
+  position: relative;
 }
-.check.notAllNodes:before{
+.inputCheck.notAllNodes:before{
   content: "";
   display: inline-block;
-  width: 13px;
-  height:13px;
-  background-image: url("/static/images/half.png");
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-30%,-5%,0);
+  /*background-image: url("/static/images/half.png");*/
+  background-image: url("/static/images/half.jpg");
 }
 </style>
