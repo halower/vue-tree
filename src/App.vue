@@ -5,9 +5,11 @@
 </template>
 <script>
 import Tree from './components/tree/tree.vue'
+let that
 export default {
   name: 'app',
   data () {
+    that = this
     return {
       options: {
         showCheckbox: true,
@@ -18,7 +20,17 @@ export default {
           customFilter: null
         }
       },
-      treeData: [
+      treeData: []
+    }
+  },
+  mounted: function(resolve){
+    this.loadTreeData(resolve);
+  },
+  methods: {
+    loadTreeData: function(resolve) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+            that.treeData = [
         {
           id: 1,
           label: '一级节点',
@@ -101,6 +113,9 @@ export default {
           ]
         }
       ]
+              resolve(that.treeData)
+          }, 100)
+      })
     }
   },
   components: {
