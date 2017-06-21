@@ -18,7 +18,11 @@
     },
     data () {
       return {
-        search: null
+        search: null,
+        store: {
+          root:[],
+          last:null
+        }
       }
     },
     created () {
@@ -33,7 +37,10 @@
         this.store.filterNodes(val, this.options.search)
       },
       treeData: function(data){
-        this.store.root = data;
+        this.store = new TreeStore({
+          root: (this.treeData || []).slice(0),
+          last: null
+        })
       }
     },
     methods: {

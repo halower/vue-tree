@@ -9,7 +9,9 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "babel-polyfill": "^6.23.0",
     "chinese-to-pinyin": "^0.1.6",
+    "es6-promise": "^4.1.0",
     "vue": "^2.2.2"
   },
   "devDependencies": {
