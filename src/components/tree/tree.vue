@@ -34,7 +34,6 @@
       },
       treeData: function(data){
         this.store.root = data;
-        return data
       }
     },
     methods: {
