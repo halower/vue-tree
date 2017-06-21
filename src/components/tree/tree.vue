@@ -41,7 +41,6 @@
           root: (this.treeData || []).slice(0),
           last: null
         })
-        return data
       }
     },
     methods: {
