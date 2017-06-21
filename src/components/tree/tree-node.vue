@@ -3,7 +3,7 @@
     <li v-for='item in nodeData' v-show="item.visible" :class="[(item.children && item.children.length > 0) ? '':'leaf']">
       <i v-if="item.children && item.children.length > 0"  @click.stop='handleNodeExpand(item)' :class="[item.open? 'tree-open':'tree-close','icon']">
         </i>
-      <div class="inputCheck" :class="{notAllNodes:item.nodeSelectNotAll}" :style="{width:inputWidth+'px', height:inputWidth+'px'}">
+      <div class="inputCheck" :class="{notAllNodes:item.nodeSelectNotAll}" :style="{width:inputWidth+'px', height:inputWidth+'px'}" @click="walkCheckBox(item)" >
         <input type="checkbox" class="check" v-if="options.showCheckbox&&options.halfCheckedStatus" v-model='item.checked' @change="handlecheckedChange(item)" />
       </div>
       <input type="checkbox" class="check" v-if="options.showCheckbox&&!options.halfCheckedStatus" v-model='item.checked' @change="handlecheckedChange(item)" />
@@ -47,6 +47,11 @@ export default {
       return 13
     }
   },
+  watch: {
+    treeData: function(data){
+      this.nodeData = (data || []).slice(0)
+    }
+  },
   methods: {
     checkFirfox(){
       let u = navigator.userAgent
@@ -54,6 +59,12 @@ export default {
           return true
         }
         return false
+    },
+    walkCheckBox(node){
+      if(node.nodeSelectNotAll){
+        node.checked = !node.checked
+        this.handlecheckedChange(node)
+      }
     },
     handleNodeExpand (node) {
       node.open = !node.open
