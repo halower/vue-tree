@@ -13,7 +13,7 @@ npm install
 npm run dev 
 ```
 ### 在线Demo
- [Demo](http://120.24.189.103:9008)
+ [点击进入线上效果](https://halower.github.io/vue2-tree/)
 ### 效果图
  ![效果图](http://files.cnblogs.com/files/rohelm/jdfw.gif)
 ### 示例
