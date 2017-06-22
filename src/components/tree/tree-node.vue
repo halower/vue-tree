@@ -1,15 +1,30 @@
 <template>
   <ul>
     <li v-for='item in nodeData' v-show="item.visible" :class="[(item.children && item.children.length > 0) ? '':'leaf']">
-      <i v-if="item.children && item.children.length > 0"  @click.stop='handleNodeExpand(item)' :class="[item.open? 'tree-open':'tree-close','icon']">
-        </i>
-      <div class="inputCheck" :class="{notAllNodes:item.nodeSelectNotAll}" :style="{width:inputWidth+'px', height:inputWidth+'px'}" @click="walkCheckBox(item)" >
-        <input type="checkbox" class="check" v-if="options.showCheckbox&&options.halfCheckedStatus" v-model='item.checked' @change="handlecheckedChange(item)" />
+      <i v-if="item.children && item.children.length > 0"
+         @click.stop='handleNodeExpand(item)'
+         :class="[item.open? 'tree-open':'tree-close','icon']">
+      </i>
+      <div class="inputCheck"
+         :class="{notAllNodes:item.nodeSelectNotAll}"
+         :style="{width:inputWidth+'px', height:inputWidth+'px'}"
+         @click="walkCheckBox(item)" >
+      <input type="checkbox" class="check"
+          v-if="options.showCheckbox && options.halfCheckedStatus  &&  !item.nodeSelectNotAll"
+          v-model='item.checked' 
+         @change="handlecheckedChange(item)" />
       </div>
-      <input type="checkbox" class="check" v-if="options.showCheckbox&&!options.halfCheckedStatus" v-model='item.checked' @change="handlecheckedChange(item)" />
-      <span @click="handleNode(item)" :class="{'node-selected':(item.checked && !options.showCheckbox) || item.searched }">{{item.label}}</span>
-      <tree-node v-if="item.children && item.children.length > 0" :options="options" @handlecheckedChange="handlecheckedChange" v-show='item.open'
-        :tree-data="item.children"></tree-node>
+      <span
+         @click="handleNode(item)" 
+        :class="{'node-selected':(item.checked && !options.showCheckbox) || item.searched }">
+         {{item.label}}
+      </span>
+      <tree-node v-if="item.children && item.children.length > 0"
+        :options="options"
+        @handlecheckedChange="handlecheckedChange" 
+        v-show='item.open'
+        :tree-data="item.children">
+      </tree-node>
     </li>
   </ul>
 </template>
