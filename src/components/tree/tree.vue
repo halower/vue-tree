@@ -104,7 +104,7 @@
   .search{
   width:14px;
   height:14px;
-  background-image: url("/static/images/search.png");
+  background-image: url("../../assets/search.png");
 }
 </style>
 

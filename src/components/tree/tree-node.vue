@@ -219,18 +219,18 @@ export default {
   .tree-close{
   width:14px;
   height:14px;
-  background-image: url("/static/images/treeOpen-1.png");
+  background-image: url("../../assets/treeOpen-1.png");
 }
 
 .tree-open{
   width:14px;
   height:14px;
-  background-image: url("/static/images/treeClose-2.png");
+  background-image: url("../../assets/treeClose-2.png");
 }
 .search{
   width:14px;
   height:14px;
-  background-image: url("/static/images/search.png");
+  background-image: url("../../assets/search.png");
 }
 /*.check.notAllNodes{
   -webkit-appearance: none;
@@ -252,7 +252,7 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate3d(-30%,-5%,0);
-  /*background-image: url("/static/images/half.png");*/
-  background-image: url("/static/images/half.jpg");
+  /*background-image: url("/../../assets/half.png");*/
+  background-image: url("../../assets/half.jpg");
 }
 </style>
