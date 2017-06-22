@@ -5,7 +5,7 @@
 </template>
 <script>
 import Tree from './components/tree/tree.vue'
-let that
+let that = null
 export default {
   name: 'app',
   data () {
