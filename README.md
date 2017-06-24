@@ -6,7 +6,10 @@
 - 2017-6-08: 修复火狐复选事件的bug 
 - 2017-6-21: 修复动态渲染
 ### QQ交流群:255965810
-
+### How to install the plugin
+```
+ npm install vue2-tree or cnpm install vue2-tree (国内)
+```
 ### How to run demo
 ```
 npm install
