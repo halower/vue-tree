@@ -10,14 +10,14 @@
     </div>
 </template>
 <script>
-    import Vue from 'vue'
-    import axios from 'axios'
-    import Tree from './components/tree/tree.vue'
+    import Vue from 'vue';
+    import axios from 'axios';
+    import Tree from './components/tree/tree.vue';
     let that = null
     export default {
         name: 'app',
         data () {
-            that = this
+            that = this;
             return {
                 options: {
                     showCheckbox: false,
@@ -25,8 +25,8 @@
 
                     lazy: true,
                     load: this.loadingChild,
-
                     showSearch: false,
+
                     search: {
                         useInitial: true,
                         useEnglish: false,
@@ -49,10 +49,10 @@
              */
             generateKey (treeData = [], parentKey) {
                 treeData = treeData.map((item, i) => {
-                    item.key = parentKey + '-' + i.toString()
-                    return item
+                    item.key = parentKey + '-' + i.toString();
+                    return item;
                 })
-                return treeData
+                return treeData;
             },
             loadTreeData: function () {
                 let treeData = [
@@ -76,37 +76,37 @@
                         visible: true,
                         searched: false
                     }
-                ]
+                ];
 
-                this.treeData = this.generateKey(treeData, 0)
+                this.treeData = this.generateKey(treeData, 0);
             },
             async loadingChild (node, index) {
                 try {
-                    let tem
-                    let postions = node.key.split('-')
-                    let data = await axios.get(' http://172.16.0.104:8082/child.json')
+                    let tem;
+                    let postions = node.key.split('-');
+                    let data = await axios.get(' http://172.16.0.104:8082/child.json');
 
                     for (let [index, item] of postions.entries()) {
                         switch (index) {
                             case 0:
                                 break;
                             case 1:
-                                tem = this.treeData[item]
+                                tem = this.treeData[item];
                                 break;
                             default:
-                                tem = tem.children[item]
+                                tem = tem.children[item];
                         }
                     }
                     // set Children
-                    Vue.set(tem, 'children', this.generateKey(data.data, node.key) )
+                    Vue.set(tem, 'children', this.generateKey(data.data, node.key) );
 
-                    Promise.resolve(data)
+                    Promise.resolve(data);
                 } catch (e) {
-                    Promise.reject(e)
+                    Promise.reject(e);
                 }
             },
             itemClick (node) {
-                console.log(node.key)
+                console.log(node.key);
             }
         },
         components: {
