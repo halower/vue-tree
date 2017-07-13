@@ -16,6 +16,10 @@ export default class TreeStore {
         _traverseNodes(this.root)
     }
 
+    /**
+     * 控制 checkbox 选中状态
+     * @param node
+     */
     changeCheckStatus(node) {
         const _traverseUp = (node) => {
             if (node.checked && node.parentId) {
@@ -90,6 +94,13 @@ export default class TreeStore {
         _traverseUp(node)
         _traverseDown(node)
     }
+
+    /**
+     * 同级的是否全部 check
+     * @param parentId
+     * @param currentId
+     * @returns {boolean}
+     */
     sameSilibingChecked(parentId, currentId) {
         let parent = this.datas.get(parentId)
         let sbIds = []
@@ -102,6 +113,15 @@ export default class TreeStore {
         }
         return true
     }
+
+    /**
+     * 控制父框是否需要半钩状态
+     * @param status
+     * @param parent
+     * @param parentId
+     * @param currentId
+     * @returns {*}
+     */
     sameSilibingHalfChecked(status, parent, parentId, currentId) {
         let sbIds = []
         let currentNode = this.getNode(currentId)
