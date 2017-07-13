@@ -19,11 +19,13 @@
     "type": "git",
     "url": "git+https://github.com/halower/vue2-tree.git"
   },
-   "keywords": [
-    "vue", "vue-tree"
+  "keywords": [
+    "vue",
+    "vue-tree"
   ],
   "devDependencies": {
-    "autoprefixer": "^6.7.2",
+    "autoprefixer": "^6.7.7",
+    "axios": "^0.16.2",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-runtime": "^6.22.0",
