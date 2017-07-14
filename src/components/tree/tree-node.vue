@@ -1,7 +1,7 @@
 <template>
     <ul>
         <li v-for='(item, index) of nodeData'
-            v-show="item.visible"
+            v-show="!item.hasOwnProperty('visible') || item.visible"
             :key="item.key"
         >
             <i v-if=" item.children && item.children.length > 0  ||  options.hasOwnProperty('lazy') && !item.hasOwnProperty('loaded') "
@@ -107,7 +107,7 @@
                     Vue.set(node, 'open', false)
                     return false
                 }
-                if (node.hasOwnProperty('children')) {
+                if (node.hasOwnProperty('children') && node.children && node.children.length > 0) {
                     Vue.set(node, 'open', true)
                     return
                 }
@@ -133,7 +133,6 @@
                 this.$emit('handlecheckedChange', node)
             },
             handleNode (node) {
-                debugger
                 if (this.tree.store.last) {
                     if (this.tree.store.last.key === node.key) {
                         this.tree.store.last.checked = !this.tree.store.last.checked

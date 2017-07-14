@@ -1,9 +1,17 @@
 {
-  "name": "vue2-tree-origin",
-  "version": "1.0.0",
+  "name": "vue2-lazy-tree",
+  "version": "1.0.6",
   "description": "A Vue.js project",
   "author": "jackwang <wangxichao001@gmail.com>",
-  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ddtramp/vue2-tree.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ddtramp/vue2-tree/issues"
+  },
+  "homepage": "https://github.com/ddtramp/vue2-tree.git",
+  "main": "./src/components/tree/tree.vue",
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
@@ -56,6 +64,7 @@
     "node": ">= 4.0.0",
     "npm": ">= 3.0.0"
   },
+  "license": "MIT",
   "browserslist": [
     "> 1%",
     "last 2 versions",
