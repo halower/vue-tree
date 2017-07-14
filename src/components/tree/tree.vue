@@ -162,17 +162,6 @@
         vertical-align: middle;
     }
 
-    .tree-close {
-        width: 14px;
-        height: 14px;
-        background-image: url("../../assets/treeOpen-1.png");
-    }
-
-    .tree-open {
-        width: 14px;
-        height: 14px;
-        background-image: url("../../assets/treeClose-2.png");
-    }
     .search {
         width: 14px;
         height: 14px;
