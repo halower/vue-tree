@@ -28,7 +28,10 @@ npm run build --report
 
 -----
 ### 贡献者名单
+
  - lily7129
+ - ddtramp
+ 
 ### develop logs
 - 2017-5-2: 支持下拉树, add combotree
 - 2017-5-26: 添加父节点半选状态框 
