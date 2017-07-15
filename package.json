@@ -1,67 +1,70 @@
 {
-  "name": "vue-tree",
-  "version": "1.0.0",
-  "description": "vue-tree ",
-  "author": "halower (youzisoft@qq.com)",
-  "private": true,
-  "scripts": {
-    "dev": "node build/dev-server.js",
-    "build": "node build/build.js",
-    "gh": "gh-pages pages"
-  },
-  "dependencies": {
-    "babel-polyfill": "^6.23.0",
-    "chinese-to-pinyin": "^0.1.6",
-    "es6-promise": "^4.1.0",
-    "vue": "^2.2.2"
-  },
+  "name": "vue2-lazy-tree",
+  "version": "1.0.6",
+  "description": "A Vue.js project",
+  "author": "jackwang <wangxichao001@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/halower/vue2-tree.git"
+    "url": "git+https://github.com/ddtramp/vue2-tree.git"
   },
-   "keywords": [
-    "vue", "vue-tree"
-  ],
+  "bugs": {
+    "url": "https://github.com/ddtramp/vue2-tree/issues"
+  },
+  "homepage": "https://github.com/ddtramp/vue2-tree.git",
+  "main": "./src/components/tree/tree.vue",
+  "scripts": {
+    "dev": "node build/dev-server.js",
+    "start": "node build/dev-server.js",
+    "build": "node build/build.js"
+  },
+  "dependencies": {
+    "chinese-to-pinyin": "^0.1.6",
+    "vue": "^2.3.3",
+    "vue-router": "^2.6.0"
+  },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
+    "axios": "^0.16.2",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-runtime": "^6.22.0",
-    "babel-preset-env": "^1.2.1",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-env": "^1.3.2",
     "babel-preset-stage-2": "^6.22.0",
     "babel-register": "^6.22.0",
     "chalk": "^1.1.3",
+    "chinese-to-pinyin": "^0.1.6",
     "connect-history-api-fallback": "^1.3.0",
     "copy-webpack-plugin": "^4.0.1",
-    "css-loader": "^0.26.1",
+    "css-loader": "^0.28.0",
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.14.1",
     "extract-text-webpack-plugin": "^2.0.0",
-    "file-loader": "^0.10.0",
+    "file-loader": "^0.11.1",
     "friendly-errors-webpack-plugin": "^1.1.3",
-    "function-bind": "^1.1.0",
-    "gh-pages": "^1.0.0",
     "html-webpack-plugin": "^2.28.0",
     "http-proxy-middleware": "^0.17.3",
     "opn": "^4.0.2",
     "optimize-css-assets-webpack-plugin": "^1.3.0",
-    "ora": "^1.1.0",
+    "ora": "^1.2.0",
     "rimraf": "^2.6.0",
     "semver": "^5.3.0",
-    "url-loader": "^0.5.7",
-    "vue-loader": "^11.1.4",
-    "vue-style-loader": "^2.0.0",
-    "vue-template-compiler": "^2.2.4",
-    "webpack": "^2.2.1",
+    "shelljs": "^0.7.6",
+    "url-loader": "^0.5.8",
+    "vue-loader": "^12.1.0",
+    "vue-style-loader": "^3.0.1",
+    "vue-template-compiler": "^2.3.3",
+    "webpack": "^2.6.1",
     "webpack-bundle-analyzer": "^2.2.1",
     "webpack-dev-middleware": "^1.10.0",
-    "webpack-hot-middleware": "^2.16.1",
-    "webpack-merge": "^2.6.1"
+    "webpack-hot-middleware": "^2.18.0",
+    "webpack-merge": "^4.1.0"
   },
   "engines": {
     "node": ">= 4.0.0",
     "npm": ">= 3.0.0"
   },
+  "license": "MIT",
   "browserslist": [
     "> 1%",
     "last 2 versions",

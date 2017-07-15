@@ -1,112 +1,121 @@
 ::: demo
 ```html
 <template>
-  <div style="width:300px;">
-    <tree ref ='tree' :treeData="treeData" :options="options" @node-click='handleNode'/>
-    <button @click='getselected'>selected</button>
-  </div>
+    <div id="app" style="width:300px; margin: auto auto;">
+        <tree
+                ref='tree'
+                :treeData="treeData"
+                :options="options"
+                @node-click="itemClick"
+
+        />
+    </div>
 </template>
 <script>
-import Tree from '../components/tree/tree.vue'
-export default {
-  name: 'test',
-  methods: {
-    getselected () {
-      console.log(this.$refs.tree.getSelectedNodeIds())
-    },
-    handleNode (e) {
-      console.log(e)
-    }
-  },
-  data () {
-    return {
-      options: {
-        showCheckbox: true,
-        search: {
-          useInitial: true,
-          useEnglish: false,
-          customFilter: null
-        }
-      },
-      treeData: [
-        {
-          id: 1,
-          label: '一级节点',
-          open: true,
-          checked: false,
-          parentId: null,
-          visible: true,
-          searched: false,
-          children: [
-            {
-              id: 2,
-              label: '二级节点-1',
-              checked: false,
-              parentId: 1,
-              searched: false,
-              visible: true
-            },
-            {
-              label: '二级节点-2',
-              open: true,
-              checked: false,
-              id: 3,
-              parentId: 1,
-              visible: true,
-              searched: false,
-              children: [
-                {
-                  id: 4,
-                  parentId: 3,
-                  label: '三级节点-1',
-                  visible: true,
-                  searched: false,
-                  checked: false
+    import Vue from 'vue';
+    import axios from 'axios';
+    import Tree from './components/tree/tree.vue';
+    let that = null
+    export default {
+        name: 'app',
+        data () {
+            that = this;
+            return {
+                options: {
+                    showCheckbox: false,
+                    halfCheckedStatus: false,//控制父框是否需要半钩状态
+
+                    lazy: true,
+                    load: this.loadingChild,
+
+                    showSearch: false,
+                    search: {
+                        useInitial: true,
+                        useEnglish: false,
+                        customFilter: null
+                    }
                 },
-                {
-                  id: 5,
-                  label: '三级节点-2',
-                  parentId: 3,
-                  searched: false,
-                  visible: true,
-                  checked: false
-                }
-              ]
-            },
-            {
-              label: '二级节点-3',
-              open: true,
-              checked: false,
-              id: 6,
-              parentId: 1,
-              visible: true,
-              searched: false,
-              children: [
-                {
-                  id: 7,
-                  parentId: 6,
-                  label: '三级节点-4',
-                  checked: false,
-                  searched: false,
-                  visible: true
-                },
-                {
-                  id: 8,
-                  label: '三级节点-5',
-                  parentId: 6,
-                  checked: false,
-                  searched: false,
-                  visible: true
-                }
-              ]
+                treeData: []
             }
-          ]
+        },
+        mounted: function () {
+            this.loadTreeData();
+        },
+        methods: {
+            /**
+             * generate key 0-1-2-3
+             * this is very important function for now module
+             * @param treeData
+             * @param parentKey
+             * @returns {Array}
+             */
+            generateKey (treeData = [], parentKey) {
+                treeData = treeData.map((item, i) => {
+                    item.key = parentKey + '-' + i.toString();
+                    return item;
+                })
+                return treeData;
+            },
+            loadTreeData: function () {
+                let treeData = [
+                    {
+                        id: 1,
+                        label: '一级节点',
+                        open: false,
+                        checked: false,
+                        nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
+                        parentId: null,
+                        visible: true,
+                        searched: false
+                    },
+                    {
+                        id: 2,
+                        label: '一级节点',
+                        open: false,
+                        checked: false,
+                        nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
+                        parentId: null,
+                        visible: true,
+                        searched: false
+                    }
+                ];
+
+                this.treeData = this.generateKey(treeData, 0);
+            },
+            async loadingChild (node, index) {
+                try {
+                    let tem;
+                    let postions = node.key.split('-');
+                    // load json file you need another server
+                    let data = await axios.get(' http://172.16.0.104:8082/child.json');
+
+                    for (let [index, item] of postions.entries()) {
+                        switch (index) {
+                            case 0:
+                                break;
+                            case 1:
+                                tem = this.treeData[item];
+                                break;
+                            default:
+                                tem = tem.children[item];
+                        }
+                    }
+                    // set Children
+                    Vue.set(tem, 'children', this.generateKey(data.data, node.key) );
+
+                    Promise.resolve(data);
+                } catch (e) {
+                    Promise.reject(e);
+                }
+            },
+            itemClick (node) {
+                console.log(node.key);
+            }
+        },
+        components: {
+            Tree
         }
-      ]
     }
-  },
-  components: {Tree}
-}
 </script>
 ```
 ### props
@@ -118,6 +127,11 @@ export default {
 ```
      options: {
         showCheckbox: true,  //是否支持多选
+        
+        lazy: true,     // 是否是异步加载数据
+        load: this.loadingChild, // 异步加载数据方法
+        showSearch: false, // 是否显示搜索
+        
         search: {
           useInitial: true, //是否支持首字母搜索
           useEnglish: false, //是否是因为搜索
