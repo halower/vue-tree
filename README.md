@@ -1,4 +1,4 @@
-# vue2-tree-origin
+# vue2-tree
 
 # README
 这是功能定制版本， 异步加载数据
@@ -34,6 +34,7 @@ npm run build --report
 - 2017-5-26: 添加父节点半选状态框 
 - 2017-6-08: 修复火狐复选事件的bug 
 - 2017-6-21: 修复动态渲染
+-2017-7-15 : 支持异步加载数据，修复IE9-11的bug
 ### QQ交流群:255965810
 ### How to install the plugin
 ```
