@@ -1,114 +1,143 @@
 <template>
-    <div id="app" style="width:300px; margin: auto auto;">
-        <tree
-                ref='tree'
-                :treeData="treeData"
-                :options="options"
-                @node-click="itemClick"
+  <div id="app" style="width:300px; margin: auto auto;">
+    <ZTree
+      ref='tree'
+      :treeData="treeData"
+      :options="options"
+      @node-click="itemClick"
 
-        />
-    </div>
+    />
+  </div>
 </template>
 <script>
-    import Vue from 'vue';
-    import axios from 'axios';
-    import Tree from './components/tree/tree.vue';
-    export default {
-        name: "appp",
-        data () {
-            return {
-                options: {
-                    showCheckbox: false,
-                    halfCheckedStatus: false,//控制父框是否需要半钩状态
+  import Vue from 'vue';
+  import axios from 'axios';
+  import {ZTree} from './index'
 
-                    lazy: true,
-                    load: this.loadingChild,
-                    showSearch: false,
+  Vue.use(ZTree)
 
-                    search: {
-                        useInitial: true,
-                        useEnglish: false,
-                        customFilter: null
-                    }
-                },
-                treeData: []
+
+  export default {
+    name: "appp",
+    data () {
+      return {
+        options: {
+          showCheckbox: false,
+          halfCheckedStatus: false,//控制父框是否需要半钩状态
+
+          lazy: true,
+          load: this.loadingChild,
+          showSearch: false,
+
+          search: {
+            useInitial: true,
+            useEnglish: false,
+            customFilter: null
+          }
+        },
+        treeData: []
+      }
+    },
+    mounted: function () {
+      this.loadTreeData();
+    },
+    methods: {
+      /**
+       * generate key 0-1-2-3
+       * this is very important function for now module
+       * @param treeData
+       * @param parentKey
+       * @returns {Array}
+       */
+      generateKey (treeData = [], parentKey) {
+        treeData = treeData.map((item, i) => {
+          item.key = parentKey + '-' + i.toString();
+
+          if (item.hasOwnProperty('children') && item.children.length > 0) {
+              this.generateKey(item.children, item.key)
+          }
+
+          return item;
+        })
+        return treeData;
+      },
+      loadTreeData: function () {
+        let treeData = [
+          {
+            id: 1,
+            label: '一级节点',
+            open: false,
+            checked: false,
+            nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
+            parentId: null,
+            visible: true,
+            searched: false,
+            children: [
+              {
+                id: 1001,
+                label: '一级节点',
+                open: false,
+                checked: false,
+                nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
+                parentId: 1,
+                visible: true,
+                searched: false
+              }
+            ]
+          },
+          {
+            id: 2,
+            label: '一级节点',
+            open: false,
+            checked: false,
+            nodeSelectNotAll: false,
+            parentId: null,
+            visible: true,
+            searched: false
+          },
+          {
+            id: 3,
+            label: '一级节点',
+            open: false,
+            checked: false,
+            nodeSelectNotAll: false,
+            parentId: null,
+            visible: true,
+            searched: false
+          }
+        ];
+
+        this.treeData = this.generateKey(treeData, 0);
+      },
+      async loadingChild (node, index) {
+        try {
+          let tem;
+          let postions = node.key.split('-');
+          let data = await axios.get('http://localhost:8082/child.json', {responseType: 'json'});
+
+          for (let [index, item] of postions.entries()) {
+            switch (index) {
+              case 0:
+                break;
+              case 1:
+                tem = this.treeData[item];
+                break;
+              default:
+                tem = tem.children[item];
             }
-        },
-        mounted: function () {
-            this.loadTreeData();
-        },
-        methods: {
-            /**
-             * generate key 0-1-2-3
-             * this is very important function for now module
-             * @param treeData
-             * @param parentKey
-             * @returns {Array}
-             */
-            generateKey (treeData = [], parentKey) {
-                treeData = treeData.map((item, i) => {
-                    item.key = parentKey + '-' + i.toString();
-                    return item;
-                })
-                return treeData;
-            },
-            loadTreeData: function () {
-                let treeData = [
-                    {
-                        id: 1,
-                        label: '一级节点',
-                        open: false,
-                        checked: false,
-                        nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
-                        parentId: null,
-                        visible: true,
-                        searched: false
-                    },
-                    {
-                        id: 2,
-                        label: '一级节点',
-                        open: false,
-                        checked: false,
-                        nodeSelectNotAll: false,
-                        parentId: null,
-                        visible: true,
-                        searched: false
-                    }
-                ];
+          }
+          // set Children
+          Vue.set(tem, 'children', this.generateKey(data.data, node.key));
 
-                this.treeData = this.generateKey(treeData, 0);
-            },
-            async loadingChild (node, index) {
-                try {
-                    let tem;
-                    let postions = node.key.split('-');
-                    let data = await axios.get('http://192.168.11.102:8082/child.json', {  responseType: 'json' });
-
-                    for (let [index, item] of postions.entries()) {
-                        switch (index) {
-                            case 0:
-                                break;
-                            case 1:
-                                tem = this.treeData[item];
-                                break;
-                            default:
-                                tem = tem.children[item];
-                        }
-                    }
-                    // set Children
-                    Vue.set(tem, 'children', this.generateKey(data.data, node.key) );
-
-                    Promise.resolve(data);
-                } catch (e) {
-                    Promise.reject(e);
-                }
-            },
-            itemClick (node) {
-                console.log(node.key);
-            }
-        },
-        components: {
-            Tree
+          Promise.resolve(data);
+        } catch (e) {
+          Promise.reject(e);
         }
+      },
+      itemClick (node) {
+        console.log(node.key);
+      }
     }
+
+  }
 </script>

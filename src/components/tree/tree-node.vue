@@ -4,7 +4,7 @@
             v-show="!item.hasOwnProperty('visible') || item.visible"
             :key="item.key"
         >
-            <i v-if=" item.children && item.children.length > 0  ||  options.hasOwnProperty('lazy') && !item.hasOwnProperty('loaded') "
+            <i v-if=" item.children && item.children.length > 0  ||  options.hasOwnProperty('lazy') && options.lazy && !item.hasOwnProperty('loaded') "
                @click.stop='handleNodeExpand(item, index)'
                class="icon iconfont icon-color"
                :class="[ !options.hasOwnProperty('lazy') || item.open? 'icon-jian-fangkuang':'icon-jia-fangkuang', 'icon']"
@@ -49,12 +49,13 @@
     </ul>
 </template>
 <script>
+  console.log(1)
     import Vue from 'vue'
     export default {
         name: 'treeNode',
         props: {
-            treeData: [Array],
-            options: [Object]
+            treeData: Array,
+            options: Object
         },
         data () {
             return {
@@ -125,7 +126,7 @@
 
 
                     } catch (e) {
-                        console.log('Get Child Erroe')
+                        console.log('Get Child Error')
                     }
                 }
             },
@@ -152,15 +153,15 @@
         }
     }
 </script>
-<style scoped>
+<style >
 
     @font-face {
         font-family: "iconfont";
-        src: url('./../../assets/iconfont/iconfont.eot?t=1499924440773'); /* IE9*/
-        src: url('./../../assets/iconfont/iconfont.eot?t=1499924440773#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('./../../assets/iconfont/iconfont.woff?t=1499924440773') format('woff'), /* chrome, firefox */ url('./../../assets/iconfont/iconfont.ttf?t=1499924440773') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/ url('./../../assets/iconfont/iconfont.svg?t=1499924440773#iconfont') format('svg'); /* iOS 4.1- */
+        src: url('assets/iconfont/iconfont.eot?t=1499924440773'); /* IE9*/
+        src: url('assets/iconfont/iconfont.eot?t=1499924440773#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('assets/iconfont/iconfont.woff?t=1499924440773') format('woff'), /* chrome, firefox */ url('assets/iconfont/iconfont.ttf?t=1499924440773') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/ url('assets/iconfont/iconfont.svg?t=1499924440773#iconfont') format('svg'); /* iOS 4.1- */
     }
 
-    .iconfont {
+     .iconfont {
         font-family: "iconfont" !important;
         font-size: 16px;
         font-style: normal;
@@ -168,7 +169,7 @@
         -moz-osx-font-smoothing: grayscale;
     }
 
-    .icon-jia-fangkuang:before {
+     .icon-jia-fangkuang:before {
         content: "\e8de";
     }
 
@@ -180,11 +181,10 @@
         content: "\e647";
     }
 
-    .icon-color {
+    .halo-tree  .icon-color {
         color: #108ee9;
     }
 
-    /**  todo   **/
     .halo-tree li span.halo-tree-iconEle {
         margin: 0;
         width: 24px;
@@ -221,7 +221,7 @@
         }
     }
 
-    li:hover {
+    .halo-tree li:hover {
         cursor: pointer;
     }
 
@@ -233,7 +233,7 @@
         border-radius: 4px;
     }
 
-    .node-selected {
+    .halo-tree .node-selected {
         background-color: #ddd
     }
 
@@ -321,7 +321,7 @@
         width: 24px;
     }
 
-    .check {
+    .halo-tree .check {
         display: inline-block;
         position: relative;
         top: 4px;
@@ -334,7 +334,7 @@
     .search {
         width: 14px;
         height: 14px;
-        background-image: url("../../assets/search.png");
+        background-image: url("assets/search.png");
     }
 
     /*.check.notAllNodes{
@@ -343,12 +343,12 @@
       -ms-appearance: none;
       width: 13px;
     }*/
-    .inputCheck {
+    .halo-tree  .inputCheck {
         display: inline-block;
         position: relative;
     }
 
-    .inputCheck.notAllNodes:before {
+    .halo-tree .inputCheck.notAllNodes:before {
         content: "";
         display: inline-block;
         position: absolute;
@@ -359,6 +359,6 @@
         left: 50%;
         transform: translate3d(-30%, -5%, 0);
         /*background-image: url("/../../assets/half.png");*/
-        background-image: url("../../assets/half.jpg");
+        background-image: url("assets/half.jpg");
     }
 </style>

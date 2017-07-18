@@ -56,7 +56,7 @@ npm run dev
 ```html
 <template>
     <div id="app" style="width:300px; margin: auto auto;">
-        <tree
+        <ZTree
                 ref='tree'
                 :treeData="treeData"
                 :options="options"
@@ -68,8 +68,12 @@ npm run dev
 <script>
     import Vue from 'vue';
     import axios from 'axios';
-    import Tree from './components/tree/tree.vue';
-    let that = null
+    import { ZTree } from './../dist/vue2-tree.min'
+    import './../dist/vue2-tree.min.css'
+
+    Vue.use(ZTree)
+    
+
     export default {
         name: 'app',
         data () {
@@ -165,10 +169,8 @@ npm run dev
             itemClick (node) {
                 console.log(node.key);
             }
-        },
-        components: {
-            Tree
         }
+        
     }
 </script>
 
