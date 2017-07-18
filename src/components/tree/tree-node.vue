@@ -4,7 +4,7 @@
             v-show="!item.hasOwnProperty('visible') || item.visible"
             :key="item.key"
         >
-            <i v-if=" item.children && item.children.length > 0  ||  options.hasOwnProperty('lazy') && !item.hasOwnProperty('loaded') "
+            <i v-if=" item.children && item.children.length > 0  ||  options.hasOwnProperty('lazy') && options.lazy && !item.hasOwnProperty('loaded') "
                @click.stop='handleNodeExpand(item, index)'
                class="icon iconfont icon-color"
                :class="[ !options.hasOwnProperty('lazy') || item.open? 'icon-jian-fangkuang':'icon-jia-fangkuang', 'icon']"
@@ -49,6 +49,7 @@
     </ul>
 </template>
 <script>
+  console.log(1)
     import Vue from 'vue'
     export default {
         name: 'treeNode',
