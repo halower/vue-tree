@@ -96,14 +96,14 @@
         components: {TreeNode}
     }
 </script>
-<style scoped>
+<style >
 
     @font-face {font-family: "iconfont";
-        src: url('./../../assets/iconfont/iconfont.eot?t=1499924440773'); /* IE9*/
-        src: url('./../../assets/iconfont/iconfont.eot?t=1499924440773#iefix') format('embedded-opentype'), /* IE6-IE8 */
-        url('./../../assets/iconfont/iconfont.woff?t=1499924440773') format('woff'), /* chrome, firefox */
-        url('./../../assets/iconfont/iconfont.ttf?t=1499924440773') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-        url('./../../assets/iconfont/iconfont.svg?t=1499924440773#iconfont') format('svg'); /* iOS 4.1- */
+        src: url('assets/iconfont/iconfont.eot?t=1499924440773'); /* IE9*/
+        src: url('assets/iconfont/iconfont.eot?t=1499924440773#iefix') format('embedded-opentype'), /* IE6-IE8 */
+        url('assets/iconfont/iconfont.woff?t=1499924440773') format('woff'), /* chrome, firefox */
+        url('assets/iconfont/iconfont.ttf?t=1499924440773') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+        url('assets/iconfont/iconfont.svg?t=1499924440773#iconfont') format('svg'); /* iOS 4.1- */
     }
 
     .iconfont {
@@ -120,30 +120,30 @@
 
     .icon-loading:before { content: "\e647"; }
 
-    .icon-color {
+    .halo-tree .icon-color {
         color: #108ee9;
     }
 
-    * {
+    .halo-tree * {
         font-size: 13px;
         font-family: '\5FAE\8F6F\96C5\9ED1'
     }
-    .root {
+    .halo-tree .root {
         position: relative;
         left: -15px;
     }
-    .input {
+    .halo-tree .input {
         width: 100%;
         position: relative;
     }
 
-    .input span {
+    .halo-tree .input span {
         position: absolute;
         top: 7px;
         right: 5px;
     }
 
-    .input input {
+    .halo-tree .input input {
         display: inline-block;
         box-sizing: border-box;
         width: 100%;
@@ -152,20 +152,20 @@
         margin-top: 2px;
     }
 
-    .input input:focus {
+    .halo-tree .input input:focus {
         border: none;
     }
 
-    .icon {
+    .halo-tree .icon {
         display: inline-block;
         margin-right: 10px;
         vertical-align: middle;
     }
 
-    .search {
+    .halo-tree .search {
         width: 14px;
         height: 14px;
-        background-image: url("../../assets/search.png");
+        background-image: url("assets/search.png");
     }
 </style>
 

@@ -1,6 +1,6 @@
 <template>
     <div id="app" style="width:300px; margin: auto auto;">
-        <tree
+        <ZTree
                 ref='tree'
                 :treeData="treeData"
                 :options="options"
@@ -12,7 +12,12 @@
 <script>
     import Vue from 'vue';
     import axios from 'axios';
-    import Tree from './components/tree/tree.vue';
+    import { ZTree } from './../dist/vue2-tree.min'
+    import './../dist/vue2-tree.min.css'
+
+    Vue.use(ZTree)
+
+
     export default {
         name: "appp",
         data () {
@@ -106,9 +111,7 @@
             itemClick (node) {
                 console.log(node.key);
             }
-        },
-        components: {
-            Tree
         }
+
     }
 </script>
