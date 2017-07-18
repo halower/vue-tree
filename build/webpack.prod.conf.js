@@ -12,7 +12,7 @@ var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
 var webpackConfig = merge(baseWebpackConfig, {
   entry: {
-    app: './src/index.js'
+    'vue2-tree': './src/index.js'
   },
   module: {
     rules: utils.styleLoaders({
@@ -29,7 +29,7 @@ var webpackConfig = merge(baseWebpackConfig, {
   output: {
     path: config.bundle.assetsRoot,
     publicPath: config.bundle.assetsPublicPath,
-    filename: 'vue2-tree.min.js',
+    filename: '[name].min.js',
     library: 'ZTree',
     libraryTarget: 'umd'
   },

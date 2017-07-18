@@ -1,6 +1,6 @@
 {
   "name": "vue2-lazy-tree",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A Vue.js project",
   "author": "jackwang <wangxichao001@gmail.com>",
   "repository": {
@@ -11,7 +11,8 @@
     "url": "https://github.com/ddtramp/vue2-tree/issues"
   },
   "homepage": "https://github.com/ddtramp/vue2-tree.git",
-  "main": "./src/index.js",
+  "main": "./dist/vue2-tree.min.js",
+  "module": "./src/index.js",
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",

@@ -12,8 +12,10 @@
 <script>
   import Vue from 'vue';
   import axios from 'axios';
-  import {ZTree} from './index'
+  //  import {ZTree} from './index'
 
+  import {ZTree} from './../dist/vue2-tree.min'
+  import './../dist/vue2-tree.min.css'
   Vue.use(ZTree)
 
 
@@ -54,7 +56,7 @@
           item.key = parentKey + '-' + i.toString();
 
           if (item.hasOwnProperty('children') && item.children.length > 0) {
-              this.generateKey(item.children, item.key)
+            this.generateKey(item.children, item.key)
           }
 
           return item;
