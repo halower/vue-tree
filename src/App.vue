@@ -74,7 +74,7 @@
             searched: false,
             children: [
               {
-                id: 3,
+                id: 1001,
                 label: '一级节点',
                 open: false,
                 checked: false,
@@ -87,6 +87,16 @@
           },
           {
             id: 2,
+            label: '一级节点',
+            open: false,
+            checked: false,
+            nodeSelectNotAll: false,
+            parentId: null,
+            visible: true,
+            searched: false
+          },
+          {
+            id: 3,
             label: '一级节点',
             open: false,
             checked: false,

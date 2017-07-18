@@ -56,7 +56,7 @@
             treeData: function (data) {
                 this.store = new TreeStore({
                     root: (this.treeData || []).slice(0),
-                    last: null
+                    last: this.store.last
                 })
             }
         },
