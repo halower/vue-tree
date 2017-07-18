@@ -1,12 +1,14 @@
-# vue2-tree-origin
+# vue2-lazy-tree
 
 # README
-这是功能定制版本， 异步加载数据
 
-loading 提示
+lazy loading tree data
 
-注意适用方式
-generateKey and loadingChild 方法
+loading tip
+
+notice: 
+
+  generateKey && loadingChild method
 
 
 ## Build Setup
@@ -18,23 +20,16 @@ npm install
 # serve with hot reload at localhost:8080
 npm run dev
 
-# build for production with minification
+# build for production with minification  publish to npm
 npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
 
 
 -----
-### 贡献者名单
- - lily7129
-### develop logs
-- 2017-5-2: 支持下拉树, add combotree
-- 2017-5-26: 添加父节点半选状态框 
-- 2017-6-08: 修复火狐复选事件的bug 
-- 2017-6-21: 修复动态渲染
-### QQ交流群:255965810
+Library is copy from [https://github.com/halower/vue2-tree](https://github.com/halower/vue2-tree)
+
+and when some new feature is test ok, i will pull a new request to halower 
+
+### QQ group:255965810
 ### How to install the plugin
 ```
  npm install vue2-tree or cnpm install vue2-tree (国内)
@@ -44,133 +39,18 @@ npm run build --report
 npm install
 npm run dev 
 ```
-### 在线Demo
- [点击进入线上效果](https://halower.github.io/vue2-tree/)
-### 效果图
- ![效果图](http://files.cnblogs.com/files/rohelm/jdfw.gif)
-### 示例
-```html
-<template>
-    <div id="app" style="width:300px; margin: auto auto;">
-        <ZTree
-                ref='tree'
-                :treeData="treeData"
-                :options="options"
-                @node-click="itemClick"
-
-        />
-    </div>
-</template>
-<script>
-    import Vue from 'vue';
-    import axios from 'axios';
-    import { ZTree } from './../dist/vue2-tree.min'
-    import './../dist/vue2-tree.min.css'
-
-    Vue.use(ZTree)
+### Demo
     
-
-    export default {
-        name: 'app',
-        data () {
-            that = this;
-            return {
-                options: {
-                    showCheckbox: false,
-                    halfCheckedStatus: false,//控制父框是否需要半钩状态
-
-                    lazy: true,
-                    load: this.loadingChild,
-
-                    showSearch: false,
-                    search: {
-                        useInitial: true,
-                        useEnglish: false,
-                        customFilter: null
-                    }
-                },
-                treeData: []
-            }
-        },
-        mounted: function () {
-            this.loadTreeData();
-        },
-        methods: {
-            /**
-             * generate key 0-1-2-3
-             * this is very important function for now module
-             * @param treeData
-             * @param parentKey
-             * @returns {Array}
-             */
-            generateKey (treeData = [], parentKey) {
-                treeData = treeData.map((item, i) => {
-                    item.key = parentKey + '-' + i.toString();
-                    return item;
-                })
-                return treeData;
-            },
-            loadTreeData: function () {
-                let treeData = [
-                    {
-                        id: 1,
-                        label: '一级节点',
-                        open: false,
-                        checked: false,
-                        nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
-                        parentId: null,
-                        visible: true,
-                        searched: false
-                    },
-                    {
-                        id: 2,
-                        label: '一级节点',
-                        open: false,
-                        checked: false,
-                        nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
-                        parentId: null,
-                        visible: true,
-                        searched: false
-                    }
-                ];
-
-                this.treeData = this.generateKey(treeData, 0);
-            },
-            async loadingChild (node, index) {
-                try {
-                    let tem;
-                    let postions = node.key.split('-');
-                    // load json file you need another server
-                    let data = await axios.get(' http://172.16.0.104:8082/child.json');
-
-                    for (let [index, item] of postions.entries()) {
-                        switch (index) {
-                            case 0:
-                                break;
-                            case 1:
-                                tem = this.treeData[item];
-                                break;
-                            default:
-                                tem = tem.children[item];
-                        }
-                    }
-                    // set Children
-                    Vue.set(tem, 'children', this.generateKey(data.data, node.key) );
-
-                    Promise.resolve(data);
-                } catch (e) {
-                    Promise.reject(e);
-                }
-            },
-            itemClick (node) {
-                console.log(node.key);
-            }
-        }
-        
-    }
-</script>
-
-```
+    you need to run 
+    
+    npm install & npm run dev
+    
+and with the http serve at /data 
+     
+     cd data/
+     http-server -p 8082 --cors
+    
+ 
 ### 属性
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
 |---------- |-------- |---------- |---------- |---------- |
