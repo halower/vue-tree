@@ -25,7 +25,7 @@
           showCheckbox: false,
           halfCheckedStatus: false,//控制父框是否需要半钩状态
 
-          lazy: false,
+          lazy: true,
           load: this.loadingChild,
           showSearch: false,
 
@@ -52,6 +52,11 @@
       generateKey (treeData = [], parentKey) {
         treeData = treeData.map((item, i) => {
           item.key = parentKey + '-' + i.toString();
+
+          if (item.hasOwnProperty('children') && item.children.length > 0) {
+              this.generateKey(item.children, item.key)
+          }
+
           return item;
         })
         return treeData;
