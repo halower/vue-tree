@@ -53,8 +53,8 @@
     export default {
         name: 'treeNode',
         props: {
-            treeData: [Array],
-            options: [Object]
+            treeData: Array,
+            options: Object
         },
         data () {
             return {
@@ -184,7 +184,6 @@
         color: #108ee9;
     }
 
-    /**  todo   **/
     .halo-tree li span.halo-tree-iconEle {
         margin: 0;
         width: 24px;

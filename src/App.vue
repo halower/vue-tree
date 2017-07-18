@@ -82,7 +82,7 @@
                 try {
                     let tem;
                     let postions = node.key.split('-');
-                    let data = await axios.get('http://192.168.11.102:8082/child.json', {  responseType: 'json' });
+                    let data = await axios.get('http://localhost:8082/child.json', {  responseType: 'json' });
 
                     for (let [index, item] of postions.entries()) {
                         switch (index) {

@@ -1,6 +1,6 @@
 {
   "name": "vue2-lazy-tree",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A Vue.js project",
   "author": "jackwang <wangxichao001@gmail.com>",
   "repository": {
@@ -11,18 +11,19 @@
     "url": "https://github.com/ddtramp/vue2-tree/issues"
   },
   "homepage": "https://github.com/ddtramp/vue2-tree.git",
-  "main": "./src/components/tree/tree.vue",
+  "main": "./src/index.js",
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
     "build": "node build/build.js"
   },
   "dependencies": {
-    "chinese-to-pinyin": "^0.1.6",
     "vue": "^2.3.3",
-    "vue-router": "^2.6.0"
+    "chinese-to-pinyin": "^0.1.6"
   },
   "devDependencies": {
+    "vue": "^2.3.3",
+    "vue-router": "^2.6.0",
     "autoprefixer": "^6.7.2",
     "axios": "^0.16.2",
     "babel-core": "^6.22.1",
