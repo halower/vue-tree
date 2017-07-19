@@ -1,7 +1,7 @@
 {
   "name": "vue2-lazy-tree",
-  "version": "1.0.9",
-  "description": "A Vue.js project",
+  "version": "1.0.10",
+  "description": "Vue component, Tree component, support lazy-load data",
   "author": "jackwang <wangxichao001@gmail.com>",
   "repository": {
     "type": "git",
@@ -19,8 +19,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "vue": "^2.3.3",
-    "chinese-to-pinyin": "^0.1.6"
+    "chinese-to-pinyin": "^0.1.6",
+    "vue": "^2.3.3"
   },
   "devDependencies": {
     "vue": "^2.3.3",

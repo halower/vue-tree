@@ -25,20 +25,16 @@ npm run build
 
 
 -----
-Library is copy from [https://github.com/halower/vue2-tree](https://github.com/halower/vue2-tree)
+package is copy from [https://github.com/halower/vue2-tree](https://github.com/halower/vue2-tree)
 
 and when some new feature is test ok, i will pull a new request to halower 
 
 ### QQ group:255965810
+
 ### How to install the plugin
-```
- npm install vue2-tree or cnpm install vue2-tree (国内)
-```
-### How to run demo
-```
-npm install
-npm run dev 
-```
+
+      npm install vue2-lazy-tree or cnpm install vue2-lazy-tree (国内)
+
 ### Demo
     
     you need to run 
