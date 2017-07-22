@@ -6,8 +6,8 @@
         >
             <i v-if=" item.children && item.children.length > 0  ||  options.hasOwnProperty('lazy') && options.lazy && !item.hasOwnProperty('loaded') "
                @click.stop='handleNodeExpand(item, index)'
-               class="icon iconfont icon-color"
-               :class="[ !options.hasOwnProperty('lazy') || item.open? 'icon-jian-fangkuang':'icon-jia-fangkuang', 'icon']"
+               class="icon iconfont icon-color  handle-icon"
+               :class="[ item.open ? 'icon-jian-fangkuang' : 'icon-jia-fangkuang']"
             >
             </i>
             </span>
@@ -283,13 +283,12 @@
 
     .halo-tree li span {
         display: inline-block;
-        padding: 3px 3px;
+        padding: 3px 0;
         text-decoration: none;
         border-radius: 3px;
-        margin-left: 4px;
     }
     .halo-tree li span.label {
-        margin-left: 0px;
+        margin-left: 8px;
     }
 
     .halo-tree li:last-child::before {
@@ -327,8 +326,9 @@
         top: 4px;
     }
 
-    .halo-tree .icon {
+    .halo-tree .handle-icon {
         margin-left: 4px;
+        margin-right: 0;
     }
 
     .search {
