@@ -3,45 +3,85 @@
         <li v-for='(item, index) of nodeData'
             v-show="!item.hasOwnProperty('visible') || item.visible"
             :key="item.key"
+
         >
-            <i v-if=" item.children && item.children.length > 0  ||  options.hasOwnProperty('lazy') && options.lazy && !item.hasOwnProperty('loaded') "
-               @click.stop='handleNodeExpand(item, index)'
-               class="icon iconfont icon-color  handle-icon"
-               :class="[ item.open ? 'icon-jian-fangkuang' : 'icon-jia-fangkuang']"
+            <div
+                :key="item.key"
+                v-show="item.hasOwnProperty('dynamicAdd')"
             >
-            </i>
-            </span>
-
-            <div class="inputCheck"
-                 :class="{notAllNodes:item.nodeSelectNotAll}"
-                 :style="{width:inputWidth+'px', height:inputWidth+'px'}"
-                 v-show="options.showCheckbox"
-                 @click="walkCheckBox(item)"
-            >
-                <input type="checkbox" class="check"
-                       v-if="options.showCheckbox && options.halfCheckedStatus  &&  !item.nodeSelectNotAll"
-                       v-model='item.checked'
-                       @change="handlecheckedChange(item)"
-                />
+                <input
+                    ref="inputadd"
+                    type="text"
+                    class="add-input"
+                    value=""
+                    v-focus
+                    :key="item.key"
+                    @blur="addNode(item, $event)"
+                    @keyup.enter="addNode(item, $event)"
+                >
             </div>
-            <span
-                class="icon-color halo-tree-icon_loading halo-tree-iconEle"
-                v-show="item.loading"
-            >
+            <div v-show="!item.hasOwnProperty('dynamicAdd')"
+                 class="item-handle-area"
+                 :class="{'node-selected':(item.checked && !options.showCheckbox) || item.searched }"
+                 @click="handleNode(item)"
 
-            </span>
-            <span
-                    @click="handleNode(item)"
-                    class="label"
-                    :class="{'node-selected':(item.checked && !options.showCheckbox) || item.searched }"
             >
-                {{item.label}}
-            </span>
-            <tree-node v-if="item.children && item.children.length > 0"
-                       :options="options"
-                       @handlecheckedChange="handlecheckedChange"
-                       v-show='item.open'
-                       :tree-data="item.children"
+                <i v-if=" item.children && item.children.length > 0  ||  options.hasOwnProperty('lazy') && options.lazy && !item.hasOwnProperty('loaded') "
+                   @click.stop='handleNodeExpand(item, index)'
+                   class="icon iconfont  handle-icon"
+                   :class="[ item.open ? options.iconClass.open : options.iconClass.close ]"
+                   :style="options.iconStyle"
+                >
+                </i>
+                <i
+                    v-else
+                    class="icon iconfont "
+                    :class="leafIcon(item)"
+                    :style="options.iconStyle"
+
+                ></i>
+                </span>
+
+                <div class="inputCheck"
+                     :class="{notAllNodes:item.nodeSelectNotAll}"
+                     :style="{width:inputWidth+'px', height:inputWidth+'px'}"
+                     v-show="options.showCheckbox"
+                     @click="walkCheckBox(item)"
+                >
+                    <input type="checkbox" class="check"
+                           v-if="options.showCheckbox && options.halfCheckedStatus  &&  !item.nodeSelectNotAll"
+                           v-model='item.checked'
+                           @change="handlecheckedChange(item)"
+                    />
+                </div>
+                <span
+                    class="halo-tree-icon_loading halo-tree-iconEle"
+                    v-show="item.loading"
+                    :style="options.iconStyle"
+                >
+
+                </span>
+                <span
+                    class="label"
+                >
+                    {{item.label}}
+                </span>
+
+                <i
+                    class="iconfont add-icon"
+                    :class="options.iconClass.add"
+                    :style="options.iconStyle"
+                    v-if="canAdd(item)"
+                    @click.stop="handleClickAddNode(item, index)"
+                ></i>
+            </div>
+            <tree-node
+                ref="treenode"
+                v-if="item.children && item.children.length > 0"
+                :options="options"
+                @handlecheckedChange="handlecheckedChange"
+                v-show='item.open'
+                :tree-data="item.children"
 
             >
             </tree-node>
@@ -49,8 +89,14 @@
     </ul>
 </template>
 <script>
-  console.log(1)
     import Vue from 'vue'
+
+    Vue.directive('focus', {
+        update: function (el) {
+            el.focus()
+        }
+    })
+
     export default {
         name: 'treeNode',
         props: {
@@ -75,6 +121,7 @@
                 console.warn('找不到树节点')
             }
             this.nodeData = (this.treeData || []).slice(0)
+
         },
         computed: {
             inputWidth: function () {
@@ -83,6 +130,7 @@
                 }
                 return 13
             }
+
         },
         watch: {
             treeData: function (data) {
@@ -124,7 +172,6 @@
                             Vue.set(node, 'loading', false)
                         })
 
-
                     } catch (e) {
                         console.log('Get Child Error')
                     }
@@ -149,81 +196,48 @@
 
                 }
                 this.tree.$emit('node-click', node)
+            },
+            async handleClickAddNode(item, index) {
+                try {
+                    // todo loading
+                    let a = await this.options.dynamicAddNode(item, index)
+                    return Promise.resolve(true)
+                } catch (e) {
+                    console.log(e)
+                    return Promise.reject(e)
+                }
+            },
+            /**
+             * filter is show add icon
+             * @param item
+             * @returns {*}
+             */
+            canAdd (item) {
+                if (this.options.dynamicAdd) {
+                    return this.options.dynamicAddFilter(item)
+                }
+                return false
+            },
+            /**
+             * 叶子节点的 icon
+             * @param item
+             */
+            leafIcon (node) {
+                return this.options.leafIcon(node)
+            },
+            /**
+             * when trigger blur or keyup.enter
+             * @param item
+             * @param e
+             */
+            addNode (item, e) {
+                this.options.dynamicSaveNode(item, e)
             }
         }
     }
 </script>
-<style >
-
-    @font-face {
-        font-family: "iconfont";
-        src: url('assets/iconfont/iconfont.eot?t=1499924440773'); /* IE9*/
-        src: url('assets/iconfont/iconfont.eot?t=1499924440773#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('assets/iconfont/iconfont.woff?t=1499924440773') format('woff'), /* chrome, firefox */ url('assets/iconfont/iconfont.ttf?t=1499924440773') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/ url('assets/iconfont/iconfont.svg?t=1499924440773#iconfont') format('svg'); /* iOS 4.1- */
-    }
-
-     .iconfont {
-        font-family: "iconfont" !important;
-        font-size: 16px;
-        font-style: normal;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-
-     .icon-jia-fangkuang:before {
-        content: "\e8de";
-    }
-
-    .icon-jian-fangkuang:before {
-        content: "\e8e0";
-    }
-
-    .icon-loading:before {
-        content: "\e647";
-    }
-
-    .halo-tree  .icon-color {
-        color: #108ee9;
-    }
-
-    .halo-tree li span.halo-tree-iconEle {
-        margin: 0;
-        width: 24px;
-        height: 24px;
-        line-height: 24px;
-        display: inline-block;
-        vertical-align: middle;
-        border: 0 none;
-        cursor: pointer;
-        outline: none;
-        text-align: center;
-    }
-
-    .halo-tree li span.halo-tree-icon_loading::after {
-        display: inline-block;
-        font-family: 'iconfont';
-        text-rendering: optimizeLegibility;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        content: "\e647";
-        -webkit-animation: loadingCircle 1s infinite linear;
-        animation: loadingCircle 1s infinite linear;
-
-    }
-
-    @keyframes loadingCircle {
-        0% {
-            transform-origin: 50% 50%;
-            transform: rotate(0deg);
-        }
-        100% {
-            transform-origin: 50% 50%;
-            transform: rotate(360deg);
-        }
-    }
-
-    .halo-tree li:hover {
-        cursor: pointer;
-    }
+<style  lang="scss" scoped>
+    @import './assets/iconfont/iconfont.css';
 
     .halo-tree {
         font-size: 14px;
@@ -233,13 +247,18 @@
         border-radius: 4px;
     }
 
+    .halo-tree li:hover {
+        cursor: pointer;
+    }
+
     .halo-tree .node-selected {
         background-color: #ddd
     }
 
     .halo-tree li {
+        line-height: 20px;
         margin: 0;
-        padding: 5px 5px 5px 0;
+        padding: 4px 0 4px 4px;
         position: relative;
         list-style: none;
         user-select: none;
@@ -259,7 +278,7 @@
     .halo-tree li:after,
     .halo-tree li:before {
         content: '';
-        left: -8px;
+        left: -11px;
         position: absolute;
         right: auto;
         border-width: 1px
@@ -269,7 +288,7 @@
         border-left: 1px dashed #999;
         bottom: 50px;
         height: 100%;
-        top: -8px;
+        top: -10px;
         width: 1px;
 
     }
@@ -277,8 +296,64 @@
     .halo-tree li:after {
         border-top: 1px dashed #999;
         height: 20px;
-        top: 17px;
+        top: 15px;
         width: 12px
+    }
+    .halo-tree .item-handle-area { height: 24px; }
+    .halo-tree li .add-input {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-color: #fff;
+        background-image: none;
+        border-radius: 4px;
+        border: 1px solid #bfcbd9;
+        box-sizing: border-box;
+        color: #1f2d3d;
+        display: inline-block;
+        font-size: inherit;
+        height: 24px;
+        outline: none;
+        padding: 3px 10px;
+        transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+        width: 100%;
+    }
+
+    /* loading */
+    .halo-tree li span.halo-tree-iconEle {
+        margin: 0;
+        width: 24px;
+        height: 24px;
+        line-height: 20px;
+        display: inline-block;
+        vertical-align: middle;
+        border: 0 none;
+        cursor: pointer;
+        outline: none;
+        text-align: center;
+    }
+
+    .halo-tree li span.halo-tree-icon_loading::after {
+        display: inline-block;
+        font-family: 'iconfont';
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        content: "\e63d";
+        -webkit-animation: loadingCircle 1s infinite linear;
+        animation: loadingCircle 1s infinite linear;
+
+    }
+
+    @keyframes loadingCircle {
+        0% {
+            transform-origin: 50% 50%;
+            transform: rotate(0deg);
+        }
+        100% {
+            transform-origin: 50% 50%;
+            transform: rotate(360deg);
+        }
     }
 
     .halo-tree li span {
@@ -286,9 +361,6 @@
         padding: 3px 0;
         text-decoration: none;
         border-radius: 3px;
-    }
-    .halo-tree li span.label {
-        margin-left: 8px;
     }
 
     .halo-tree li:last-child::before {
@@ -327,8 +399,12 @@
     }
 
     .halo-tree .handle-icon {
-        margin-left: 4px;
         margin-right: 0;
+    }
+    .halo-tree .add-icon {
+        position: absolute;
+        top: 8px;
+        right: 0;
     }
 
     .search {

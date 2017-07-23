@@ -1,10 +1,26 @@
 # vue2-lazy-tree
 
-# README
+first of all, i highly recommended to see the demo 
 
-lazy loading tree data
+and u will find out how to use this plugin
 
-loading tip
+i must say, this doc is terrible, but the function is really good
+
+## features
+
+* normal tree
+
+* lazy loading 
+
+* loading tip
+
+* dynamic add node 
+
+* custom tree icon, use [iconfont](http://iconfont.cn/)
+
+* custom icon style. color
+
+* ie9,10,11,spartan
 
 notice: 
 
@@ -25,11 +41,6 @@ npm run build
 
 
 -----
-package is copy from [https://github.com/halower/vue2-tree](https://github.com/halower/vue2-tree)
-
-and when some new feature is test ok, i will pull a new request to halower 
-
-### QQ group:255965810
 
 ### How to install the plugin
 
@@ -37,16 +48,8 @@ and when some new feature is test ok, i will pull a new request to halower
 
 ### Demo
     
-    you need to run 
-    
     npm install & npm run dev
-    
-and with the http serve at /data 
-     
-     cd data/
-     http-server -p 8082 --cors
-    
- 
+        
 ### 属性
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
 |---------- |-------- |---------- |---------- |---------- |
@@ -60,7 +63,42 @@ and with the http serve at /data
         
         lazy: true,     // 是否是异步加载数据
         load: this.loadingChild, // 异步加载数据方法
+        
         showSearch: false, // 是否显示搜索
+        
+        iconClass: {                        // custom icon class, Default
+            close: 'icon-youjiantou',
+            open: 'icon-xiajiantou',
+            add: 'icon-add'
+        },
+        iconStyle: {                        // custom icon style, sometimes u just need to set colr
+            color: '#108ee9'                // default #000
+        },
+        
+        dynamicAdd: true,
+        // function  handle display add button
+        // return true or false, default true
+        // [Function] param: { node } 
+        dynamicAddFilter: (node) => {
+            if (node.type === 1 || node.type === 2) {
+                return true
+            }
+            return false
+        },
+        // function handle add node; the new node must have `dynamicAdd : true` property
+        // the tree component rely on this show editor
+        // param { node }
+        // return Promise
+        dynamicAddNode: [Function],
+        // function handle save node; when successfull saved, the new node must del `dynamicAdd` property
+        // the tree component rely on this save node
+        // param { node, $event }
+        // return Promise
+        dynamicSaveNode: [Function],
+        // function handle leaf icon
+        // param { node }
+        // return { String } , iconfont class name, default ''
+        leafIcon: [Function],
         
         search: {
           useInitial: true, //是否支持拼音首字母搜索
@@ -91,4 +129,13 @@ and with the http serve at /data
 | 事件名称      | 说明    | 回调参数      |
 |---------- |-------- |---------- |
 | node-click  | 节点被点击时的回调 | 共1个参数，节点组件本身。 |
+
+
+----
+
+package is copy from [https://github.com/halower/vue2-tree](https://github.com/halower/vue2-tree)
+
+and when some new feature is test ok, i will pull a new request to halower 
+
+### QQ group:255965810
 

@@ -6,25 +6,35 @@
         </div>
         <div class="root">
             <i
-                class="icon-color  icon iconfont"
-                :class="[itemsShow ? 'icon-jian-fangkuang': 'icon-jia-fangkuang' ]"
+                class="icon iconfont"
+                :class="[itemsShow ? treeNodeOptions.iconClass.open : treeNodeOptions.iconClass.close ]"
+                :style="treeNodeOptions.iconStyle"
                 @click="rootIconClick"
             >
 
             </i>
             我的组织
         </div>
+
         <tree-node
                 :treeData='store.root'
-                :options="options"
+                :options="treeNodeOptions"
                 @handlecheckedChange="handlecheckedChange"
                 v-show="itemsShow"
-        ></tree-node>
+        >
+        </tree-node>
     </div>
 </template>
 <script>
     import TreeNode from './tree-node.vue'
     import TreeStore from './tree-store'
+
+    const DEFAULTICONCLASS = {
+        open: 'icon-jian-fangkuang',
+        close: 'icon-jia-fangkuang',
+        add: 'icon-add'
+    }
+    const DEFAULTICONCOLOR = '#000'
 
     export default {
         name: 'tree',
@@ -36,6 +46,8 @@
             return {
                 itemsShow: true,
                 search: null,
+
+                treeNodeOptions: {},
                 store: {
                     root: [],
                     last: null
@@ -48,6 +60,23 @@
                 root: (this.treeData || []).slice(0),
                 last: null
             })
+
+            this.checkOptions() // check options
+
+            this.treeNodeOptions = Object.assign({}, {
+                iconClass: DEFAULTICONCLASS,
+                iconStyle: { color: DEFAULTICONCOLOR },
+
+                lazy: false,            // 异步加载
+                load: () => {},
+
+                dynamicAdd: false,      // 动态添加
+                dynamicAddFilter () { return true },
+                dynamicAddNode () {},
+                dynamicSaveNode () {},
+                leafIcon () { return '' }          // not required
+
+                }, this.options)
         },
         watch: {
             search: function (val) {
@@ -91,46 +120,63 @@
                     }
                 }
                 return selectedNodeIds
+            },
+            checkOptions () {
+                if ('lazy' in this.options ) {
+                    if (typeof this.options.load !== 'function') {
+                        console.error('load must be Function')
+                    }
+                }
+
+                if ('dynamicAdd' in this.options ) {
+                    if ('dynamicAddFilter' in this.options) {
+                        if (typeof this.options.dynamicAddFilter !== 'function') {
+                            console.error('dynamicFilter must be Function')
+                        }
+                    }
+
+                    if ('dynamicAddNode' in this.options) {
+                        if (typeof this.options.dynamicAddNode !== 'function') {
+                            console.error('dynamicAddNode must be Function')
+                        }
+                    } else {
+                        console.warning('seem\'s u config dynamicAdd, but dynamicAddNode Function missing')
+                    }
+
+                    if ('dynamicSaveNode' in this.options) {
+                        if (typeof this.options.dynamicSaveNode !== 'function') {
+                            console.error('dynamicSaveNode must be Function')
+                        }
+                    } else {
+                        console.warning('seem\'s u config dynamicAdd, but dynamicSaveNode Function missing')
+                    }
+                }
+                if ('leafIcon' in this.options) {
+                    if (typeof this.options.leafIcon !== 'function') {
+                        console.error('leafIcon must be Function')
+                    }
+                }
             }
         },
         components: {TreeNode}
     }
 </script>
-<style >
-
-    @font-face {font-family: "iconfont";
-        src: url('assets/iconfont/iconfont.eot?t=1499924440773'); /* IE9*/
-        src: url('assets/iconfont/iconfont.eot?t=1499924440773#iefix') format('embedded-opentype'), /* IE6-IE8 */
-        url('assets/iconfont/iconfont.woff?t=1499924440773') format('woff'), /* chrome, firefox */
-        url('assets/iconfont/iconfont.ttf?t=1499924440773') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-        url('assets/iconfont/iconfont.svg?t=1499924440773#iconfont') format('svg'); /* iOS 4.1- */
-    }
-
-    .iconfont {
-        font-family:"iconfont" !important;
-        font-size:16px;
-        font-style:normal;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-
-    .icon-jia-fangkuang:before { content: "\e8de"; }
-
-    .icon-jian-fangkuang:before { content: "\e8e0"; }
-
-    .icon-loading:before { content: "\e647"; }
-
-    .halo-tree .icon-color {
-        color: #108ee9;
-    }
+<style lang="scss"  scoped>
+    @import './assets/iconfont/iconfont.css';
 
     .halo-tree * {
         font-size: 13px;
-        font-family: '\5FAE\8F6F\96C5\9ED1'
+        font-family: Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;
     }
     .halo-tree .root {
         position: relative;
-        left: -15px;
+        left: -19px;
+        cursor: default;
+        user-select: none;
+        i {
+            font-size: 16px;
+            cursor: pointer;
+        }
     }
     .halo-tree .input {
         width: 100%;
