@@ -5,7 +5,7 @@
         :options="options1"
         @node-click="itemClick1"
         @add-node="addNode"
-        :key="2"
+        :key="3"
 
     >
     </ZTree>
@@ -14,17 +14,17 @@
 <script>
     import Vue from 'vue';
     import axios from 'axios';
-    import {ZTree, generateKey, getParentNode } from './index'
+    import {ZTree} from './index'
     //  import {ZTree} from './../dist/vue2-tree.min'
     //  import './../dist/vue2-tree.min.css'
     Vue.use(ZTree)
 
-    const Tree2 = {
-        name: 'Tree2',
+    const Tree3 = {
+        name: 'Tree3',
         data: function () {
             return {
                 options1: {
-                    showCheckbox: false,
+                    showCheckbox: true,
                     halfCheckedStatus: false,//控制父框是否需要半钩状态
 
                     lazy: true,
@@ -75,6 +75,47 @@
             this.loadTreeData();
         },
         methods: {
+            /**
+             * generate key 0-1-2-3
+             * this is very important function for now module
+             * @param treeData
+             * @param parentKey
+             * @returns {Array}
+             */
+            generateKey (treeData = [], parentKey) {
+                treeData = treeData.map((item, i) => {
+                    item.key = parentKey + '-' + i.toString();
+
+                    if (item.hasOwnProperty('children') && item.children.length > 0) {
+                        this.generateKey(item.children, item.key)
+                    }
+
+                    return item;
+                })
+                return treeData;
+            },
+            /**
+             * get parent node
+             * @param node { Object }
+             * @param treeData { Array }
+             * @returns { Object }
+             */
+            getParentNode (node, treeData) {
+                let tem;
+                let postions = node.key.split('-');
+                for (let [index, item] of postions.entries()) {
+                    switch (index) {
+                        case 0:
+                            break;
+                        case 1:
+                            tem = treeData[item];
+                            break;
+                        default:
+                            tem = tem.children[item];
+                    }
+                }
+                return tem
+            },
             loadTreeData: function () {
                 let treeData = [
                     {
@@ -134,9 +175,9 @@
                         searched: false
                     }
                 ]
-                this.treeData1 = generateKey(treeData, 0);
-//                this.treeData1 = treeData
 
+//                this.treeData1 = this.generateKey(treeData, 0);
+                this.treeData1 = treeData
             },
             async loadingChild (node, index) {
                 try {
@@ -168,10 +209,10 @@
                             resolve(d)
                         }, 1000)
                     })
-                    let tem = getParentNode(node, this.treeData1)
+                    let tem = this.getParentNode(node, this.treeData1)
 
                     // set Children
-                    Vue.set(tem, 'children', generateKey(data, node.key));
+                    Vue.set(tem, 'children', this.generateKey(data, node.key));
 //                    Vue.set(tem, 'children', data);
 
                     Promise.resolve(data);
@@ -185,7 +226,7 @@
                 console.log(node.key);
             },
             async addNode (item) {
-                let parent = getParentNode(item, this.treeData1)
+                let parent = this.getParentNode(item, this.treeData1)
                 let node = {
                     id: 2,
                     label: '一级节点',
@@ -203,21 +244,28 @@
 
                 parent.children.splice(0, 0, Object.assign({}, { dynamicAdd: true, loaded: true }, node))
 
-                generateKey(parent.children, parent.key) // regenerate key
-                return Promise.resolve(true)
+                this.generateKey(parent.children, parent.key) // regenerate key
+                return Promise.resolve(parent.children)
 
             },
             async saveNode (item, e) {
                 if (!e.target.value) {
                     return
                 }
-                // todo sent data to sever
-                delete item.dynamicAdd // 删除属性
-                Vue.set(item, 'label', e.target.value)
-                e.target.value = ''
-                setTimeout(() => {
-                    return Promise.resolve(true)
-                }, 1000)
+                try {
+                    // todo sent data to sever
+                    delete item.dynamicAdd // 删除属性
+
+                    Vue.set(item, 'label', e.target.value)
+
+                    e.target.value = ''
+
+                    return Promise.resolve(item) // server return data with id
+                } catch (e) {
+                    return Promise.reject(e)
+                }
+
+
 
             },
             /**
@@ -237,7 +285,7 @@
         }
     }
 
-    export default Tree2
+    export default Tree3
 </script>
 
 <style lang="scss" scoped>

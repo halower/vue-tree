@@ -6,7 +6,7 @@
 
         >
             <div
-                :key="item.key"
+                :key="index"
                 v-show="item.hasOwnProperty('dynamicAdd')"
             >
                 <input
@@ -16,6 +16,7 @@
                     value=""
                     v-focus
                     :key="item.key"
+
                     @blur="addNode(item, $event)"
                     @keyup.enter="addNode(item, $event)"
                 >
@@ -40,18 +41,18 @@
                     :style="options.iconStyle"
 
                 ></i>
-                </span>
 
                 <div class="inputCheck"
                      :class="{notAllNodes:item.nodeSelectNotAll}"
                      :style="{width:inputWidth+'px', height:inputWidth+'px'}"
                      v-show="options.showCheckbox"
-                     @click="walkCheckBox(item)"
+                     @click.stop="walkCheckBox(item)"
                 >
                     <input type="checkbox" class="check"
-                           v-if="options.showCheckbox && options.halfCheckedStatus  &&  !item.nodeSelectNotAll"
-                           v-model='item.checked'
-                           @change="handlecheckedChange(item)"
+                           v-if="options.showCheckbox  &&  !item.nodeSelectNotAll"
+                           :checked="item.checked"
+                           @change="checkBoxChange(item, $event)"
+                           :key="item.key"
                     />
                 </div>
                 <span
@@ -147,9 +148,14 @@
             },
             walkCheckBox(node){
                 if (node.nodeSelectNotAll) {
-                    node.checked = !node.checked
+                    Vue.set(node, 'checked', false)
                     this.handlecheckedChange(node)
                 }
+            },
+            checkBoxChange (node, e) {
+                Vue.set(node, 'checked', e.target.checked)
+                this.handlecheckedChange(node, e)
+
             },
             handleNodeExpand (node, index) {
                 if (node.open) {
@@ -177,6 +183,7 @@
                     }
                 }
             },
+
             handlecheckedChange (node) {
                 this.$emit('handlecheckedChange', node)
             },
@@ -186,8 +193,11 @@
                         this.tree.store.last.checked = !this.tree.store.last.checked
                         Vue.set(node, 'checked', this.tree.store.last.checked)
                     } else {
-                        Vue.set(this.tree.store.last, 'checked', false)
-                        Vue.set(node, 'checked', true)
+                        if ( !this.options.showCheckbox ) {
+                            Vue.set(this.tree.store.last, 'checked', false)
+                        }
+
+                        Vue.set(node, 'checked', !node.checked)
                         this.tree.store.last = node
                     }
                 } else {
@@ -201,6 +211,10 @@
                 try {
                     // todo loading
                     let a = await this.options.dynamicAddNode(item, index)
+                    // update data
+                    a.forEach((node, i) => {
+                        this.tree.store.setData(node)
+                    })
                     return Promise.resolve(true)
                 } catch (e) {
                     console.log(e)
@@ -230,8 +244,15 @@
              * @param item
              * @param e
              */
-            addNode (item, e) {
-                this.options.dynamicSaveNode(item, e)
+            async addNode (item, e) {
+                try {
+                    let d = await this.options.dynamicSaveNode(item, e)
+                    this.tree.store.setData(d)
+                    this.handlecheckedChange(d)
+
+                } catch (e) {
+                    console.log('Tree: save node error')
+                }
             }
         }
     }
@@ -395,7 +416,7 @@
     .halo-tree .check {
         display: inline-block;
         position: relative;
-        top: 4px;
+        top: -1px;
     }
 
     .halo-tree .handle-icon {
@@ -424,17 +445,23 @@
         position: relative;
     }
 
+    .halo-tree .inputCheck.notAllNodes {
+        font-family: "iconfont" !important;
+        font-size: 14px;
+        font-style: normal;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
     .halo-tree .inputCheck.notAllNodes:before {
-        content: "";
+        content: "\e640";
         display: inline-block;
         position: absolute;
         width: 100%;
         height: 100%;
         z-index: 10;
-        top: 50%;
-        left: 50%;
+        top: -1px;
+        left: 7px;
         transform: translate3d(-30%, -5%, 0);
         /*background-image: url("/../../assets/half.png");*/
-        background-image: url("assets/half.jpg");
     }
 </style>

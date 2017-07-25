@@ -18,8 +18,8 @@
     //  import './../dist/vue2-tree.min.css'
     Vue.use(ZTree)
 
-    const Tree1 = {
-        name: 'Tree1',
+    const Tree0 = {
+        name: 'Tree0',
         data: function () {
             return {
                 treeData: [
@@ -77,8 +77,8 @@
                     }
                 ],
                 options: {
-                    showCheckbox: true,
-                    halfCheckedStatus: true,//控制父框是否需要半钩状态
+                    showCheckbox: false,
+                    halfCheckedStatus: false, //控制父框是否需要半钩状态
 
                     search: {
                         useInitial: true,
@@ -95,7 +95,7 @@
         }
     }
 
-    export default Tree1
+    export default Tree0
 </script>
 
 <style lang="scss" scoped>

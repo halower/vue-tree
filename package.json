@@ -1,6 +1,6 @@
 {
   "name": "vue2-lazy-tree",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Vue component, Tree component, support lazy-load data",
   "author": "jackwang <wangxichao001@gmail.com>",
   "repository": {

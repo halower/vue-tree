@@ -8,25 +8,44 @@
 
         <div id="app" >
             <div>
-                <h2>Default Tree</h2>
-                <Tree1></Tree1>
+                <div>
+                    <h2>Default Tree</h2>
+                    <code>
+                        showCheckbox: false,
+                        halfCheckedStatus: false
+                    </code>
+                    <Tree0 :key="0"></Tree0>
+                </div>
+                <div>
+                    <h2>Default Tree with checkbox</h2>
+                    <code>
+                        showCheckbox: true,
+                        halfCheckedStatus: true
+                    </code>
+                    <Tree1 :key="1"></Tree1>
+                </div>
             </div>
             <div>
-                <h2> Lazy Load Tree</h2>
-                <Tree2></Tree2>
+                <div>
+                    <h2> Lazy Load Tree</h2>
+                    <Tree2 :key="2"></Tree2>
 
+                </div>
+                <div>
+                    <h2> Lazy Load Tree with checkbox </h2>
+                    <Tree3 :key="3"></Tree3>
+                </div>
             </div>
-            <div>
-                <h2>Other</h2>
 
-            </div>
         </div>
     </div>
 
 </template>
 <script>
+    import Tree0 from './Tree0'
     import Tree1 from './Tree1'
     import Tree2 from './Tree2'
+    import Tree3 from './Tree3'
 
     export default {
         name: "app",
@@ -36,8 +55,10 @@
             }
         },
         components: {
+            Tree0,
             Tree1,
-            Tree2
+            Tree2,
+            Tree3
         }
 
     }
@@ -45,15 +66,22 @@
 <style>
     #app {
         margin: 40px 40px;
-        display: flex;
+
     }
     #app > div {
+        display: flex;
         width: 100%;
         padding: 20px 20px;
         flex-shrink: 1;
         margin: 0 auto;
         justify-content: flex-start;
         align-content: flex-start;
+
+    }
+    #app > div  > div {
+        flex: 1;
+        padding: 20px 20px;
+        margin: 0 auto;
 
     }
 </style>

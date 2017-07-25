@@ -1,4 +1,5 @@
 const pinyin = require('chinese-to-pinyin')
+import Vue from 'vue'
 export default class TreeStore {
     constructor(options) {
         for (let option in options) {
@@ -9,28 +10,38 @@ export default class TreeStore {
         this.datas = new Map()
         const _traverseNodes = (root) => {
             for (let node of root) {
-                this.datas.set(node.id, node)
+                this.datas.set(node.key, node)
                 if (node.children && node.children.length > 0) _traverseNodes(node.children)
             }
         }
         _traverseNodes(this.root)
     }
-
+    __parseKey (key) {
+        return {
+            current: key,
+            parent: key.slice(0, -2)
+        }
+    }
     /**
      * 控制 checkbox 选中状态
      * @param node
      */
     changeCheckStatus(node) {
         const _traverseUp = (node) => {
-            if (node.checked && node.parentId) {
-                let parent = this.getNode(node.parentId)
-                parent.checked = this.sameSilibingChecked(node.parentId, node.id)
+            if (node.key.length <= 3) {
+                return false
+            }
+
+            let key = this.__parseKey(node.key)
+            if (node.checked) {
+                let parent = this.getNode(key.parent)
+                Vue.set(parent, 'checked', this.sameSilibingChecked(key.parent, key.current))
                 _traverseUp(parent)
             } else {
-                if (!node.checked && node.parentId) {
-                    let upparent = this.getNode(node.parentId)
-                    upparent.checked = false
-                    if (upparent.parentId) {
+                if (!node.checked) {
+                    let upparent = this.getNode(key.parent)
+                    Vue.set(upparent, 'checked', false)
+                    if (upparent.key) {
                         _traverseUp(upparent)
                     }
                 }
@@ -40,7 +51,7 @@ export default class TreeStore {
         const _traverseDown = (node) => {
             if (node.children && node.children.length > 0) {
                 for (let child of node.children) {
-                    child.checked = node.checked
+                    Vue.set(child, 'checked', node.checked)
                     _traverseDown(child)
                 }
             }
@@ -52,24 +63,30 @@ export default class TreeStore {
         let flag = false;
         //如果勾选的是子节点，父节点默认打上勾
         const _traverseUp = (node, flag) => {
+            if (node.key.length <= 3) {
+                return false
+            }
+
+            let key = this.__parseKey(node.key)
+
             let parent = null;
             if (node.checked) { //打钩
-                if (node.parentId) {
-                    parent = this.getNode(node.parentId)
+                if (key.parent) {
+                    parent = this.getNode(key.parent)
                     if (flag) {
                         parent.checked = true
                         parent.nodeSelectNotAll = true
                         _traverseUp(parent, true)
                     } else {
                         parent.checked = true;
-                        parent.nodeSelectNotAll = this.sameSilibingHalfChecked(true, parent, node.parentId, node.id) === 'half' ? true : false; //返回true则全钩，false为半钩
+                        parent.nodeSelectNotAll = this.sameSilibingHalfChecked(true, parent, key.parent, key.current) === 'half' ? true : false; //返回true则全钩，false为半钩
                         _traverseUp(parent)
                     }
                 }
             } else { //去钩
-                if (node.parentId) {
-                    parent = this.getNode(node.parentId)
-                    if (this.sameSilibingHalfChecked(false, parent, node.parentId, node.id) === "none") { //返回true则全没钩，false为半钩
+                if (key.parent) {
+                    parent = this.getNode(key.parent)
+                    if (this.sameSilibingHalfChecked(false, parent, key.parent, key.current) === "none") { //返回true则全没钩，false为半钩
                         parent.checked = false
                         parent.nodeSelectNotAll = false
                     } else {
@@ -86,7 +103,7 @@ export default class TreeStore {
                     node.nodeSelectNotAll = false
                 }
                 for (let child of node.children) {
-                    child.checked = node.checked
+                    Vue.set(child, 'checked', node.checked)
                     _traverseDown(child)
                 }
             }
@@ -97,18 +114,18 @@ export default class TreeStore {
 
     /**
      * 同级的是否全部 check
-     * @param parentId
-     * @param currentId
+     * @param parentKey
+     * @param currentKey
      * @returns {boolean}
      */
-    sameSilibingChecked(parentId, currentId) {
-        let parent = this.datas.get(parentId)
+    sameSilibingChecked(parentKey, currentKey) {
+        let parent = this.datas.get(parentKey)
         let sbIds = []
         parent.children.forEach(x => {
-            if (x.id !== currentId) sbIds.push(x.id)
+            if (x.key !== currentKey) sbIds.push(x.key)
         })
-        for (let id of sbIds) {
-            let node = this.getNode(id)
+        for (let key of sbIds) {
+            let node = this.getNode(key)
             if (!node.checked) return false
         }
         return true
@@ -122,11 +139,11 @@ export default class TreeStore {
      * @param currentId
      * @returns {*}
      */
-    sameSilibingHalfChecked(status, parent, parentId, currentId) {
+    sameSilibingHalfChecked(status, parent, parentKey, currentKey) {
         let sbIds = []
-        let currentNode = this.getNode(currentId)
+        let currentNode = this.getNode(currentKey)
         parent.children.forEach(x => {
-            if (!currentNode.nodeSelectNotAll && x.id !== currentId) sbIds.push(x.id) //除去当前节点的剩下节点
+            if (!currentNode.nodeSelectNotAll && x.key !== currentKey) sbIds.push(x.key) //除去当前节点的剩下节点
         })
 
         if (status) { //打钩
@@ -139,7 +156,7 @@ export default class TreeStore {
                 }
             } else {
                 if (currentNode.nodeSelectNotAll) {
-                    return "half" //表示全钩的状态
+                    return "all" //表示全钩的状态
                 }
             }
             return "all" //表示全钩的状态
@@ -153,15 +170,16 @@ export default class TreeStore {
                 }
             } else {
                 if (currentNode.nodeSelectNotAll) {
-                    return "half" //表示全钩的状态
+                    return "all" //表示全钩的状态
                 }
             }
             return "none"
         }
     }
     isExitParent(parent) {
-        if (parent.id) {
-            return this.getNode(node.parentId)
+        let key = this.getNode(parent.key)
+        if (key.current.length > 3) {
+            return this.getNode(key.parent)
         }
         return null
     }
@@ -225,5 +243,8 @@ export default class TreeStore {
             return res
         }
         return fullpinyin
+    }
+    setData (node) {
+        this.datas.set(node.key, node)
     }
 }

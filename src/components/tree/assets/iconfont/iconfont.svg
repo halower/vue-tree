@@ -2,7 +2,7 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
 <svg xmlns="http://www.w3.org/2000/svg">
 <metadata>
-Created by FontForge 20120731 at Sat Jul 22 22:00:04 2017
+Created by FontForge 20120731 at Tue Jul 25 16:22:21 2017
  By admin
 </metadata>
 <defs>
@@ -44,6 +44,9 @@ t49 -20.5t49 20.5t20.5 49.5t-20.5 49.5t-49 20.5t-49 -20.5t-20.5 -49.5zM800 481.5
 t-24 -57.5z" />
     <glyph glyph-name="square" unicode="&#xe60a;" 
 d="M831 683h-639q-26 0 -44.5 -19t-18.5 -45v-638q0 -27 18.5 -45.5t44.5 -18.5h639q26 0 44.5 18.5t18.5 45.5v638q0 26 -18.5 45t-44.5 19zM767 105q0 -25 -18 -43t-43 -18h-389q-25 0 -43 18t-18 43v390q0 26 18 43.5t43 17.5h389q25 0 43 -17.5t18 -43.5v-390z" />
+    <glyph glyph-name="halfcheck" unicode="&#xe640;" 
+d="M957 646v-556q0 -68 -49 -117.5t-118 -49.5h-556q-69 0 -118 49t-49 118v556q0 69 49 118t118 49h556q69 0 118 -49t49 -118v0zM691 483q0 29 -21 50q-20 20 -49 20h-235q-28 0 -49 -20q-21 -21 -21 -50v-234q0 -28 21 -50q21 -20 49 -20h235q29 0 49 20q21 21 21 50v234
+z" />
     <glyph glyph-name="squareo" unicode="&#xe808;" 
 d="M750 750h-476q-37 0 -64 -27t-27 -65v-475q0 -38 27 -65t64 -27h476q37 0 64 27t27 65v475q0 38 -27 65t-64 27zM914 658v-475q0 -68 -48 -116.5t-116 -48.5h-476q-68 0 -116 48.5t-48 116.5v475q0 68 48 116.5t116 48.5h476q68 0 116 -48.5t48 -116.5z" />
     <glyph glyph-name="xiajiantou" unicode="&#xe600;" 

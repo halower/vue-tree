@@ -57,7 +57,7 @@
         created () {
             this.isTree = true
             this.store = new TreeStore({
-                root: (this.treeData || []).slice(0),
+                root: (this.generateKey(this.treeData, '0') || []).slice(0),
                 last: null
             })
 
@@ -78,18 +78,42 @@
 
                 }, this.options)
         },
+
         watch: {
             search: function (val) {
                 this.store.filterNodes(val, this.options.search)
             },
-            treeData: function (data) {
-                this.store = new TreeStore({
-                    root: (this.treeData || []).slice(0),
-                    last: this.store.last
-                })
+            treeData: {
+                    handler: function (data, oldData) {
+                        this.store = new TreeStore({
+                            root: ( this.generateKey(this.treeData, '0') || []).slice(0),
+                            last: this.store.last
+                        })
+
+                    deep: true
+                }
             }
         },
         methods: {
+            /**
+             * generate key 0-1-2-3
+             * this is very important function for now module
+             * @param treeData
+             * @param parentKey
+             * @returns {Array}
+             */
+            generateKey (treeData = [], parentKey) {
+                treeData = treeData.map((item, i) => {
+                    item.key = parentKey + '-' + i.toString();
+
+                    if (item.hasOwnProperty('children') && item.children.length > 0) {
+                        this.generateKey(item.children, item.key)
+                    }
+
+                    return item;
+                })
+                return treeData;
+            },
             rootIconClick () {
                 this.itemsShow = !this.itemsShow
             },
@@ -121,6 +145,9 @@
                 }
                 return selectedNodeIds
             },
+            /**
+             * 初始化时检查 参数
+             */
             checkOptions () {
                 if ('lazy' in this.options ) {
                     if (typeof this.options.load !== 'function') {
@@ -157,9 +184,11 @@
                     }
                 }
             }
+
         },
         components: {TreeNode}
     }
+
 </script>
 <style lang="scss"  scoped>
     @import './assets/iconfont/iconfont.css';

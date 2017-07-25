@@ -24,7 +24,37 @@ i must say, this doc is terrible, but the function is really good
 
 notice: 
 
-  generateKey && loadingChild method
+  loadingChild method
+  
+  this branch require generateKey method, 
+  because the children node is dynamic, the vue watch method can not work when the tree structure deep > 2
+  so, the solution is use generateKey Function, when u add children node dynamic
+  
+  i'll be put this Function to assert, you can import this function 
+  
+  import { ZTree, ComboZTree, generateKey, getParentNode } from 'vue2-lazy-tree'
+  
+  import ZTree from 'vue2-lazy-tree'
+  
+      /**
+       * generate key 0-1-2-3
+       * this is very important function for now module
+       * @param treeData
+       * @param parentKey
+       * @returns {Array}
+       */
+      generateKey (treeData = [], parentKey= '0') {
+          treeData = treeData.map((item, i) => {
+              item.key = parentKey + '-' + i.toString();
+
+              if (item.hasOwnProperty('children') && item.children.length > 0) {
+                  this.generateKey(item.children, item.key)
+              }
+
+              return item;
+          })
+          return treeData;
+      }
 
 
 ## Build Setup
@@ -94,12 +124,12 @@ npm run build
         // function handle add node; the new node must have `dynamicAdd : true` property
         // the tree component rely on this show editor
         // param { node }
-        // return Promise
+        // return Promise(parent.children) must bu children Array
         dynamicAddNode: [Function],
         // function handle save node; when successfull saved, the new node must del `dynamicAdd` property
         // the tree component rely on this save node
         // param { node, $event }
-        // return Promise
+        // return Promise(node) must be node Object return from server
         dynamicSaveNode: [Function],
         // function handle leaf icon
         // param { node }
@@ -146,5 +176,7 @@ and when some new feature is test ok, i will pull a new request to halower
 ### QQ group:255965810
 
 ## Update History
+
+* fix checkbox bugs, showCheckbox & halfCheckedStatus   25072017
 
 * Add how to use it in the production env       25072017
