@@ -46,6 +46,12 @@ npm run build
 
       npm install vue2-lazy-tree or cnpm install vue2-lazy-tree (国内)
 
+### How to use in u production
+
+    import { ZTree } from 'vue2-lazy-tree'
+    import './../dist/vue2-tree.min.css'
+    Vue.use(ZTree)
+    
 ### Demo
     
     npm install & npm run dev
@@ -139,3 +145,6 @@ and when some new feature is test ok, i will pull a new request to halower
 
 ### QQ group:255965810
 
+## Update History
+
+* Add how to use it in the production env       25072017
