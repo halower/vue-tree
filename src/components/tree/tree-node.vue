@@ -228,7 +228,6 @@
 
                     return Promise.resolve(true)
                 } catch (e) {
-                    console.log(e)
                     return Promise.reject(e)
                 }
             },

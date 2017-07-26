@@ -50,7 +50,7 @@ npm run dev
 
 # build for production with minification  publish to npm
 npm run build
-
+```
 
 -----
 
