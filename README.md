@@ -148,7 +148,15 @@ npm run build
 |---------- |-------- |---------- |
 | node-click  | 节点被点击时的回调 | 共1个参数，节点组件本身。 |
 
+### iconfont
 
+u can use build in iconfont class or u add it by u self [iconfont](http://iconfont.cn/)
+
+how to find the build in class:
+
+    // just go to the package folder, under node_modules/vue2-lazy-tree/
+    src/components/tree/assets/iconfont/demo_fontclass.html
+    
 ----
 
 package is copy from [https://github.com/halower/vue2-tree](https://github.com/halower/vue2-tree)
@@ -159,6 +167,8 @@ and when some new feature is test ok, i will pull a new request to halower
 
 ## Update History
 
-* fix checkbox bugs, showCheckbox & halfCheckedStatus   25072017
+* fix key bugs, add iconfont class                              25072017
 
-* Add how to use it in the production env       25072017
+* fix checkbox bugs, showCheckbox & halfCheckedStatus           25072017
+
+* Add how to use it in the production env                       25072017
