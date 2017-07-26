@@ -56,10 +56,7 @@
         },
         created () {
             this.isTree = true
-            this.store = new TreeStore({
-                root: (this.generateKey(this.treeData, '0') || []).slice(0),
-                last: null
-            })
+            this.dealTreeData()
 
             this.checkOptions() // check options
 
@@ -84,14 +81,10 @@
                 this.store.filterNodes(val, this.options.search)
             },
             treeData: {
-                    handler: function (data, oldData) {
-                        this.store = new TreeStore({
-                            root: ( this.generateKey(this.treeData, '0') || []).slice(0),
-                            last: this.store.last
-                        })
-
-                    deep: true
-                }
+                handler: function (data, oldData) {
+                    this.dealTreeData()
+                },
+                deep: true
             }
         },
         methods: {
@@ -183,6 +176,16 @@
                         console.error('leafIcon must be Function')
                     }
                 }
+            },
+            /**
+             * del tree data
+             * when created, update, dynamic add node
+             */
+            dealTreeData () {
+                this.store = new TreeStore({
+                    root: (this.generateKey(this.treeData, '0') || []).slice(0),
+                    last: null
+                })
             }
 
         },

@@ -22,40 +22,22 @@ i must say, this doc is terrible, but the function is really good
 
 * ie9,10,11,spartan
 
+__issues__
+
+* checkbox status fix later
+
+    showCheckbox: true,  
+    halfCheckedStatus: true
+
+
 notice: 
 
   loadingChild method
-  
-  this branch require generateKey method, 
-  because the children node is dynamic, the vue watch method can not work when the tree structure deep > 2
-  so, the solution is use generateKey Function, when u add children node dynamic
-  
-  i'll be put this Function to assert, you can import this function 
   
   import { ZTree, ComboZTree, generateKey, getParentNode } from 'vue2-lazy-tree'
   
   import ZTree from 'vue2-lazy-tree'
   
-      /**
-       * generate key 0-1-2-3
-       * this is very important function for now module
-       * @param treeData
-       * @param parentKey
-       * @returns {Array}
-       */
-      generateKey (treeData = [], parentKey= '0') {
-          treeData = treeData.map((item, i) => {
-              item.key = parentKey + '-' + i.toString();
-
-              if (item.hasOwnProperty('children') && item.children.length > 0) {
-                  this.generateKey(item.children, item.key)
-              }
-
-              return item;
-          })
-          return treeData;
-      }
-
 
 ## Build Setup
 

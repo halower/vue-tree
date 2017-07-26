@@ -44,7 +44,7 @@
 
                 <div class="inputCheck"
                      :class="{notAllNodes:item.nodeSelectNotAll}"
-                     :style="{width:inputWidth+'px', height:inputWidth+'px'}"
+                     :style="{width:inputWidth+'px', height:inputWidth+'px', color: options.iconStyle.color}"
                      v-show="options.showCheckbox"
                      @click.stop="walkCheckBox(item)"
                 >
@@ -154,7 +154,7 @@
             },
             checkBoxChange (node, e) {
                 Vue.set(node, 'checked', e.target.checked)
-                this.handlecheckedChange(node, e)
+                this.handlecheckedChange(node)
 
             },
             handleNodeExpand (node, index) {
@@ -176,7 +176,12 @@
                             Vue.set(node, 'open', true)
                             Vue.set(node, 'loaded', true)
                             Vue.set(node, 'loading', false)
+
+                            if (this.options.showCheckbox) {
+                                this.handlecheckedChange(node)
+                            }
                         })
+
 
                     } catch (e) {
                         console.log('Get Child Error')
@@ -209,12 +214,18 @@
             },
             async handleClickAddNode(item, index) {
                 try {
+//                    this.$nextTick(function () {
+//                        this.tree
+//                    })
                     // todo loading
                     let a = await this.options.dynamicAddNode(item, index)
-                    // update data
-                    a.forEach((node, i) => {
-                        this.tree.store.setData(node)
-                    })
+
+//                    // update data
+//                    a.forEach((node, i) => {
+//                        this.tree.store.setData(node)
+//                    })
+
+
                     return Promise.resolve(true)
                 } catch (e) {
                     console.log(e)
@@ -247,7 +258,7 @@
             async addNode (item, e) {
                 try {
                     let d = await this.options.dynamicSaveNode(item, e)
-                    this.tree.store.setData(d)
+//                    this.tree.store.setData(d)
                     this.handlecheckedChange(d)
 
                 } catch (e) {

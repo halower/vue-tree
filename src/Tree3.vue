@@ -25,7 +25,7 @@
             return {
                 options1: {
                     showCheckbox: true,
-                    halfCheckedStatus: false,//控制父框是否需要半钩状态
+                    halfCheckedStatus: true, //控制父框是否需要半钩状态
 
                     lazy: true,
                     load: this.loadingChild,
@@ -212,8 +212,8 @@
                     let tem = this.getParentNode(node, this.treeData1)
 
                     // set Children
-                    Vue.set(tem, 'children', this.generateKey(data, node.key));
-//                    Vue.set(tem, 'children', data);
+//                    Vue.set(tem, 'children', this.generateKey(data, node.key));
+                    Vue.set(tem, 'children', data);
 
                     Promise.resolve(data);
                 } catch (e) {
@@ -244,7 +244,7 @@
 
                 parent.children.splice(0, 0, Object.assign({}, { dynamicAdd: true, loaded: true }, node))
 
-                this.generateKey(parent.children, parent.key) // regenerate key
+//                this.generateKey(parent.children, parent.key) // regenerate key
                 return Promise.resolve(parent.children)
 
             },

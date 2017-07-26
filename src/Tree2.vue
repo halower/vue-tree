@@ -134,8 +134,8 @@
                         searched: false
                     }
                 ]
-                this.treeData1 = generateKey(treeData, 0);
-//                this.treeData1 = treeData
+//                this.treeData1 = generateKey(treeData, 0);
+                this.treeData1 = treeData
 
             },
             async loadingChild (node, index) {
@@ -171,8 +171,8 @@
                     let tem = getParentNode(node, this.treeData1)
 
                     // set Children
-                    Vue.set(tem, 'children', generateKey(data, node.key));
-//                    Vue.set(tem, 'children', data);
+//                    Vue.set(tem, 'children', generateKey(data, node.key));
+                    Vue.set(tem, 'children', data);
 
                     Promise.resolve(data);
                 } catch (e) {
@@ -203,7 +203,7 @@
 
                 parent.children.splice(0, 0, Object.assign({}, { dynamicAdd: true, loaded: true }, node))
 
-                generateKey(parent.children, parent.key) // regenerate key
+//                generateKey(parent.children, parent.key) // regenerate key
                 return Promise.resolve(true)
 
             },
