@@ -1,4 +1,4 @@
-# vue2-lazy-tree
+# vue2-tree
 
 first of all, i highly recommended to see the demo 
 
@@ -52,8 +52,19 @@ npm run dev
 npm run build
 ```
 
------
 
+### 贡献者名单
+
+ - lily7129
+ - ddtramp
+ 
+### develop logs
+- 2017-5-2: 支持下拉树, add combotree
+- 2017-5-26: 添加父节点半选状态框 
+- 2017-6-08: 修复火狐复选事件的bug 
+- 2017-6-21: 修复动态渲染
+- 2017-7-15 : 支持异步加载数据，修复IE9-11的bug
+### QQ交流群:255965810
 ### How to install the plugin
 
       npm install vue2-lazy-tree or cnpm install vue2-lazy-tree (国内)
@@ -154,21 +165,8 @@ u can use build in iconfont class or u add it by u self [iconfont](http://iconfo
 
 how to find the build in class:
 
-    // just go to the package folder, under node_modules/vue2-lazy-tree/
-    src/components/tree/assets/iconfont/demo_fontclass.html
+    // just go to the package folder, under
+    node_modules/vue2-lazy-tree/src/components/tree/assets/iconfont/demo_fontclass.html
     
-----
 
-package is copy from [https://github.com/halower/vue2-tree](https://github.com/halower/vue2-tree)
 
-and when some new feature is test ok, i will pull a new request to halower 
-
-### QQ group:255965810
-
-## Update History
-
-* fix key bugs, add iconfont class                              25072017
-
-* fix checkbox bugs, showCheckbox & halfCheckedStatus           25072017
-
-* Add how to use it in the production env                       25072017
