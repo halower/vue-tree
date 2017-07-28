@@ -16,7 +16,7 @@ i must say, this doc is terrible, but the function is really good
 
 * dynamic add node 
 
-* custom tree icon, use [iconfont](http://iconfont.cn/)
+* custom tree icon, use [iconFont](http://iconfont.cn/)
 
 * custom icon style. color
 
@@ -153,7 +153,7 @@ npm run build
 
 ### iconfont
 
-u can use build in iconfont class or u add it by u self [iconfont](http://iconfont.cn/)
+u can use build in iconfont class or u add it by u self [iconFont](http://iconfont.cn/)
 
 how to find the build in class:
 
