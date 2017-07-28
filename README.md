@@ -76,6 +76,7 @@ npm run build
 
 ```
      options: {
+        labelKey: '',           { String } set the label field, default 'label'
         showCheckbox: true,  //是否支持多选,
         halfCheckedStatus: true,//控制父框是否需要半钩状态,
         
@@ -89,7 +90,7 @@ npm run build
             open: 'icon-xiajiantou',
             add: 'icon-add'
         },
-        iconStyle: {                        // custom icon style, sometimes u just need to set colr
+        iconStyle: {                        // custom icon style, sometimes u just need to set color
             color: '#108ee9'                // default #000
         },
         
@@ -126,15 +127,17 @@ npm run build
 
     /* 节点元素 */
     {
-      id: 1, //节点标志
-      label: '一级节点', //节点名称
-      open: true, // 是否打开节点
-      checked: false, //是否被选中
-      parentId: null, //父级节点Id
-      visible: true, //是否可见
-      searched: false, //是否是搜索值,
-      nodeSelectNotAll: false,//表示父框可以半钩状态
-      children: [] //子节点
+      id: 1,                    // 节点标志
+      label: '一级节点',         // 节点名称
+      open: true,               // 是否打开节点
+      checked: false,           // 是否被选中
+      parentId: null,           // 父级节点Id
+      visible: true,            // 是否可见
+      searched: false,          // 是否是搜索值,
+      nodeSelectNotAll: false,  // 表示父框可以半钩状态
+      leaf: true,               // 是否是叶子节点， 如果是叶子结点， lazy=true 时，显示 leafIcon， 此节点不再异步加载数据
+      children: []              // 子节点,
+
     }
 ```
 ### 方法
@@ -166,6 +169,10 @@ and when some new feature is test ok, i will pull a new request to halower
 ### QQ group:255965810
 
 ## Update History
+
+* add label key property, set the label field                   28072017
+
+* add node leaf                                                 27072017
 
 * fix key bugs, add iconfont class                              25072017
 

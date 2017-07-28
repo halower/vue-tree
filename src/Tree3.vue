@@ -161,7 +161,8 @@
                         nodeSelectNotAll: false,
                         parentId: null,
                         visible: true,
-                        searched: false
+                        searched: false,
+                        leaf: true
                     },
                     {
                         id: 4,

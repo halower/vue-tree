@@ -27,7 +27,7 @@
                  @click="handleNode(item)"
 
             >
-                <i v-if=" item.children && item.children.length > 0  ||  options.hasOwnProperty('lazy') && options.lazy && !item.hasOwnProperty('loaded') "
+                <i v-if=" isLeaf(item) "
                    @click.stop='handleNodeExpand(item, index)'
                    class="icon iconfont  handle-icon"
                    :class="[ item.open ? options.iconClass.open : options.iconClass.close ]"
@@ -65,7 +65,7 @@
                 <span
                     class="label"
                 >
-                    {{item.label}}
+                    {{ item[options.labelKey] }}
                 </span>
 
                 <i
@@ -263,6 +263,12 @@
                 } catch (e) {
                     console.log('Tree: save node error')
                 }
+            },
+            isLeaf (item) {
+                if (item.hasOwnProperty('leaf') && item.leaf) {
+                    return false
+                }
+                return  item.children && item.children.length > 0  || this. options.hasOwnProperty('lazy') && this.options.lazy && !item.hasOwnProperty('loaded')
             }
         }
     }
@@ -405,22 +411,6 @@
     .halo-tree ul ul {
         padding-left: 19px;
         padding-top: 10px;
-    }
-
-    .halo-tree li.leaf {
-        padding-left: 19px;
-    }
-
-    .halo-tree li.leaf:after {
-        content: '';
-        left: -8px;
-        position: absolute;
-        right: auto;
-        border-width: 1px;
-        border-top: 1px dashed #999;
-        height: 20px;
-        top: 17px;
-        width: 24px;
     }
 
     .halo-tree .check {

@@ -61,6 +61,7 @@
             this.checkOptions() // check options
 
             this.treeNodeOptions = Object.assign({}, {
+                labelKey: 'label',      // 默认的标题字段
                 iconClass: DEFAULTICONCLASS,
                 iconStyle: { color: DEFAULTICONCOLOR },
 
