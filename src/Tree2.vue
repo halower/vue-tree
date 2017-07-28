@@ -205,6 +205,7 @@
                 parent.children.splice(0, 0, Object.assign({}, { dynamicAdd: true, loaded: true }, node))
 
 //                generateKey(parent.children, parent.key) // regenerate key
+
                 return Promise.resolve(true)
 
             },
@@ -212,13 +213,17 @@
                 if (!e.target.value) {
                     return
                 }
-                // todo sent data to sever
-                delete item.dynamicAdd // 删除属性
-                Vue.set(item, 'label', e.target.value)
-                e.target.value = ''
-                setTimeout(() => {
-                    return Promise.resolve(true)
-                }, 1000)
+
+                return new Promise((resolve, reject) => {
+                    // todo sent data to sever
+                    delete item.dynamicAdd // 删除属性
+                    Vue.set(item, 'label', e.target.value)
+                    e.target.value = ''
+                    setTimeout(() => {
+                        resolve(item)
+                    }, 1000)
+                })
+
 
             },
             /**

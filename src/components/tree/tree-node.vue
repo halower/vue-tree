@@ -258,8 +258,7 @@
                 try {
                     let d = await this.options.dynamicSaveNode(item, e)
 //                    this.tree.store.setData(d)
-                    this.handlecheckedChange(d)
-
+                    this.handlecheckedChange(item)
                 } catch (e) {
                     console.log('Tree: save node error')
                 }
