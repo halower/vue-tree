@@ -3,45 +3,86 @@
         <li v-for='(item, index) of nodeData'
             v-show="!item.hasOwnProperty('visible') || item.visible"
             :key="item.key"
+
         >
-            <i v-if=" item.children && item.children.length > 0  ||  options.hasOwnProperty('lazy') && !item.hasOwnProperty('loaded') "
-               @click.stop='handleNodeExpand(item, index)'
-               class="icon iconfont icon-color"
-               :class="[ !options.hasOwnProperty('lazy') || item.open? 'icon-jian-fangkuang':'icon-jia-fangkuang', 'icon']"
+            <div
+                :key="index"
+                v-show="item.hasOwnProperty('dynamicAdd')"
             >
-            </i>
-            </span>
+                <input
+                    ref="inputadd"
+                    type="text"
+                    class="add-input"
+                    value=""
+                    v-focus
+                    :key="item.key"
 
-            <div class="inputCheck"
-                 :class="{notAllNodes:item.nodeSelectNotAll}"
-                 :style="{width:inputWidth+'px', height:inputWidth+'px'}"
-                 v-show="options.showCheckbox"
-                 @click="walkCheckBox(item)"
-            >
-                <input type="checkbox" class="check"
-                       v-if="options.showCheckbox && options.halfCheckedStatus  &&  !item.nodeSelectNotAll"
-                       v-model='item.checked'
-                       @change="handlecheckedChange(item)"
-                />
+                    @blur="addNode(item, $event)"
+                    @keyup.enter="addNode(item, $event)"
+                >
             </div>
-            <span
-                class="icon-color halo-tree-icon_loading halo-tree-iconEle"
-                v-show="item.loading"
-            >
+            <div v-show="!item.hasOwnProperty('dynamicAdd')"
+                 class="item-handle-area"
+                 :class="{'node-selected':(item.checked && !options.showCheckbox) || item.searched }"
+                 @click="handleNode(item)"
 
-            </span>
-            <span
-                    @click="handleNode(item)"
-                    class="label"
-                    :class="{'node-selected':(item.checked && !options.showCheckbox) || item.searched }"
             >
-                {{item.label}}
-            </span>
-            <tree-node v-if="item.children && item.children.length > 0"
-                       :options="options"
-                       @handlecheckedChange="handlecheckedChange"
-                       v-show='item.open'
-                       :tree-data="item.children"
+                <i v-if=" isLeaf(item) "
+                   @click.stop='handleNodeExpand(item, index)'
+                   class="icon iconfont  handle-icon"
+                   :class="[ item.open ? options.iconClass.open : options.iconClass.close ]"
+                   :style="options.iconStyle"
+                >
+                </i>
+                <i
+                    v-else
+                    class="icon iconfont "
+                    :class="leafIcon(item)"
+                    :style="options.iconStyle"
+
+                ></i>
+
+                <div class="inputCheck"
+                     :class="{notAllNodes:item.nodeSelectNotAll}"
+                     :style="{width:inputWidth+'px', height:inputWidth+'px', color: options.iconStyle.color}"
+                     v-show="options.showCheckbox"
+                     @click.stop="walkCheckBox(item)"
+                >
+                    <input type="checkbox" class="check"
+                           v-if="options.showCheckbox  &&  !item.nodeSelectNotAll"
+                           :checked="item.checked"
+                           @change="checkBoxChange(item, $event)"
+                           :key="item.key"
+                    />
+                </div>
+                <span
+                    class="halo-tree-icon_loading halo-tree-iconEle"
+                    v-show="item.loading"
+                    :style="options.iconStyle"
+                >
+
+                </span>
+                <span
+                    class="label"
+                >
+                    {{ item[options.labelKey] }}
+                </span>
+
+                <i
+                    class="iconfont add-icon"
+                    :class="options.iconClass.add"
+                    :style="options.iconStyle"
+                    v-if="canAdd(item)"
+                    @click.stop="handleClickAddNode(item, index)"
+                ></i>
+            </div>
+            <tree-node
+                ref="treenode"
+                v-if="item.children && item.children.length > 0"
+                :options="options"
+                @handlecheckedChange="handlecheckedChange"
+                v-show='item.open'
+                :tree-data="item.children"
 
             >
             </tree-node>
@@ -50,11 +91,18 @@
 </template>
 <script>
     import Vue from 'vue'
+
+    Vue.directive('focus', {
+        update: function (el) {
+            el.focus()
+        }
+    })
+
     export default {
         name: 'treeNode',
         props: {
-            treeData: [Array],
-            options: [Object]
+            treeData: Array,
+            options: Object
         },
         data () {
             return {
@@ -74,6 +122,7 @@
                 console.warn('找不到树节点')
             }
             this.nodeData = (this.treeData || []).slice(0)
+
         },
         computed: {
             inputWidth: function () {
@@ -82,6 +131,7 @@
                 }
                 return 13
             }
+
         },
         watch: {
             treeData: function (data) {
@@ -98,9 +148,14 @@
             },
             walkCheckBox(node){
                 if (node.nodeSelectNotAll) {
-                    node.checked = !node.checked
+                    Vue.set(node, 'checked', false)
                     this.handlecheckedChange(node)
                 }
+            },
+            checkBoxChange (node, e) {
+                Vue.set(node, 'checked', e.target.checked)
+                this.handlecheckedChange(node)
+
             },
             handleNodeExpand (node, index) {
                 if (node.open) {
@@ -121,14 +176,19 @@
                             Vue.set(node, 'open', true)
                             Vue.set(node, 'loaded', true)
                             Vue.set(node, 'loading', false)
+
+                            if (this.options.showCheckbox) {
+                                this.handlecheckedChange(node)
+                            }
                         })
 
 
                     } catch (e) {
-                        console.log('Get Child Erroe')
+                        console.log('Get Child Error')
                     }
                 }
             },
+
             handlecheckedChange (node) {
                 this.$emit('handlecheckedChange', node)
             },
@@ -138,8 +198,11 @@
                         this.tree.store.last.checked = !this.tree.store.last.checked
                         Vue.set(node, 'checked', this.tree.store.last.checked)
                     } else {
-                        Vue.set(this.tree.store.last, 'checked', false)
-                        Vue.set(node, 'checked', true)
+                        if ( !this.options.showCheckbox ) {
+                            Vue.set(this.tree.store.last, 'checked', false)
+                        }
+
+                        Vue.set(node, 'checked', !node.checked)
                         this.tree.store.last = node
                     }
                 } else {
@@ -148,82 +211,69 @@
 
                 }
                 this.tree.$emit('node-click', node)
+            },
+            async handleClickAddNode(item, index) {
+                try {
+//                    this.$nextTick(function () {
+//                        this.tree
+//                    })
+                    // todo loading
+                    let a = await this.options.dynamicAddNode(item, index)
+
+//                    // update data
+//                    a.forEach((node, i) => {
+//                        this.tree.store.setData(node)
+//                    })
+
+
+                    return Promise.resolve(true)
+                } catch (e) {
+                    return Promise.reject(e)
+                }
+            },
+            /**
+             * filter is show add icon
+             * @param item
+             * @returns {*}
+             */
+            canAdd (item) {
+                if (this.options.dynamicAdd) {
+                    return this.options.dynamicAddFilter(item)
+                }
+                return false
+            },
+            /**
+             * 叶子节点的 icon
+             * @param item
+             */
+            leafIcon (node) {
+                return this.options.leafIcon(node)
+            },
+            /**
+             * when trigger blur or keyup.enter
+             * @param item
+             * @param e
+             */
+            async addNode (item, e) {
+                try {
+                    let d = await this.options.dynamicSaveNode(item, e)
+//                    this.tree.store.setData(d)
+                    this.handlecheckedChange(item)
+                } catch (e) {
+                    console.log('Tree: save node error')
+                }
+            },
+            isLeaf (item) {
+                if (item.hasOwnProperty('leaf') && item.leaf) {
+                    return false
+                }
+                return  item.children && item.children.length > 0  || this. options.hasOwnProperty('lazy') && this.options.lazy && !item.hasOwnProperty('loaded')
             }
         }
     }
 </script>
-<style scoped>
-
-    @font-face {
-        font-family: "iconfont";
-        src: url('./../../assets/iconfont/iconfont.eot?t=1499924440773'); /* IE9*/
-        src: url('./../../assets/iconfont/iconfont.eot?t=1499924440773#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('./../../assets/iconfont/iconfont.woff?t=1499924440773') format('woff'), /* chrome, firefox */ url('./../../assets/iconfont/iconfont.ttf?t=1499924440773') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/ url('./../../assets/iconfont/iconfont.svg?t=1499924440773#iconfont') format('svg'); /* iOS 4.1- */
-    }
-
-    .iconfont {
-        font-family: "iconfont" !important;
-        font-size: 16px;
-        font-style: normal;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-
-    .icon-jia-fangkuang:before {
-        content: "\e8de";
-    }
-
-    .icon-jian-fangkuang:before {
-        content: "\e8e0";
-    }
-
-    .icon-loading:before {
-        content: "\e647";
-    }
-
-    .icon-color {
-        color: #108ee9;
-    }
-
-    /**  todo   **/
-    .halo-tree li span.halo-tree-iconEle {
-        margin: 0;
-        width: 24px;
-        height: 24px;
-        line-height: 24px;
-        display: inline-block;
-        vertical-align: middle;
-        border: 0 none;
-        cursor: pointer;
-        outline: none;
-        text-align: center;
-    }
-
-    .halo-tree li span.halo-tree-icon_loading::after {
-        display: inline-block;
-        font-family: 'iconfont';
-        text-rendering: optimizeLegibility;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        content: "\e647";
-        -webkit-animation: loadingCircle 1s infinite linear;
-        animation: loadingCircle 1s infinite linear;
-
-    }
-
-    @keyframes loadingCircle {
-        0% {
-            transform-origin: 50% 50%;
-            transform: rotate(0deg);
-        }
-        100% {
-            transform-origin: 50% 50%;
-            transform: rotate(360deg);
-        }
-    }
-
-    li:hover {
-        cursor: pointer;
-    }
+<style  lang="scss" scoped>
+    @import './assets/iconfont/iconfont.css';
 
     .halo-tree {
         font-size: 14px;
@@ -233,13 +283,18 @@
         border-radius: 4px;
     }
 
-    .node-selected {
+    .halo-tree li:hover {
+        cursor: pointer;
+    }
+
+    .halo-tree .node-selected {
         background-color: #ddd
     }
 
     .halo-tree li {
+        line-height: 20px;
         margin: 0;
-        padding: 5px 5px 5px 0;
+        padding: 4px 0 4px 4px;
         position: relative;
         list-style: none;
         user-select: none;
@@ -259,7 +314,7 @@
     .halo-tree li:after,
     .halo-tree li:before {
         content: '';
-        left: -8px;
+        left: -11px;
         position: absolute;
         right: auto;
         border-width: 1px
@@ -269,7 +324,7 @@
         border-left: 1px dashed #999;
         bottom: 50px;
         height: 100%;
-        top: -8px;
+        top: -10px;
         width: 1px;
 
     }
@@ -277,19 +332,71 @@
     .halo-tree li:after {
         border-top: 1px dashed #999;
         height: 20px;
-        top: 17px;
+        top: 15px;
         width: 12px
+    }
+    .halo-tree .item-handle-area { height: 24px; }
+    .halo-tree li .add-input {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-color: #fff;
+        background-image: none;
+        border-radius: 4px;
+        border: 1px solid #bfcbd9;
+        box-sizing: border-box;
+        color: #1f2d3d;
+        display: inline-block;
+        font-size: inherit;
+        height: 24px;
+        outline: none;
+        padding: 3px 10px;
+        transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+        width: 100%;
+    }
+
+    /* loading */
+    .halo-tree li span.halo-tree-iconEle {
+        margin: 0;
+        width: 24px;
+        height: 24px;
+        line-height: 20px;
+        display: inline-block;
+        vertical-align: middle;
+        border: 0 none;
+        cursor: pointer;
+        outline: none;
+        text-align: center;
+    }
+
+    .halo-tree li span.halo-tree-icon_loading::after {
+        display: inline-block;
+        font-family: 'iconfont';
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        content: "\e63d";
+        -webkit-animation: loadingCircle 1s infinite linear;
+        animation: loadingCircle 1s infinite linear;
+
+    }
+
+    @keyframes loadingCircle {
+        0% {
+            transform-origin: 50% 50%;
+            transform: rotate(0deg);
+        }
+        100% {
+            transform-origin: 50% 50%;
+            transform: rotate(360deg);
+        }
     }
 
     .halo-tree li span {
         display: inline-block;
-        padding: 3px 3px;
+        padding: 3px 0;
         text-decoration: none;
         border-radius: 3px;
-        margin-left: 4px;
-    }
-    .halo-tree li span.label {
-        margin-left: 0px;
     }
 
     .halo-tree li:last-child::before {
@@ -305,36 +412,25 @@
         padding-top: 10px;
     }
 
-    .halo-tree li.leaf {
-        padding-left: 19px;
-    }
-
-    .halo-tree li.leaf:after {
-        content: '';
-        left: -8px;
-        position: absolute;
-        right: auto;
-        border-width: 1px;
-        border-top: 1px dashed #999;
-        height: 20px;
-        top: 17px;
-        width: 24px;
-    }
-
-    .check {
+    .halo-tree .check {
         display: inline-block;
         position: relative;
-        top: 4px;
+        top: -1px;
     }
 
-    .halo-tree .icon {
-        margin-left: 4px;
+    .halo-tree .handle-icon {
+        margin-right: 0;
+    }
+    .halo-tree .add-icon {
+        position: absolute;
+        top: 8px;
+        right: 0;
     }
 
     .search {
         width: 14px;
         height: 14px;
-        background-image: url("../../assets/search.png");
+        background-image: url("assets/search.png");
     }
 
     /*.check.notAllNodes{
@@ -343,22 +439,28 @@
       -ms-appearance: none;
       width: 13px;
     }*/
-    .inputCheck {
+    .halo-tree  .inputCheck {
         display: inline-block;
         position: relative;
     }
 
-    .inputCheck.notAllNodes:before {
-        content: "";
+    .halo-tree .inputCheck.notAllNodes {
+        font-family: "iconfont" !important;
+        font-size: 14px;
+        font-style: normal;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    .halo-tree .inputCheck.notAllNodes:before {
+        content: "\e640";
         display: inline-block;
         position: absolute;
         width: 100%;
         height: 100%;
         z-index: 10;
-        top: 50%;
-        left: 50%;
+        top: -1px;
+        left: 7px;
         transform: translate3d(-30%, -5%, 0);
         /*background-image: url("/../../assets/half.png");*/
-        background-image: url("../../assets/half.jpg");
     }
 </style>
