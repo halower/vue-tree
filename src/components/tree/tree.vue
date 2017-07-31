@@ -13,7 +13,7 @@
             >
 
             </i>
-            我的组织
+            {{ treeNodeOptions.rootName }}
         </div>
 
         <tree-node
@@ -61,6 +61,8 @@
             this.checkOptions() // check options
 
             this.treeNodeOptions = Object.assign({}, {
+                rootName: '根节点',
+
                 labelKey: 'label',      // 默认的标题字段
                 iconClass: DEFAULTICONCLASS,
                 iconStyle: { color: DEFAULTICONCOLOR },
