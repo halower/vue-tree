@@ -100,6 +100,8 @@ npm run build
         
         showSearch: false, // 是否显示搜索
         
+        rootName: '我的组织',       // custom root node name
+
         iconClass: {                        // custom icon class, Default
             close: 'icon-youjiantou',
             open: 'icon-xiajiantou',
