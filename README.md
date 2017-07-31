@@ -172,6 +172,8 @@ and when some new feature is test ok, i will pull a new request to halower
 
 ## contributor
 
+* lily7129
+* halower
 * https://github.com/alonesuperman
 
 ## Update History
