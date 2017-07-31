@@ -166,9 +166,17 @@ package is copy from [https://github.com/halower/vue2-tree](https://github.com/h
 
 and when some new feature is test ok, i will pull a new request to halower 
 
-### QQ group:255965810
+## discuss
+ 
+ QQ group:255965810
+
+## contributor
+
+* https://github.com/alonesuperman
 
 ## Update History
+
+* fix generateKey method bug                                    31072017
 
 * add label key property, set the label field                   28072017
 
