@@ -162,10 +162,6 @@ how to find the build in class:
     
 ----
 
-package is copy from [https://github.com/halower/vue2-tree](https://github.com/halower/vue2-tree)
-
-and when some new feature is test ok, i will pull a new request to halower 
-
 ## discuss
  
  QQ group:255965810
