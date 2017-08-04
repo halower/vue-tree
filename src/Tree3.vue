@@ -289,6 +289,6 @@
     export default Tree3
 </script>
 
-<style lang="scss" scoped>
+<style  scoped>
 
 </style>

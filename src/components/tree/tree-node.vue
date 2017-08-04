@@ -272,7 +272,7 @@
         }
     }
 </script>
-<style  lang="scss" scoped>
+<style  scoped>
     @import './assets/iconfont/iconfont.css';
 
     .halo-tree {

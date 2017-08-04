@@ -246,6 +246,6 @@
     export default Tree2
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>

@@ -98,6 +98,6 @@
     export default Tree0
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>
