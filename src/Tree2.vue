@@ -32,6 +32,8 @@
 
                     showSearch: false,
 
+                    rootName: '我的组织',
+
                     iconClass: {
                         close: 'icon-youjiantou',
                         open: 'icon-xiajiantou',

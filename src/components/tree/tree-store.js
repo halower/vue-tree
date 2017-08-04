@@ -16,10 +16,25 @@ export default class TreeStore {
         }
         _traverseNodes(this.root)
     }
+
+    /**
+     * https://github.com/alonesuperman update this method
+     * fix 0-0-0-2000 bug  origin: parent: key.slice(0, -2)
+     * @param key
+     * @returns {{current: *, parent: (*|Array)}}
+     * @private
+     */
     __parseKey (key) {
+        let parent = key.split("-");
+        parent.pop();
+        if(parent.length>1){
+            parent = parent.join("-");
+        }else{
+            parent = null;
+        }
         return {
             current: key,
-            parent: key.slice(0, -2)
+            parent: parent
         }
     }
     /**
