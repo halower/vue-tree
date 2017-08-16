@@ -3,7 +3,7 @@
         <li v-for='(item, index) of nodeData'
             v-show="!item.hasOwnProperty('visible') || item.visible"
             :key="item.key"
-
+            :class="{onLyLi:item.parentId === null && treeData.length===1}"
         >
             <div
                 :key="index"
@@ -309,6 +309,22 @@
 
     .halo-tree ul ul li:hover {
         background: rgba(0, 0, 0, .035)
+    }
+
+    .halo-tree>ul:first-child>li:first-child:before{
+        border-left:1px dashed #999;
+        bottom: 50%;
+        height: 100%;
+        top:15px;
+        width:1px;
+    }
+
+    .halo-tree>ul:first-child>li.onlyLi:first-child:before{
+        height: 0;
+    }
+
+    .halo-tree>ul:first-child>li.onlyLi:first-child:before{
+        height: 0;
     }
 
     .halo-tree li:after,

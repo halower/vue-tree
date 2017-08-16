@@ -4,17 +4,17 @@
             <input type="text" v-model="search">
             <span class="icon search"></span>
         </div>
-        <div class="root">
-            <i
-                class="icon iconfont"
-                :class="[itemsShow ? treeNodeOptions.iconClass.open : treeNodeOptions.iconClass.close ]"
-                :style="treeNodeOptions.iconStyle"
-                @click="rootIconClick"
-            >
+        <!--<div class="root">-->
+            <!--<i-->
+                <!--class="icon iconfont"-->
+                <!--:class="[itemsShow ? treeNodeOptions.iconClass.open : treeNodeOptions.iconClass.close ]"-->
+                <!--:style="treeNodeOptions.iconStyle"-->
+                <!--@click="rootIconClick"-->
+            <!--&gt;-->
 
-            </i>
-            {{ treeNodeOptions.rootName }}
-        </div>
+            <!--</i>-->
+            <!--{{ treeNodeOptions.rootName }}-->
+        <!--</div>-->
 
         <tree-node
                 :treeData='store.root'
