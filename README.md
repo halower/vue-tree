@@ -1,6 +1,6 @@
 # vue2-lazy-tree
 
-first of all, i highly recommended to see the demo 
+first of all, i highly recommended to see the demo
 
 and u will find out how to use this plugin
 
@@ -10,11 +10,11 @@ i must say, this doc is terrible, but the function is really good
 
 * normal tree
 
-* lazy loading 
+* lazy loading
 
 * loading tip
 
-* dynamic add node 
+* dynamic add node
 
 * custom tree icon, use [iconFont](http://iconfont.cn/)
 
@@ -26,18 +26,18 @@ __issues__
 
 * checkbox status fix later
 
-    showCheckbox: true,  
+    showCheckbox: true,
     halfCheckedStatus: true
 
 
-notice: 
+notice:
 
   loadingChild method
-  
+
   import { ZTree, ComboZTree, generateKey, getParentNode } from 'vue2-lazy-tree'
-  
+
   import ZTree from 'vue2-lazy-tree'
-  
+
 
 ## Build Setup
 
@@ -63,7 +63,7 @@ npm run build
     import { ZTree } from 'vue2-lazy-tree'
     import './../dist/vue2-tree.min.css'
     Vue.use(ZTree)
-    
+
 ### Demo
 ```
 <template>
@@ -184,7 +184,7 @@ npm run build
     }
 </script>
 ```
-        
+
 ### 属性
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
 |---------- |-------- |---------- |---------- |---------- |
@@ -196,12 +196,12 @@ npm run build
         labelKey: '',           { String } set the label field, default 'label'
         showCheckbox: true,  //是否支持多选,
         halfCheckedStatus: true,//控制父框是否需要半钩状态,
-        
+
         lazy: true,     // 是否是异步加载数据
         load: this.loadingChild, // 异步加载数据方法
-        
+
         showSearch: false, // 是否显示搜索
-        
+
         iconClass: {                        // custom icon class, Default
             close: 'icon-youjiantou',
             open: 'icon-xiajiantou',
@@ -210,11 +210,11 @@ npm run build
         iconStyle: {                        // custom icon style, sometimes u just need to set color
             color: '#108ee9'                // default #000
         },
-        
+
         dynamicAdd: true,
         // function  handle display add button
         // return true or false, default true
-        // [Function] param: { node } 
+        // [Function] param: { node }
         dynamicAddFilter: (node) => {
             if (node.type === 1 || node.type === 2) {
                 return true
@@ -235,7 +235,7 @@ npm run build
         // param { node }
         // return { String } , iconfont class name, default ''
         leafIcon: [Function],
-        
+
         search: {
           useInitial: true, //是否支持拼音首字母搜索
           useEnglish: false, //是否是英文搜索
@@ -276,11 +276,11 @@ how to find the build in class:
 
     // just go to the package folder, under node_modules/vue2-lazy-tree/
     src/components/tree/assets/iconfont/demo_fontclass.html
-    
+
 ----
 
 ## discuss
- 
+
  QQ group:255965810
 
 ## contributor
@@ -290,6 +290,7 @@ how to find the build in class:
 * https://github.com/alonesuperman
 
 ## Update History
+* fix tree's root bug                                           16082017
 
 * fix generateKey method bug                                    31072017
 
