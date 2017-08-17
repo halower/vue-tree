@@ -5,7 +5,8 @@ first of all, i highly recommended to see the demo
 and u will find out how to use this plugin
 
 i must say, this doc is terrible, but the function is really good
-
+# online demo
+[https://halower.github.io/vue2-tree](https://halower.github.io/vue2-tree)
 ## features
 
 * normal tree
