@@ -56,6 +56,7 @@ npm run build
 -----
 
 ### How to install the plugin
+     
 
       npm install vue2-lazy-tree or cnpm install vue2-lazy-tree (国内)
 
@@ -291,6 +292,8 @@ how to find the build in class:
 * https://github.com/alonesuperman
 
 ## Update History
+* fix tree's halfchecked&click status                           23082017
+
 * fix tree's root bug                                           16082017
 
 * fix generateKey method bug                                    31072017
