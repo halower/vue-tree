@@ -193,20 +193,21 @@
                 this.$emit('handlecheckedChange', node)
             },
             handleNode (node) {
-                if (this.tree.store.last) {
-                    if (this.tree.store.last.key === node.key) {
-                        this.tree.store.last.checked = !this.tree.store.last.checked
+                debugger
+                if (this.tree.last) {
+                    if (this.tree.last.key === node.key) {
+                        this.tree.store.last.checked = !this.tree.last.checked
                         Vue.set(node, 'checked', this.tree.store.last.checked)
                     } else {
                         if ( !this.options.showCheckbox ) {
-                            Vue.set(this.tree.store.last, 'checked', false)
+                            Vue.set(this.tree.last, 'checked', false)
                         }
 
                         Vue.set(node, 'checked', !node.checked)
-                        this.tree.store.last = node
+                        this.tree.last = node
                     }
                 } else {
-                    this.tree.store.last = node
+                    this.tree.last = node
                     Vue.set(node, 'checked', true)
 
                 }

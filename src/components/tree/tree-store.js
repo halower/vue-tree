@@ -171,7 +171,7 @@ export default class TreeStore {
                 }
             } else {
                 if (currentNode.nodeSelectNotAll) {
-                    return "all" //表示全钩的状态
+                    return "half"
                 }
             }
             return "all" //表示全钩的状态
@@ -185,7 +185,7 @@ export default class TreeStore {
                 }
             } else {
                 if (currentNode.nodeSelectNotAll) {
-                    return "all" //表示全钩的状态
+                    return "half" 
                 }
             }
             return "none"

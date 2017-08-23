@@ -49,8 +49,14 @@
 
                 treeNodeOptions: {},
                 store: {
+                    _last: null,
                     root: [],
-                    last: null
+                    set last(v){
+                        this._last = v
+                    } ,
+                    get last(){
+                        return this._last
+                    }
                 }
             }
         },
