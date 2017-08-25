@@ -196,9 +196,7 @@
     }
 
 </script>
-<style   scoped>
-    @import './assets/iconfont/iconfont.css';
-
+<style scoped>
     .halo-tree * {
         font-size: 13px;
         font-family: Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;
@@ -208,10 +206,10 @@
         left: -19px;
         cursor: default;
         user-select: none;
-        i {
-            font-size: 16px;
-            cursor: pointer;
-        }
+    }
+    .halo-tree i {
+        font-size: 16px;
+        cursor: pointer;
     }
     .halo-tree .input {
         width: 100%;
@@ -246,7 +244,6 @@
     .halo-tree .search {
         width: 14px;
         height: 14px;
-        background-image: url("assets/search.png");
     }
 </style>
 

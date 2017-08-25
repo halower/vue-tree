@@ -36,7 +36,7 @@
                 </i>
                 <i
                     v-else
-                    class="icon iconfont "
+                    class="icon iconfont icon-square"
                     :class="leafIcon(item)"
                     :style="options.iconStyle"
 
@@ -44,14 +44,14 @@
 
                 <div class="inputCheck"
                      :class="{notAllNodes:item.nodeSelectNotAll}"
-                     :style="{width:inputWidth+'px', height:inputWidth+'px', color: options.iconStyle.color}"
+                     :style="{color: options.iconStyle.color}"
                      v-show="options.showCheckbox"
                      @click.stop="walkCheckBox(item)"
                 >
-                    <input type="checkbox" class="check"
+                    <span  :class="{'check': true, 'checked': item.checked}"
                            v-if="options.showCheckbox  &&  !item.nodeSelectNotAll"
                            :checked="item.checked"
-                           @change="checkBoxChange(item, $event)"
+                           @click.stop="checkBoxChange(item, $event)"
                            :key="item.key"
                     />
                 </div>
@@ -124,15 +124,6 @@
             this.nodeData = (this.treeData || []).slice(0)
 
         },
-        computed: {
-            inputWidth: function () {
-                if (this.checkFirfox()) {
-                    return 14
-                }
-                return 13
-            }
-
-        },
         watch: {
             treeData: function (data) {
                 this.nodeData = (data || []).slice(0)
@@ -153,7 +144,7 @@
                 }
             },
             checkBoxChange (node, e) {
-                Vue.set(node, 'checked', e.target.checked)
+                Vue.set(node, 'checked', !node.checked)
                 this.handlecheckedChange(node)
 
             },
@@ -273,8 +264,6 @@
     }
 </script>
 <style  scoped>
-    @import './assets/iconfont/iconfont.css';
-
     .halo-tree {
         font-size: 14px;
         min-height: 20px;
@@ -284,11 +273,7 @@
     }
 
     .halo-tree li:hover {
-        cursor: pointer;
-    }
-
-    .halo-tree .node-selected {
-        background-color: #ddd
+        /*cursor: pointer;*/
     }
 
     .halo-tree li {
@@ -308,7 +293,7 @@
     }
 
     .halo-tree ul ul li:hover {
-        background: rgba(0, 0, 0, .035)
+        /*background: rgba(0, 0, 0, .035)*/
     }
 
     .halo-tree>ul:first-child>li:first-child:before{
@@ -387,14 +372,17 @@
 
     .halo-tree li span.halo-tree-icon_loading::after {
         display: inline-block;
-        font-family: 'iconfont';
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        content: "\e63d";
+        content: "\21BB";
         -webkit-animation: loadingCircle 1s infinite linear;
         animation: loadingCircle 1s infinite linear;
-
+        width: 13px;
+        height:13px;
+        line-height: 13px;
+        position: relative;
+        top: -1px;
     }
 
     @keyframes loadingCircle {
@@ -410,7 +398,6 @@
 
     .halo-tree li span {
         display: inline-block;
-        padding: 3px 0;
         text-decoration: none;
         border-radius: 3px;
     }
@@ -431,7 +418,22 @@
     .halo-tree .check {
         display: inline-block;
         position: relative;
-        top: -1px;
+        top: 2px;
+        left: 1px;
+        width: 15px;
+        height: 15px;
+        border: 1px solid #108ee9;
+        line-height: 15px;
+        text-align: left;
+    }
+    .halo-tree .check.checked {
+    }
+    .halo-tree .check.checked:before {
+        position: absolute;
+        content: '\2714';
+        font-size: 14px;
+        text-indent: 2px;
+        color: #108ee9;
     }
 
     .halo-tree .handle-icon {
@@ -443,10 +445,9 @@
         right: 0;
     }
 
-    .search {
+    .halo-tree .search {
         width: 14px;
         height: 14px;
-        background-image: url("assets/search.png");
     }
 
     /*.check.notAllNodes{
@@ -462,10 +463,17 @@
 
     .halo-tree .inputCheck.notAllNodes {
         font-family: "iconfont" !important;
-        font-size: 14px;
+        width: 17px;
+        height: 17px;
+        font-size: 13px;
         font-style: normal;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        display: inline-block;
+        position: relative;
+        top: 3px;
+        text-align: center;
     }
     .halo-tree .inputCheck.notAllNodes:before {
         content: "\e640";
@@ -474,9 +482,154 @@
         width: 100%;
         height: 100%;
         z-index: 10;
-        top: -1px;
-        left: 7px;
         transform: translate3d(-30%, -5%, 0);
-        /*background-image: url("/../../assets/half.png");*/
+    }
+    .halo-tree .label {
+        margin-left: 2px;
+        padding: 2px 4px;
+        border: 1px solid transparent;
+        cursor: pointer;
+    }
+    .halo-tree .node-selected .label {
+        background-color: #F2F5FA;
+        border: 1px solid #DAE3EC;
+        opacity: 1;
+    }
+    .halo-tree .handle-icon, .halo-tree .add-icon {
+        cursor: pointer;
+    }
+    .halo-tree .iconfont {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        position: relative;
+    }
+    .halo-tree .icon-xiajiantou, .halo-tree .icon-jian-fangkuang {
+        top: -1%;
+    }
+    .halo-tree .icon-youjiantou,
+    .halo-tree .icon-jia-fangkuang
+    {
+        left: 0px;
+        top: 2px;
+        width:10px;
+        overflow: hidden;
+    }
+
+    .halo-tree .icon-youjiantou:before,
+    .halo-tree .icon-jia-fangkuang:before
+    {
+        left: -5px;
+        top: 4px;
+    }
+    .halo-tree .icon-xiajiantou,
+    .halo-tree .icon-jian-fangkuang {
+        left: 0px;
+        top: 2px;
+        height:10px;
+        overflow: hidden;
+    }
+    .halo-tree .icon-xiajiantou:before,
+    .halo-tree .icon-jian-fangkuang:before
+    {
+        left: 3px;
+        bottom: 3px;
+    }
+    .halo-tree .icon-youjiantou:before,
+    .halo-tree .icon-jia-fangkuang:before,
+    .halo-tree .icon-xiajiantou:before,
+    .halo-tree .icon-jian-fangkuang:before
+    {
+        content: "";
+        position:absolute;
+        overflow:hidden;
+        width:11px;
+        height:11px;
+        background:#108ee9;
+        border-bottom:1px solid #C9E9C0;
+        border-right:1px solid #C9E9C0;
+        -webkit-transform:rotate(45deg);
+        -moz-transform:rotate(45deg);
+        -o-transform:rotate(45deg);
+        transform:rotate(45deg);
+        -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(
+        M11=0.7071067811865475,
+                M12=-0.7071067811865477,
+                M21=0.7071067811865477,
+                M22=0.7071067811865475,
+                SizingMethod='auto expand')";
+    filter: progid:DXImageTransform.Microsoft.Matrix(
+    M11=0.7071067811865475,
+    M12=-0.7071067811865477,
+    M21=0.7071067811865477,
+    M22=0.7071067811865475,
+    SizingMethod='auto expand');
+    }
+    .halo-tree .icon-youjiantou:after,
+    .halo-tree .icon-jia-fangkuang:after
+    {
+        content: "";
+    }
+    .halo-tree .icon-xiajiantou:after,
+    .halo-tree .icon-jian-fangkuang:after
+    {
+        content: "";
+    }
+    .halo-tree .icon-square {
+        width: 0;
+        height: 0;
+    }
+    .halo-tree .notAllNodes {
+        width: 13px;
+        height: 13px;
+        display: inline-block;
+        position: relative;
+        background-color: #108ee9;
+        border-radius: 3px;
+        margin-left: 3px;
+        margin-right: -3px;
+        top: 2px;
+        line-height: 15px;
+    }
+    .halo-tree .notAllNodes:before {
+        content: "" !important;
+    }
+    .halo-tree .notAllNodes:after {
+        content: "\2714";
+        position: absolute;
+        left: 11%;
+        z-index: 4;
+        font-size: 14px;
+        width: 75%;
+        height: 2px;
+        color: #ffffff;
+    }
+    .halo-tree .icon-add {
+        width: 15px;
+        height: 15px;
+        display: inline-block;
+        position: relative;
+        /*background-color: #108ee9;*/
+        border-radius: 3px;
+        margin-left: 3px;
+        margin-right: -3px;
+        top: 2px;
+    }
+    .halo-tree .icon-add:before {
+        position: absolute;
+        content: "" !important;
+    }
+    .halo-tree .icon-add:after {
+        content: "+";
+        font-size: 18px;
+        position: absolute;
+        left: 1px;
+        top: -3px;
+        color: #108ee9;
+    }
+    .halo-tree input[type=checkbox] {
+        border: none;
+        outline: none;
+        background-color: #fff;
     }
 </style>
