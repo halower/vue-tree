@@ -35,7 +35,7 @@
                         children: [
                             {
                                 id: 1001,
-                                name: '一级节点',
+                                name: '2级节点',
                                 open: false,
                                 nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
                                 parentId: 1,
@@ -44,7 +44,7 @@
                             },
                             {
                                 id: 1002,
-                                name: '一级节点',
+                                name: '2级节点',
                                 open: false,
                                 nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
                                 parentId: 1,
@@ -80,7 +80,7 @@
                     labelKey: 'name',
 
                     showCheckbox: true,
-                    halfCheckedStatus: true,//控制父框是否需要半钩状态
+                    halfCheck: true,//控制父框是否需要半钩状态
 
                     search: {
                         useInitial: true,

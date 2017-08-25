@@ -120,7 +120,7 @@
                 this.itemsShow = !this.itemsShow
             },
             handlecheckedChange (node) {
-                if (this.options.halfCheckedStatus) {
+                if (this.options.halfCheck) {
                     this.store.changeCheckHalfStatus(node)
                 } else {
                     this.store.changeCheckStatus(node)

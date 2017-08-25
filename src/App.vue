@@ -12,7 +12,7 @@
                     <h2>Default Tree</h2>
                     <code>
                         showCheckbox: false,
-                        halfCheckedStatus: false
+                        halfCheck: false
                     </code>
                     <Tree0 :key="0"></Tree0>
                 </div>
@@ -20,7 +20,7 @@
                     <h2>Default Tree with checkbox</h2>
                     <code>
                         showCheckbox: true,
-                        halfCheckedStatus: true
+                        halfCheck: true
                     </code>
                     <Tree1 :key="1"></Tree1>
                 </div>

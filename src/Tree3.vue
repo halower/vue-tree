@@ -25,7 +25,7 @@
             return {
                 options1: {
                     showCheckbox: true,
-                    halfCheckedStatus: true, //控制父框是否需要半钩状态
+                    halfCheck: true, //控制父框是否需要半钩状态
 
                     lazy: true,
                     load: this.loadingChild,
@@ -133,7 +133,7 @@
                         children: [
                             {
                                 id: 1001,
-                                label: '一级节点',
+                                label: '2级节点',
                                 open: false,
                                 checked: false,
                                 nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态

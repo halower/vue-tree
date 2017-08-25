@@ -28,7 +28,7 @@ __issues__
 * checkbox status fix later
 
     showCheckbox: true,
-    halfCheckedStatus: true
+    halfCheck: true
 
 
 notice:
@@ -90,7 +90,7 @@ npm run build
             return {
                 options: {
                     showCheckbox: false,
-                    halfCheckedStatus: false,//控制父框是否需要半钩状态
+                    halfCheck: false,//控制父框是否需要半钩状态
 
                     lazy: true,
                     load: this.loadingChild,
@@ -196,7 +196,7 @@ npm run build
      options: {
         labelKey: '',           { String } set the label field, default 'label'
         showCheckbox: true,  //是否支持多选,
-        halfCheckedStatus: true,//控制父框是否需要半钩状态,
+        halfCheck: true,//控制父框是否需要半钩状态,
 
         lazy: true,     // 是否是异步加载数据
         load: this.loadingChild, // 异步加载数据方法
@@ -306,6 +306,6 @@ how to find the build in class:
 
 * fix key bugs, add iconfont class                              25072017
 
-* fix checkbox bugs, showCheckbox & halfCheckedStatus           25072017
+* fix checkbox bugs, showCheckbox & halfCheck           25072017
 
 * Add how to use it in the production env                       25072017
