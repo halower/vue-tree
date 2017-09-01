@@ -1,5 +1,7 @@
 # vue2-tree
 
+## online demo
+ [https://halower.github.io/vue2-tree](https://halower.github.io/vue2-tree)
 ## features
 
 * normal tree
