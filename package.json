@@ -2,15 +2,15 @@
   "name": "vue2-lazy-tree",
   "version": "1.1.4",
   "description": "Vue component, Tree component, support lazy-load data",
-  "author": "jackwang <wangxichao001@gmail.com>",
+  "author": "halower <121625933@qq.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ddtramp/vue2-tree.git"
+    "url": "git+https://github.com/halower/vue2-tree.git"
   },
   "bugs": {
-    "url": "https://github.com/ddtramp/vue2-tree/issues"
+    "url": "https://github.com/halower/vue2-tree/issues"
   },
-  "homepage": "https://github.com/ddtramp/vue2-tree.git",
+  "homepage": "https://github.com/halower/vue2-tree.git",
   "main": "./dist/vue2-tree.min.js",
   "module": "./src/index.js",
   "scripts": {
