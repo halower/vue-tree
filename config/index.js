@@ -1,5 +1,8 @@
+'use strict'
+// Template version: 1.1.3
 // see http://vuejs-templates.github.io/webpack for documentation.
-var path = require('path')
+
+const path = require('path')
 
 module.exports = {
   build: {
@@ -21,19 +24,9 @@ module.exports = {
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report
   },
-  bundle: {
-    env: require('./prod.env'),
-    assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsPublicPath: '/',
-    assetsSubDirectory: '/',
-    productionSourceMap: true,
-    productionGzip: false,
-    productionGzipExtensions: ['js', 'css'],
-    bundleAnalyzerReport: process.env.npm_config_report
-  },
   dev: {
     env: require('./dev.env'),
-    port: 8080,
+    port: process.env.PORT || 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
