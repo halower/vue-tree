@@ -1,5 +1,10 @@
 # vue2-tree
 
+## the version2  coming soon  ...
+ - 1、abandoned recursively
+ - 2、support custom template
+ - 3、simplify the data structure
+
 ## online demo
  [https://halower.github.io/vue2-tree](https://halower.github.io/vue2-tree)
 ## features
