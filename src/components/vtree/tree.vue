@@ -4,7 +4,7 @@
        <input v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/> 
        <span v-html="item.title"/>
        <Render :node='item' :tpl ='tpl'/>
-       <tree v-if="!isLeaf(item)"  :tpl ='tpl' :data="item.children" :level="`${level}-${index}`" :scoped='scoped' :parent ='item' :multiple="multiple">
+       <tree v-if="!isLeaf(item)"  :tpl ='tpl' :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple">
        </tree>
     </li>
   </ul>
@@ -25,6 +25,10 @@ export default {
       default: () => null
     },
     multiple: {
+      type: Boolean,
+      default: false
+    },
+    halfcheck: {
       type: Boolean,
       default: false
     },
@@ -71,8 +75,16 @@ export default {
      */
     this.$on('parentSeleted', (node, checked) => {
       Vue.set(node, 'checked', checked)
+      let childrenCheckedNum = node.parent.children.filter(node => node.checked).length
       if (node.parent) {
-        this.$emit('parentSeleted', node.parent, checked)
+        if (this.halfcheck) {
+          if (!checked && childrenCheckedNum > 0) return false
+          this.$emit('parentSeleted', node.parent, checked)
+        } else {
+          if (checked && childrenCheckedNum === node.parent.children.length) {
+            this.$emit('parentSeleted', node.parent, checked)
+          }
+        }
       }
     })
 
