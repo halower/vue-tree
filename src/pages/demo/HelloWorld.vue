@@ -9,7 +9,7 @@
        <option value='zh'>中文</option>
        <option value='en'>Engilsh</option>
     </select>
-    <tree ref='tree' :data='treeData' :multiple='true' :tpl='tpl'></tree>
+    <tree ref='tree' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'></tree>
  </div>
 </template>
 
