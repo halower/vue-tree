@@ -1,191 +1,134 @@
-# vue2-tree
+﻿### 贡献者名单
+ - lily7129
+### develop logs
+- 2017-5-2: 支持下拉树, add combotree
+- 2017-5-26: 添加父节点半选状态框 
+- 2017-6-08: 修复火狐复选事件的bug 
+- 2017-6-21: 修复动态渲染
+### QQ交流群:255965810
 
-## the version2  coming soon  ...
- - 1、abandoned recursively
- - 2、support custom template
- - 3、simplify the data structure
-
-## online demo
- [https://halower.github.io/vue2-tree](https://halower.github.io/vue2-tree)
-## features
-
-* normal tree
-
-* lazy loading
-
-* loading tip
-
-* dynamic add node
-
-* custom tree icon, use [iconFont](http://iconfont.cn/)
-
-* custom icon style. color
-
-* ie9,10,11,spartan
-
-__issues__
-
-* checkbox status fix later
-
-    showCheckbox: true,
-    halfCheck: true
-
-
-notice:
-
-  loadingChild method
-
-  import { ZTree, ComboZTree, generateKey, getParentNode } from 'vue2-lazy-tree'
-
-  import ZTree from 'vue2-lazy-tree'
-
-
-## Build Setup
-
-``` bash
-# install dependencies
+### How to run demo
+```
 npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification  publish to npm
-npm run build
+npm run dev 
 ```
-
------
-
-### How to install the plugin (the npm package is not necessarily updated synchronously with the source code)
-     
-      npm install vue2-lazy-tree or cnpm install vue2-lazy-tree (国内)
-
-### How to use in u production
-
-    import { ZTree } from 'vue2-lazy-tree'
-    import './../dist/vue2-tree.min.css'
-    Vue.use(ZTree)
-
-### Demo
-```
+### 在线Demo
+ [点击进入线上效果](https://halower.github.io/vue2-tree/)
+### 效果图
+ ![效果图](http://files.cnblogs.com/files/rohelm/jdfw.gif)
+### 示例
+```html
 <template>
-    <div id="app" style="width:300px; margin: auto auto;">
-        <tree
-                ref='tree'
-                :treeData="treeData"
-                :options="options"
-                @node-click="itemClick"
-
-        />
-    </div>
+  <div style="width:300px;">
+    <tree ref ='tree' :treeData="treeData" :options="options" @node-click='handleNode'/>
+  </div>
 </template>
 <script>
-    import Vue from 'vue';
-    import axios from 'axios';
-    import Tree from './components/tree/tree.vue';
-    let that = null
-    export default {
-        name: 'app',
-        data () {
-            that = this;
-            return {
-                options: {
-                    showCheckbox: false,
-                    halfCheck: false,//控制父框是否需要半钩状态
-
-                    lazy: true,
-                    load: this.loadingChild,
-
-                    showSearch: false,
-                    search: {
-                        useInitial: true,
-                        useEnglish: false,
-                        customFilter: null
-                    }
-                },
-                treeData: []
-            }
-        },
-        mounted: function () {
-            this.loadTreeData();
-        },
-        methods: {
-            /**
-             * generate key 0-1-2-3
-             * this is very important function for now module
-             * @param treeData
-             * @param parentKey
-             * @returns {Array}
-             */
-            generateKey (treeData = [], parentKey) {
-                treeData = treeData.map((item, i) => {
-                    item.key = parentKey + '-' + i.toString();
-                    return item;
-                })
-                return treeData;
-            },
-            loadTreeData: function () {
-                let treeData = [
-                    {
-                        id: 1,
-                        label: '一级节点',
-                        open: false,
-                        checked: false,
-                        nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
-                        parentId: null,
-                        visible: true,
-                        searched: false
-                    },
-                    {
-                        id: 2,
-                        label: '一级节点',
-                        open: false,
-                        checked: false,
-                        nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
-                        parentId: null,
-                        visible: true,
-                        searched: false
-                    }
-                ];
-
-                this.treeData = this.generateKey(treeData, 0);
-            },
-            async loadingChild (node, index) {
-                try {
-                    let tem;
-                    let postions = node.key.split('-');
-                    // load json file you need another server
-                    let data = await axios.get(' http://172.16.0.104:8082/child.json');
-
-                    for (let [index, item] of postions.entries()) {
-                        switch (index) {
-                            case 0:
-                                break;
-                            case 1:
-                                tem = this.treeData[item];
-                                break;
-                            default:
-                                tem = tem.children[item];
-                        }
-                    }
-                    // set Children
-                    Vue.set(tem, 'children', this.generateKey(data.data, node.key) );
-
-                    Promise.resolve(data);
-                } catch (e) {
-                    Promise.reject(e);
-                }
-            },
-            itemClick (node) {
-                console.log(node.key);
-            }
-        },
-        components: {
-            Tree
+import Tree from '../components/tree/tree.vue'
+export default {
+  name: 'test',
+  data () {
+    return {
+      options: {
+        showCheckbox: true,
+        halfCheckedStatus: true,//控制父框是否需要半钩状态( lily7129 贡献代码)
+        search: {
+          useInitial: true,
+          useEnglish: false,
+          customFilter: null
         }
+      },
+      treeData: [
+        {
+          id: 1,
+          label: '一级节点',
+          open: true,
+          checked: false,
+          nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
+          parentId: null,
+          visible: true,
+          searched: false,
+          children: [
+            {
+              id: 2,
+              label: '二级节点-1',
+              checked: false,
+              nodeSelectNotAll: false,
+              parentId: 1,
+              searched: false,
+              visible: true
+            },
+            {
+              label: '二级节点-2',
+              open: true,
+              checked: false,
+              nodeSelectNotAll: false,
+              id: 3,
+              parentId: 1,
+              visible: true,
+              searched: false,
+              children: [
+                {
+                  id: 4,
+                  parentId: 3,
+                  label: '三级节点-1',
+                  visible: true,
+                  searched: false,
+                  checked: false,
+                  nodeSelectNotAll: false
+                },
+                {
+                  id: 5,
+                  label: '三级节点-2',
+                  parentId: 3,
+                  searched: false,
+                  visible: true,
+                  checked: false,
+                  nodeSelectNotAll: false
+                }
+              ]
+            },
+            {
+              label: '二级节点-3',
+              open: true,
+              checked: false,
+              nodeSelectNotAll: false,
+              id: 6,
+              parentId: 1,
+              visible: true,
+              searched: false,
+              children: [
+                {
+                  id: 7,
+                  parentId: 6,
+                  label: '三级节点-4',
+                  checked: false,
+                  nodeSelectNotAll: false,
+                  searched: false,
+                  visible: true
+                },
+                {
+                  id: 8,
+                  label: '三级节点-5',
+                  parentId: 6,
+                  checked: false,
+                  nodeSelectNotAll: false,
+                  searched: false,
+                  visible: true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
+  },
+  components: {
+    Tree
+  }
+}
 </script>
 ```
-
 ### 属性
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
 |---------- |-------- |---------- |---------- |---------- |
@@ -194,49 +137,8 @@ npm run build
 
 ```
      options: {
-        labelKey: '',           { String } set the label field, default 'label'
         showCheckbox: true,  //是否支持多选,
-        halfCheck: true,//控制父框是否需要半钩状态,
-
-        lazy: true,     // 是否是异步加载数据
-        load: this.loadingChild, // 异步加载数据方法
-
-        showSearch: false, // 是否显示搜索
-
-        iconClass: {                        // custom icon class, Default
-            close: 'icon-youjiantou',
-            open: 'icon-xiajiantou',
-            add: 'icon-add'
-        },
-        iconStyle: {                        // custom icon style, sometimes u just need to set color
-            color: '#108ee9'                // default #000
-        },
-
-        dynamicAdd: true,
-        // function  handle display add button
-        // return true or false, default true
-        // [Function] param: { node }
-        dynamicAddFilter: (node) => {
-            if (node.type === 1 || node.type === 2) {
-                return true
-            }
-            return false
-        },
-        // function handle add node; the new node must have `dynamicAdd : true` property
-        // the tree component rely on this show editor
-        // param { node }
-        // return Promise(parent.children) must bu children Array
-        dynamicAddNode: [Function],
-        // function handle save node; when successfull saved, the new node must del `dynamicAdd` property
-        // the tree component rely on this save node
-        // param { node, $event }
-        // return Promise(node) must be node Object return from server
-        dynamicSaveNode: [Function],
-        // function handle leaf icon
-        // param { node }
-        // return { String } , iconfont class name, default ''
-        leafIcon: [Function],
-
+        halfCheckedStatus: true,//控制父框是否需要半钩状态,
         search: {
           useInitial: true, //是否支持拼音首字母搜索
           useEnglish: false, //是否是英文搜索
@@ -245,17 +147,15 @@ npm run build
 
     /* 节点元素 */
     {
-      id: 1,                    // 节点标志
-      label: '一级节点',         // 节点名称
-      open: true,               // 是否打开节点
-      checked: false,           // 是否被选中
-      parentId: null,           // 父级节点Id
-      visible: true,            // 是否可见
-      searched: false,          // 是否是搜索值,
-      nodeSelectNotAll: false,  // 表示父框可以半钩状态
-      leaf: true,               // 是否是叶子节点， 如果是叶子结点， lazy=true 时，显示 leafIcon， 此节点不再异步加载数据
-      children: []              // 子节点,
-
+      id: 1, //节点标志
+      label: '一级节点', //节点名称
+      open: true, // 是否打开节点
+      checked: false, //是否被选中
+      parentId: null, //父级节点Id
+      visible: true, //是否可见
+      searched: false, //是否是搜索值,
+      nodeSelectNotAll: false,//表示父框可以半钩状态
+      children: [] //子节点
     }
 ```
 ### 方法
@@ -269,43 +169,3 @@ npm run build
 |---------- |-------- |---------- |
 | node-click  | 节点被点击时的回调 | 共1个参数，节点组件本身。 |
 
-### iconfont
-
-u can use build in iconfont class or u add it by u self [iconFont](http://iconfont.cn/)
-
-how to find the build in class:
-
-    // just go to the package folder, under node_modules/vue2-lazy-tree/
-    src/components/tree/assets/iconfont/demo_fontclass.html
-
-----
-
-## discuss
-
- QQ group:255965810
-
-## contributor
-
-* lily7129
-* halower
-* https://github.com/alonesuperman
-* tinwan
-
-## Update History
-* beautify the tree                                             25082017
-
-* fix tree's halfchecked&click status                           23082017
-
-* fix tree's root bug                                           16082017
-
-* fix generateKey method bug                                    31072017
-
-* add label key property, set the label field                   28072017
-
-* add node leaf                                                 27072017
-
-* fix key bugs, add iconfont class                              25072017
-
-* fix checkbox bugs, showCheckbox & halfCheck           25072017
-
-* Add how to use it in the production env                       25072017
