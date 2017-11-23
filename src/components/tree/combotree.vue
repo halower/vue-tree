@@ -41,21 +41,21 @@
     components: {Tree}
   }
 </script>
-<style scoped>
-  *{
+<style >
+  .halo-tree *{
     font-size: 13px;
     font-family: '\5FAE\8F6F\96C5\9ED1'
   }
-  .input{
+  .halo-tree .input{
     width:100%;
     position: relative;
   }
-  .input span {
+  .halo-tree .input span {
     position: absolute;
     top: 9px;
     right: 10px;
   }
-  .input input{
+  .halo-tree .input input{
     display: inline-block;
     box-sizing: border-box;
     width:100%;
@@ -65,7 +65,7 @@
     border:transparent;
     border:1px solid #ddd;
   }
-  .input input:focus {
+  .halo-tree .input input:focus {
       border:none;
   }
 </style>
