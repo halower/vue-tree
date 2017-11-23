@@ -78,7 +78,7 @@
 </script>
 <style scoped>
   *{
-    font-size: 13px;
+    font-size: 14px;
     font-family: '\5FAE\8F6F\96C5\9ED1'
   }
   .input{
