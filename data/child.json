@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "label": "节点 1",
+    "open": false,
+    "checked": false,
+    "nodeSelectNotAll": false,
+    "parentId": null,
+    "visible": true,
+    "searched": false
+  },
+  {
+    "id": 2,
+    "label": "节点 2",
+    "open": false,
+    "checked": false,
+    "nodeSelectNotAll": false,
+    "parentId": null,
+    "visible": true,
+    "searched": false
+  }
+]
