@@ -9,7 +9,7 @@
        <option value='zh'>中文</option>
        <option value='en'>Engilsh</option>
     </select>
-    <tree ref='tree' :async='async' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'></tree>
+    <tree ref='tree' :async='true' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='false'></tree>
  </div>
 </template>
 
@@ -22,7 +22,6 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      async: true,
       lang: 'zh',
       treeData: [{
         title: '一级节点',
