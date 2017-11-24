@@ -1,13 +1,17 @@
 <template>
-  <ul class="tree">
-    <li v-for="(item, index) in data" :key="item.title" >
-       <input v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/> 
-       <span v-html="item.title"/>
-       <Render :node='item' :tpl ='tpl'/>
-       <tree v-if="!isLeaf(item)"  :tpl ='tpl' :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple">
-       </tree>
-    </li>
-  </ul>
+    <ul class="halo-tree">
+        <li v-for="(item, index) in data" :key="item.title" >
+            <div class="tree-node-el">
+                <div :class="[item.checked ? 'box-checked' : 'box-unchecked', 'inputCheck']">
+                    <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
+                </div>
+                <span v-html="item.title"/>
+                <Render :node='item' :tpl ='tpl'/>
+            </div>
+            <tree v-if="!isLeaf(item)"  :tpl ='tpl' :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple">
+            </tree>
+        </li>
+    </ul>
 </template>
 <script>
 import Vue from 'vue'
@@ -154,3 +158,64 @@ export default {
   }
 }
 </script>
+<style>
+    .halo-tree {
+        font-size: 14px;
+    }
+    .halo-tree ul, .halo-tree li {
+        list-style-type: none;
+        text-align: left;
+    }
+    .inputCheck{
+        display: inline-block;
+        position: relative;
+        width: 14px;
+        height: 14px;
+        border: 1px solid #888888;
+        border-radius: 2px;
+        top: 4px;
+        text-align: center;
+        font-size: 14px;
+        line-height: 14px;
+    }
+    .inputCheck.notAllNodes:before{
+        content: "\2713";
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #888888;
+        z-index: 1;
+        color: #ffffff;
+    }
+    .inputCheck.box-checked {
+    }
+    .inputCheck.box-checked:after {
+        content: "\2713";
+        display: block;
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+        text-align: center;
+    }
+    .inputCheck.box-unchecked {
+
+    }
+    .check {
+        display: block;
+        position: absolute;
+        font-size: 14px;
+        width: 16px;
+        height: 16px;
+        left: -5px;
+        top: -4px;
+        border: 1px solid #000000;
+        /*width: 14px;
+        height: 14px;*/
+        opacity: 0;
+        cursor: pointer;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+        filter: alpha(opacity=0);
+        z-index: 2;
+    }
+</style>
