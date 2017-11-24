@@ -93,7 +93,13 @@ export default {
           if (!checked && childrenCheckedNum > 0) return false
           this.$emit('parentSeleted', node.parent, checked)
         } else {
+          debugger
+          console.log(checked && childrenCheckedNum === node.parent.children.length)
           if (checked && childrenCheckedNum === node.parent.children.length) {
+            console.log('enter')
+            this.$emit('parentSeleted', node.parent, checked)
+          } else {
+            if (!node.children.filter(node => node.checked).length) return false
             this.$emit('parentSeleted', node.parent, checked)
           }
         }
