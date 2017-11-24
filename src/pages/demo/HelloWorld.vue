@@ -9,7 +9,7 @@
        <option value='zh'>中文</option>
        <option value='en'>Engilsh</option>
     </select>
-    <tree ref='tree' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'></tree>
+    <tree ref='tree' :asyncLoad='asyncLoad' :async='async' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'></tree>
  </div>
 </template>
 
@@ -22,6 +22,7 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
+      async: 'false',
       lang: 'zh',
       treeData: [{
         title: '一级节点',
@@ -75,6 +76,9 @@ export default {
       <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.addNode(node, {title: '哈哈'})}>添加</button>
       <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.delNode(node.parent, node)}>删除</button>
       </span>
+    },
+    async asyncLoad (node) {
+      this.$refs.tree.addNodes(node, await this.$api.demo.getChild())
     }
   },
   components: { Tree }

@@ -7,11 +7,10 @@ class DemoApiController extends BaseApiController {
     /*
     * @method 这里我们只做演示
     */
-  test () {
+  async getChild () {
     // 假设这里有很复杂的前端逻辑
-    return this.get(this.demo.test, {}).then(res => {
-      return res.data
-    })
+    let data = await this.get(this.demo.test)
+    return data
   }
 }
 export default new DemoApiController()

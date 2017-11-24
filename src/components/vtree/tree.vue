@@ -7,13 +7,13 @@
                 </div>
                 <span @click="expandNode(item)" v-if="item.children">
                   <span v-show="item.expanded">-</span>
-                  <span v-show='!item.expanded'>+</span>
+                  <span v-show='!item.expanded' @click.once="asyncLoad(item)">+</span>
                 </span>
                 <span v-html="item.title"/>            
                 <Render :node='item' :tpl ='tpl'/>
             </div>
             <transition name="bounce">
-              <tree v-if="!isLeaf(item)" v-show="item.expanded" :tpl ='tpl' :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+              <tree v-if="!isLeaf(item)" :async="async" v-show="item.expanded" :asyncLoad="asyncLoad" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
             </transition>
         </li>
     </ul>
@@ -41,6 +41,10 @@ export default {
       type: Boolean,
       default: false
     },
+    async: {
+      type: Boolean,
+      default: false
+    },
     level: {
       type: String,
       default: '0'
@@ -49,7 +53,8 @@ export default {
       type: Boolean,
       default: false
     },
-    tpl: Function
+    tpl: Function,
+    asyncLoad: Function
   },
   components: { Render },
   watch: {
@@ -147,6 +152,11 @@ export default {
       }
       this.$emit('addNode', { parentNode: parent, newNode: newNode })
     },
+    addNodes (node, children) {
+      for (let n of children) {
+        this.addNode(node, n)
+      }
+    },
     /* @method delete a node
      * @param  parent parent node
      * @param  node current node
@@ -238,8 +248,9 @@ export default {
 	width:100%;
 	text-align:center;
 }
-.inputCheck.box-unchecked {
-	}.check {
+  .inputCheck.box-unchecked {
+	}
+  .check {
 	display:block;
 	position:absolute;
 	font-size:14px;
