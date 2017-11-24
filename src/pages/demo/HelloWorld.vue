@@ -22,7 +22,7 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      async: 'false',
+      async: true,
       lang: 'zh',
       treeData: [{
         title: '一级节点',
@@ -73,7 +73,9 @@ export default {
     },
     tpl (node) {
       return <span>
-      <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.addNode(node, {title: '哈哈'})}>添加</button>
+        <button style='color:blue; background-color:pink' onClick={() => this.$refs.tree.addNode(node, {title: '哈哈'})}>+</button>
+      <span>{node.title}</span>
+      <button style='color:green; background-color:pink' onClick={() => this.$refs.tree.addNode(node, {title: '哈哈'})}>添加</button>
       <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.delNode(node.parent, node)}>删除</button>
       </span>
     },

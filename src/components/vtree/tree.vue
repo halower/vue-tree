@@ -1,22 +1,21 @@
 <template>
-    <ul class="halo-tree">
-        <li v-for="(item, index) in data" :key="item.title" >
-            <div class="tree-node-el">
-                <div :class="[item.checked ? 'box-checked' : 'box-unchecked', 'inputCheck']">
-                    <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
-                </div>
-                <span @click="expandNode(item)" v-if="item.children">
-                  <span v-show="item.expanded">-</span>
-                  <span v-show='!item.expanded' @click.once="asyncLoad(item)">+</span>
-                </span>
-                <span v-html="item.title"/>            
-                <Render :node='item' :tpl ='tpl'/>
-            </div>
-            <transition name="bounce">
-              <tree v-if="!isLeaf(item)" :async="async" v-show="item.expanded" :asyncLoad="asyncLoad" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
-            </transition>
-        </li>
-    </ul>
+  <ul class="halo-tree">
+      <li v-for="(item, index) in data" :key="item.title" >
+          <div class="tree-node-el">
+              <div :class="[item.checked ? 'box-checked' : 'box-unchecked', 'inputCheck']">
+                  <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
+              </div>
+              <span @click="expandNode(item)" v-if="item.children">
+                <span v-show="item.expanded">-</span>
+                <span v-show='!item.expanded' @click.once="asyncLoad(item)">+</span>
+              </span>     
+              <Render :node='item' :tpl ='tpl'/>
+          </div>
+          <transition name="bounce">
+            <tree v-if="!isLeaf(item)" :async="async" v-show="item.expanded" :asyncLoad="asyncLoad" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+          </transition>
+      </li>
+  </ul>
 </template>
 <script>
 import Vue from 'vue'
@@ -132,6 +131,7 @@ export default {
      * @param newnode  new node
     */
     addNode (parent, newNode) {
+      Vue.set(parent, 'expanded', true)
       let addnode = null
       if (typeof newNode === 'undefined') {
         throw new ReferenceError('newNode is required but undefined')
