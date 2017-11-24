@@ -9,7 +9,7 @@
        <option value='zh'>中文</option>
        <option value='en'>Engilsh</option>
     </select>
-    <tree ref='tree' :asyncLoad='asyncLoad' :async='async' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'></tree>
+    <tree ref='tree' :async='async' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'></tree>
  </div>
 </template>
 
@@ -74,8 +74,8 @@ export default {
     tpl (node) {
       return <span>
         <button style='color:blue; background-color:pink' onClick={() => this.$refs.tree.addNode(node, {title: '哈哈'})}>+</button>
-      <span>{node.title}</span>
-      <button style='color:green; background-color:pink' onClick={() => this.$refs.tree.addNode(node, {title: '哈哈'})}>添加</button>
+      <span style='bold' domPropsInnerHTML={node.title}></span>
+      <button style='color:green; background-color:pink' onClick={() => this.asyncLoad(node)}>异步加载</button>
       <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.delNode(node.parent, node)}>删除</button>
       </span>
     },
