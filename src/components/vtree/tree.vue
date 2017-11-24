@@ -12,7 +12,7 @@
               <Render :node='item' :tpl ='tpl'/>
           </div>
           <transition name="bounce">
-            <tree v-if="!isLeaf(item)" :async="async" v-show="item.expanded" :asyncLoad="asyncLoad" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+            <tree v-if="!isLeaf(item)" :async="async" v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
           </transition>
       </li>
   </ul>
@@ -52,8 +52,7 @@ export default {
       type: Boolean,
       default: false
     },
-    tpl: Function,
-    asyncLoad: Function
+    tpl: Function
   },
   components: { Render },
   watch: {
