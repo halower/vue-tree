@@ -1,6 +1,6 @@
 <template>
   <ul class="halo-tree">
-      <li v-for="(item, index) in data" :key="item.title" :class="{leaf: isLeaf(item)}">
+      <li v-for="(item, index) in data" :key="item.title" :class="{leaf: isLeaf(item)}"  v-show="item.show">
           <div class="tree-node-el">
               <span @click="expandNode(item)" v-if="item.children">
                 <span v-show="item.expanded" class="tree-open"></span>
@@ -9,10 +9,14 @@
               <div :class="[item.checked ? 'box-checked' : 'box-unchecked', 'inputCheck']">
                   <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
               </div>
+              <span @click="expandNode(item)" v-if="item.children">
+                <span v-show="item.expanded">-</span>
+                <span v-show='!item.expanded' @click.once="asyncLoad(item)">+</span>
+              </span>   
               <Render :node='item' :tpl ='tpl'/>
           </div>
           <transition name="bounce">
-            <tree v-if="!isLeaf(item)" :async="async" v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+            <tree v-if="!isLeaf(item)" :searchable='searchable' :async="async" :keyword='keyword' v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
           </transition>
       </li>
   </ul>
@@ -48,7 +52,15 @@ export default {
       type: String,
       default: '0'
     },
+    keyword: {
+      type: String,
+      default: ''
+    },
     scoped: {
+      type: Boolean,
+      default: false
+    },
+    searchable: {
       type: Boolean,
       default: false
     },
@@ -58,10 +70,18 @@ export default {
   watch: {
     data () {
       this.initHandle()
+    },
+    keyword () {
+      for (let node of this.data) {
+        if (this.searchable) {
+          let searched = node.title.indexOf(this.keyword) > -1
+          Vue.set(node, 'searched', searched)
+          this.$emit('shownode', node, searched)
+        }
+      }
     }
   },
   mounted () {
-    this.initHandle()
     /*
      * @event monitor the children nodes seleted event
      */
@@ -103,6 +123,14 @@ export default {
         Vue.set(node, 'checked', checked)
       }
     })
+
+    this.$on('shownode', (node, isShow) => {
+      Vue.set(node, 'show', isShow)
+      if (isShow && node.parent) {
+        this.$emit('shownode', node.parent, isShow)
+      }
+    })
+    this.initHandle()
   },
   methods: {
     /*
@@ -111,6 +139,7 @@ export default {
     initHandle () {
       for (let node of this.data) {
         Vue.set(node, 'parent', this.parent)
+        Vue.set(node, 'show', true)
       }
     },
     /* @method expand or close node
