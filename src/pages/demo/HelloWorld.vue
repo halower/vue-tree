@@ -24,7 +24,7 @@ export default {
   data () {
     return {
       lang: 'zh',
-      keyword: 'aaa',
+      keyword: '',
       treeData: [{
         title: '一级节点',
         expanded: true,
