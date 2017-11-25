@@ -87,21 +87,15 @@ export default {
      */
     this.$on('parentSeleted', (node, checked) => {
       Vue.set(node, 'checked', checked)
-      let childrenCheckedNum = node.parent.children.filter(node => node.checked).length
-      if (node.parent) {
-        if (this.halfcheck) {
-          if (!checked && childrenCheckedNum > 0) return false
+      if (!node.parent) return false
+      let someBortherNodeChecked = node.parent.children.some(node => node.checked)
+      if (this.halfcheck) {
+        if (!checked && someBortherNodeChecked) return false
+        this.$emit('parentSeleted', node.parent, checked)
+      } else {
+        let allBortherNodeChecked = node.parent.children.every(node => node.checked)
+        if (checked && allBortherNodeChecked) {
           this.$emit('parentSeleted', node.parent, checked)
-        } else {
-          debugger
-          console.log(checked && childrenCheckedNum === node.parent.children.length)
-          if (checked && childrenCheckedNum === node.parent.children.length) {
-            console.log('enter')
-            this.$emit('parentSeleted', node.parent, checked)
-          } else {
-            if (!node.children.filter(node => node.checked).length) return false
-            this.$emit('parentSeleted', node.parent, checked)
-          }
         }
       }
     })
