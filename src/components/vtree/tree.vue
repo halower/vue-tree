@@ -57,19 +57,11 @@ export default {
   components: { Render },
   watch: {
     data () {
-      for (let node of this.data) {
-        Vue.set(node, 'parent', this.parent)
-      }
+      this.initHandle()
     }
   },
   mounted () {
-    /*
-    *@description dynamically add an 'parent' attribute for every node
-    */
-    for (let node of this.data) {
-      Vue.set(node, 'parent', this.parent)
-    }
-
+    this.initHandle()
     /*
      * @event monitor the children nodes seleted event
      */
@@ -113,6 +105,14 @@ export default {
     })
   },
   methods: {
+    /*
+    * @method dynamically add an 'parent' attribute for every node
+    */
+    initHandle () {
+      for (let node of this.data) {
+        Vue.set(node, 'parent', this.parent)
+      }
+    },
     /* @method expand or close node
      * @param node current node
     */
