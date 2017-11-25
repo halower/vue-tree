@@ -7,13 +7,9 @@
                 <span v-show='!item.expanded' @click.once="asyncLoad(item)" class="tree-close"></span>
               </span>
               <div :class="[item.checked ? 'box-checked' : 'box-unchecked', 'inputCheck']">
-                  <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
+                  <input :class="[item.halfchecked ? 'halfcheck' : 'check']" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
               </div>
-              <span @click="expandNode(item)" v-if="item.children">
-                <span v-show="item.expanded">-</span>
-                <span v-show='!item.expanded' @click.once="asyncLoad(item)">+</span>
-              </span>   
-              <Render :node='item' :tpl ='tpl'/>
+              <Render :node="item" :tpl ='tpl'/>
           </div>
           <transition name="bounce">
             <tree v-if="!isLeaf(item)" :searchable='searchable' :async="async" :keyword='keyword' v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
@@ -101,11 +97,23 @@ export default {
       Vue.set(node, 'checked', checked)
       if (!node.parent) return false
       let someBortherNodeChecked = node.parent.children.some(node => node.checked)
+      let allBortherNodeChecked = node.parent.children.every(node => node.checked)
       if (this.halfcheck) {
-        if (!checked && someBortherNodeChecked) return false
+        if (!checked && someBortherNodeChecked) {
+          Vue.set(node.parent, 'halfchecked', true)
+          return false
+        }
+        if (allBortherNodeChecked) {
+          Vue.set(node.parent, 'halfchecked', false)
+        } else {
+          if (!someBortherNodeChecked) {
+            Vue.set(node.parent, 'halfchecked', false)
+          } else {
+            Vue.set(node.parent, 'halfchecked', true)
+          }
+        }
         this.$emit('parentSeleted', node.parent, checked)
       } else {
-        let allBortherNodeChecked = node.parent.children.every(node => node.checked)
         if (checked && allBortherNodeChecked) {
           this.$emit('parentSeleted', node.parent, checked)
         }
@@ -280,7 +288,7 @@ export default {
     }
     .halo-tree.inputCheck.box-unchecked {
 	}
-    .halo-tree .check {
+    .halo-tree .check, .halfcheck {
         display:block;
         position:absolute;
         font-size:14px;
@@ -297,6 +305,11 @@ export default {
         -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
         filter:alpha(opacity=0);
         z-index:2;
+    }
+
+    .halfcheck {
+      border-radius: 3px;
+      opacity: 1;
     }
     .halo-tree li {
         margin: 0;
