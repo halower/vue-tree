@@ -10,7 +10,7 @@
        <option value='en'>Engilsh</option>
     </select>
     <input v-model="keyword"/>
-    <tree ref='tree' :async='true' :searchable='true' :keyword='keyword' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='false'></tree>
+    <tree ref='tree' :async='true' :searchable='true' :keyword='keyword' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'></tree>
  </div>
 </template>
 
