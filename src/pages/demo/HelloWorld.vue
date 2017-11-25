@@ -72,7 +72,7 @@ export default {
     },
     tpl (node) {
       return <span>
-        <button style='color:blue; background-color:pink' onClick={() => this.$refs.tree.addNode(node, {title: '哈哈'})}>+</button>
+        <button style='color:blue; background-color:pink' onClick={() => this.$refs.tree.addNode(node, {title: '同步节点'})}>+</button>
       <span style='bold' domPropsInnerHTML={node.title}></span>
       <button style='color:green; background-color:pink' onClick={() => this.asyncLoad(node)}>异步加载</button>
       <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.delNode(node.parent, node)}>删除</button>
