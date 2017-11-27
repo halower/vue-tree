@@ -7,7 +7,7 @@
                 <span v-show='!item.expanded' @click.once="asyncLoad(item)" class="tree-close"></span>
               </span>
               <div :class="[item.checked ? 'box-checked' : 'box-unchecked', 'inputCheck']">
-                  <input :class="[item.halfchecked ? 'halfcheck' : 'check']" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
+                  <input :class="[item.halfcheck ? 'halfcheck' : 'check']" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
               </div>
               <Render :node="item" :tpl ='tpl'/>
           </div>
@@ -99,19 +99,8 @@ export default {
       let someBortherNodeChecked = node.parent.children.some(node => node.checked)
       let allBortherNodeChecked = node.parent.children.every(node => node.checked)
       if (this.halfcheck) {
-        if (!checked && someBortherNodeChecked) {
-          Vue.set(node.parent, 'halfchecked', true)
-          return false
-        }
-        if (allBortherNodeChecked) {
-          Vue.set(node.parent, 'halfchecked', false)
-        } else {
-          if (!someBortherNodeChecked) {
-            Vue.set(node.parent, 'halfchecked', false)
-          } else {
-            Vue.set(node.parent, 'halfchecked', true)
-          }
-        }
+        allBortherNodeChecked ? Vue.set(node.parent, 'halfcheck', false) : someBortherNodeChecked ? Vue.set(node.parent, 'halfcheck', true) : Vue.set(node.parent, 'halfcheck', false)
+        if (!checked && someBortherNodeChecked) return false
         this.$emit('parentSeleted', node.parent, checked)
       } else {
         if (checked && allBortherNodeChecked) {
