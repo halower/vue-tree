@@ -98,7 +98,6 @@ export default {
      * @event monitor the parent nodes seleted event
      */
     this.$on('parentSeleted', (node, checked) => {
-      debugger
       Vue.set(node, 'checked', checked)
       if (!node.parent) return false
       let someBortherNodeChecked = node.parent.children.some(node => node.checked)
