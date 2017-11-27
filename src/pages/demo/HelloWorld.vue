@@ -9,7 +9,7 @@
        <option value='zh'>中文</option>
        <option value='en'>Engilsh</option>
     </select>
-    <input v-model="searchexpression"/>
+    <input type="text" v-model="searchexpression" :class="{'halo-tree-searching': searchexpression, 'halo-tree-search-box': true}"/>
     <tree ref='tree' :async='true' :searchable='true' :searchexpression='searchexpression' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'></tree>
  </div>
 </template>
