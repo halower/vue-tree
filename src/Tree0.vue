@@ -25,7 +25,7 @@
                 treeData: [
                     {
                         id: 1,
-                        label: '一级节点',
+                        label: '一级节点1',
                         open: false,
                         checked: false,
                         nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
@@ -35,7 +35,7 @@
                         children: [
                             {
                                 id: 1001,
-                                label: '2级节点',
+                                label: '二级节点1',
                                 open: false,
                                 nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
                                 parentId: 1,
@@ -44,7 +44,7 @@
                             },
                             {
                                 id: 1002,
-                                label: '2级节点',
+                                label: '二级节点2',
                                 open: false,
                                 nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
                                 parentId: 1,
@@ -55,7 +55,7 @@
                     },
                     {
                         id: 2,
-                        label: '一级节点',
+                        label: '一级节点2',
 
                         open: false,
                         checked: false,
@@ -67,7 +67,7 @@
                     {
                         id: 3,
 
-                        label: '一级节点',
+                        label: '一级节点3',
                         open: false,
                         checked: false,
                         nodeSelectNotAll: false,
@@ -79,9 +79,9 @@
                 options: {
                     showCheckbox: false,
                     halfCheck: false, //控制父框是否需要半钩状态
-
+                    showSearch: true,
                     search: {
-                        useInitial: true,
+                        useInitial: false,
                         useEnglish: false,
                         customFilter: null
                     }

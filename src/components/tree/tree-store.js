@@ -229,7 +229,7 @@ export default class TreeStore {
             node.searched = false
             if (node.visible) {
                 if (!this.isNullOrEmpty(keyworld)) {
-                    node.searched = true
+                  node.searched = true
                 }
                 _syncNodeStatus(node)
             }
