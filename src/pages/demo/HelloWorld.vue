@@ -9,8 +9,8 @@
        <option value='zh'>中文</option>
        <option value='en'>Engilsh</option>
     </select>
-    <input v-model="keyword"/>
-    <tree ref='tree' :async='true' :searchable='true' :keyword='keyword' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'></tree>
+    <input v-model="searchexpression"/>
+    <tree ref='tree' :async='true' :searchable='true' :searchexpression='searchexpression' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'></tree>
  </div>
 </template>
 
@@ -24,7 +24,7 @@ export default {
   data () {
     return {
       lang: 'zh',
-      keyword: '',
+      searchexpression: '',
       treeData: [{
         title: '一级节点',
         expanded: true,
