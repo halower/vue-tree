@@ -94,18 +94,22 @@ export default {
      * @event monitor the parent nodes seleted event
      */
     this.$on('parentSeleted', (node, checked) => {
+      debugger
       Vue.set(node, 'checked', checked)
       if (!node.parent) return false
       let someBortherNodeChecked = node.parent.children.some(node => node.checked)
       let allBortherNodeChecked = node.parent.children.every(node => node.checked)
       if (this.halfcheck) {
+        // all / some / none
         allBortherNodeChecked ? Vue.set(node.parent, 'halfcheck', false) : someBortherNodeChecked ? Vue.set(node.parent, 'halfcheck', true) : Vue.set(node.parent, 'halfcheck', false)
-        if (!checked && someBortherNodeChecked) return false
+        if (!checked && someBortherNodeChecked) {
+          Vue.set(node.parent, 'halfcheck', true)
+          return false
+        }
         this.$emit('parentSeleted', node.parent, checked)
       } else {
-        if (checked && allBortherNodeChecked) {
-          this.$emit('parentSeleted', node.parent, checked)
-        }
+        if (checked && allBortherNodeChecked) this.$emit('parentSeleted', node.parent, checked)
+        if (!checked) this.$emit('parentSeleted', node.parent, checked)
       }
     })
 
