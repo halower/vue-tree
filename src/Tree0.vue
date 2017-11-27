@@ -81,7 +81,7 @@
                     halfCheck: false, //控制父框是否需要半钩状态
                     showSearch: true,
                     search: {
-                        useInitial: false,
+                        useInitial: true,
                         useEnglish: false,
                         customFilter: null
                     }
