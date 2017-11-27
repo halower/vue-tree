@@ -1,5 +1,6 @@
 const pinyin = require('chinese-to-pinyin')
 import Vue from 'vue'
+import { debug } from 'util';
 export default class TreeStore {
     constructor(options) {
         for (let option in options) {
@@ -205,38 +206,38 @@ export default class TreeStore {
         return true
     }
     filterNodes(keyworld, searchOptions) {
-        const _filterNode = (val, node) => {
-            if (!val) return true
-            if (searchOptions.useEnglish) {
-                return node.label.indexOf(val) !== -1
-            } else {
-                return this.toPinYin(node.label, searchOptions.useInitial).indexOf(this.toPinYin(keyworld.toLowerCase(), searchOptions.useInitial, true)) !== -1
-            }
+       this.datas.forEach(node => {
+        if (!keyworld) {
+           Vue.set(node, 'searched', false)
+           Vue.set(node, 'visible', true)
+           return false
         }
-
-        const _syncNodeStatus = (node) => {
+        const _updateVisible = (node) => {
             if (node.parentId) {
                 let parentNode = this.getNode(node.parentId)
                 if (node.visible) {
                     parentNode.visible = node.visible
-                    _syncNodeStatus(parentNode)
+                    _updateVisible(parentNode)
                 }
             }
         }
-        let filterFunc = (searchOptions.customFilter && typeof(searchOptions.customFilter) === 'function') ? searchOptions.customFilter : _filterNode
-        this.datas.forEach(node => {
-            node.visible = filterFunc(keyworld, node)
-            node.searched = false
-            if (node.visible) {
-                if (!this.isNullOrEmpty(keyworld)) {
-                  node.searched = true
-                }
-                _syncNodeStatus(node)
-            }
-        })
+         let nodePyin = this.toPinYin(node.label, searchOptions.useInitial, true)
+         let searched = nodePyin.indexOf(this.toPinYin(keyworld.toLowerCase(), searchOptions.useInitial, true)) > -1
+         Vue.set(node, 'searched', searched)
+         Vue.set(node, 'visible', searched)
+         if (node.searched) _updateVisible(node)
+      }) 
     }
-    getNode(key) {
-        return this.datas.get(key)
+    getNode(id) {
+      let rn = null
+      for(let [key, node] of this.datas.entries()) {
+        if (node.id == id) {
+          rn = node
+          break
+        }
+      }
+      return rn
+      //  return this.datas.get(key)
     }
     toPinYin(keyworld, useInitial) {
         if (/^[a-zA-Z]/.test(keyworld)) {
