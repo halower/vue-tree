@@ -6,8 +6,8 @@
                 <span v-show="item.expanded" class="tree-open"></span>
                 <span v-show='!item.expanded' @click.once="asyncLoad(item)" class="tree-close"></span>
               </span>
-              <div :class="[item.checked ? 'box-checked' : 'box-unchecked', 'inputCheck']">
-                  <input :class="[item.halfcheck ? 'halfcheck' : 'check']" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
+              <div :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
+                  <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
               </div>
               <Render :node="item" :tpl ='tpl'/>
           </div>
@@ -284,7 +284,19 @@ export default {
     }
     .halo-tree.inputCheck.box-unchecked {
 	}
-    .halo-tree .check, .halfcheck {
+    .halo-tree .box-halfchecked {
+        background-color: #888888;
+    }
+    .halo-tree .box-halfchecked:after {
+        content:"\2713";
+        display:block;
+        position:absolute;
+        z-index:1;
+        width:100%;
+        text-align:center;
+        color: #FFFFFF;
+    }
+    .halo-tree .check{
         display:block;
         position:absolute;
         font-size:14px;
@@ -293,19 +305,11 @@ export default {
         left:-5px;
         top:-4px;
         border:1px solid #000000;
-        /*width:14px;
-        height:14px;
-        */
         opacity:0;
         cursor:pointer;
         -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
         filter:alpha(opacity=0);
         z-index:2;
-    }
-
-    .halfcheck {
-      border-radius: 3px;
-      opacity: 1;
     }
     .halo-tree li {
         margin: 0;
