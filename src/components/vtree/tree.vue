@@ -12,7 +12,7 @@
               <Render :node="item" :tpl ='tpl'/>
           </div>
           <transition name="bounce">
-            <tree v-if="!isLeaf(item)" :searchable='searchable' :async="async" :keyword='keyword' v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+            <tree v-if="!isLeaf(item)" :searchable='searchable' :async="async" :searchexpression='searchexpression' v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
           </transition>
       </li>
   </ul>
@@ -48,7 +48,7 @@ export default {
       type: String,
       default: '0'
     },
-    keyword: {
+    searchexpression: {
       type: String,
       default: ''
     },
@@ -67,10 +67,14 @@ export default {
     data () {
       this.initHandle()
     },
-    keyword () {
+    searchexpression  (newVal, oldVal) {
+      const evalFunc = (fn) => {
+        let F = Function
+        return new F('return ' + fn)()
+      }
       for (let node of this.data) {
         if (this.searchable) {
-          let searched = node.title.indexOf(this.keyword) > -1
+          let searched = newVal.indexOf('=>') > -1 ? evalFunc(newVal)(node) : node.title.indexOf(newVal) > -1
           Vue.set(node, 'searched', searched)
           this.$emit('shownode', node, searched)
         }
