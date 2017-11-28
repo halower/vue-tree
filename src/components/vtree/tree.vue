@@ -1,6 +1,6 @@
 <template>
   <ul class="halo-tree">
-      <li v-for="(item, index) in data" :key="item.title" :class="{leaf: isLeaf(item)}"  v-show="item.show">
+      <li v-for="(item, index) in data" :key="item.title" :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1}"  v-show="item.show">
           <div class="tree-node-el">
               <span @click="expandNode(item)" v-if="item.children">
                 <span v-show="item.expanded" class="tree-open"></span>
@@ -342,7 +342,12 @@ export default {
     .halo-tree li:last-child::before {
         height: 26px
     }
-
+    .halo-tree>li.first-node:before {
+        border-left: none;
+    }
+    .halo-tree>li.only-node:after {
+        border-top: none;
+    }
     .halo-tree > ul {
         padding-left: 0
     }
