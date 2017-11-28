@@ -4,15 +4,15 @@
           <div class="tree-node-el">
               <span @click="expandNode(item)" v-if="item.children">
                 <span v-show="item.expanded" class="tree-open"></span>
-                <span v-show='!item.expanded' @click.once="asyncLoad(item)" class="tree-close"></span>
-              </span>
+                <span v-show='!item.expanded' class="tree-close"></span>
+              </span> selected: {{item.lastselectTime}}
               <div :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
                   <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
               </div>
               <Render :node="item" :tpl ='tpl'/>
           </div>
           <transition name="bounce">
-            <tree v-if="!isLeaf(item)" :searchable='searchable' :async="async" :searchexpression='searchexpression' v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+            <tree v-if="!isLeaf(item)" :searchexpression='searchexpression' v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
           </transition>
       </li>
   </ul>
@@ -37,10 +37,6 @@ export default {
       default: false
     },
     halfcheck: {
-      type: Boolean,
-      default: false
-    },
-    async: {
       type: Boolean,
       default: false
     },
@@ -73,11 +69,9 @@ export default {
         return new F('return ' + fn)()
       }
       for (let node of this.data) {
-        if (this.searchable) {
-          let searched = newVal.indexOf('=>') > -1 ? evalFunc(newVal)(node) : node.title.indexOf(newVal) > -1
-          Vue.set(node, 'searched', searched)
-          this.$emit('shownode', node, searched)
-        }
+        let searched = newVal.indexOf('=>') > -1 ? evalFunc(newVal)(node) : node.title.indexOf(newVal) > -1
+        Vue.set(node, 'searched', searched)
+        this.$emit('shownode', node, searched)
       }
     }
   },
@@ -158,7 +152,7 @@ export default {
     isLeaf (node) {
       return !(node.children && node.children.length)
     },
-    /* @method adding child nodes
+    /* @method adding child node
      * @param node parent node
      * @param newnode  new node
     */
@@ -184,6 +178,10 @@ export default {
       }
       this.$emit('addNode', { parentNode: parent, newNode: newNode })
     },
+    /* @method adding childlren nodes
+     * @param node parent node
+     * @param newnode  new node
+    */
     addNodes (node, children) {
       for (let n of children) {
         this.addNode(node, n)
@@ -207,6 +205,12 @@ export default {
      */
     changeCheckStatus (node, $event) {
       this.$emit('nodeSelected', node, $event.target.checked)
+    },
+
+    setSelectedNode (node) {
+      window.lastSelected = new Date()
+      Vue.set(node, 'lastselectTime', window.lastSelected)
+      Vue.set(node, 'selected', true)
     }
   }
 }
