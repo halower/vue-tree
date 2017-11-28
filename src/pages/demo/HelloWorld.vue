@@ -10,7 +10,7 @@
        <option value='en'>Engilsh</option>
     </select>
     <input type="text" v-model="searchexpression" :class="{'halo-tree-searching': searchexpression, 'halo-tree-search-box': true}"/>
-    <tree ref='tree' :async='true' :searchable='true' :searchexpression='searchexpression' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'></tree>
+    <tree ref='tree' :searchexpression='searchexpression' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'></tree>
  </div>
 </template>
 
@@ -28,7 +28,6 @@ export default {
       treeData: [{
         title: '一级节点',
         expanded: true,
-        selected: true,
         children: [{
           title: '二级节点1',
           expanded: true,
@@ -72,10 +71,10 @@ export default {
         ]
       })
     },
-    tpl (node) {
+    tpl (node, ctx) {
       return <span>
         <button style='color:blue; background-color:pink' onClick={() => this.$refs.tree.addNode(node, {title: '同步节点'})}>+</button>
-      <span style='bold' domPropsInnerHTML={node.title}></span>
+      <span style='bold' domPropsInnerHTML={node.title} onClick={() => ctx.parent.selectClick(ctx.props.node)}></span>
       <button style='color:green; background-color:pink' onClick={() => this.asyncLoad(node)}>异步加载</button>
       <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.delNode(node.parent, node)}>删除</button>
       </span>

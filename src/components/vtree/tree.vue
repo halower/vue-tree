@@ -4,21 +4,20 @@
           <div class="tree-node-el">
               <span @click="expandNode(item)" v-if="item.children">
                 <span v-show="item.expanded" class="tree-open"></span>
-                <span v-show='!item.expanded' @click.once="asyncLoad(item)" class="tree-close"></span>
+                <span v-show='!item.expanded' class="tree-close"></span>
               </span>
               <div :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
                   <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
-              </div>
+              </div> {{item.selected}}
               <Render :node="item" :tpl ='tpl'/>
           </div>
           <transition name="bounce">
-            <tree v-if="!isLeaf(item)" :searchable='searchable' :async="async" :searchexpression='searchexpression' v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+            <tree v-if="!isLeaf(item)"  :searchexpression='searchexpression' v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
           </transition>
       </li>
   </ul>
 </template>
 <script>
-import Vue from 'vue'
 import Render from './render'
 
 export default {
@@ -40,10 +39,6 @@ export default {
       type: Boolean,
       default: false
     },
-    async: {
-      type: Boolean,
-      default: false
-    },
     level: {
       type: String,
       default: '0'
@@ -53,10 +48,6 @@ export default {
       default: ''
     },
     scoped: {
-      type: Boolean,
-      default: false
-    },
-    searchable: {
       type: Boolean,
       default: false
     },
@@ -73,11 +64,9 @@ export default {
         return new F('return ' + fn)()
       }
       for (let node of this.data) {
-        if (this.searchable) {
-          let searched = newVal.indexOf('=>') > -1 ? evalFunc(newVal)(node) : node.title.indexOf(newVal) > -1
-          Vue.set(node, 'searched', searched)
-          this.$emit('shownode', node, searched)
-        }
+        let searched = newVal.indexOf('=>') > -1 ? evalFunc(newVal)(node) : node.title.indexOf(newVal) > -1
+        this.$set(node, 'searched', searched)
+        this.$emit('shownode', node, searched)
       }
     }
   },
@@ -88,7 +77,7 @@ export default {
     this.$on('childSelected', (node, checked) => {
       if (node.children && node.children.length) {
         for (let child of node.children) {
-          Vue.set(child, 'checked', checked)
+          this.$set(child, 'checked', checked)
           this.$emit('nodeSelected', child, checked)
         }
       }
@@ -98,15 +87,15 @@ export default {
      * @event monitor the parent nodes seleted event
      */
     this.$on('parentSeleted', (node, checked) => {
-      Vue.set(node, 'checked', checked)
+      this.$set(node, 'checked', checked)
       if (!node.parent) return false
       let someBortherNodeChecked = node.parent.children.some(node => node.checked)
       let allBortherNodeChecked = node.parent.children.every(node => node.checked)
       if (this.halfcheck) {
         // all / some / none
-        allBortherNodeChecked ? Vue.set(node.parent, 'halfcheck', false) : someBortherNodeChecked ? Vue.set(node.parent, 'halfcheck', true) : Vue.set(node.parent, 'halfcheck', false)
+        allBortherNodeChecked ? this.$set(node.parent, 'halfcheck', false) : someBortherNodeChecked ? this.$set(node.parent, 'halfcheck', true) : this.$set(node.parent, 'halfcheck', false)
         if (!checked && someBortherNodeChecked) {
-          Vue.set(node.parent, 'halfcheck', true)
+          this.$set(node.parent, 'halfcheck', true)
           return false
         }
         this.$emit('parentSeleted', node.parent, checked)
@@ -119,21 +108,25 @@ export default {
     /*
      * @event monitor the node seleted event
      */
-    this.$on('nodeSelected', (node, checked) => {
+    this.$on('nodeCheckStatusChange', (node, checked) => {
       if (!this.scoped) {
         this.$emit('parentSeleted', node, checked)
         this.$emit('childSelected', node, checked)
       } else {
-        Vue.set(node, 'checked', checked)
+        this.$set(node, 'checked', checked)
       }
     })
 
+    /*
+     * @event monitor the node show event
+     */
     this.$on('shownode', (node, isShow) => {
-      Vue.set(node, 'show', isShow)
+      this.$set(node, 'show', isShow)
       if (isShow && node.parent) {
         this.$emit('shownode', node.parent, isShow)
       }
     })
+
     this.initHandle()
   },
   methods: {
@@ -142,15 +135,15 @@ export default {
     */
     initHandle () {
       for (let node of this.data) {
-        Vue.set(node, 'parent', this.parent)
-        Vue.set(node, 'show', true)
+        this.$set(node, 'parent', this.parent)
+        this.$set(node, 'show', true)
       }
     },
     /* @method expand or close node
      * @param node current node
     */
     expandNode (node) {
-      Vue.set(node, 'expanded', !node.expanded)
+      this.$set(node, 'expanded', !node.expanded)
     },
     /* @method Determine whether it is a leaf node
      * @param node current node
@@ -158,12 +151,12 @@ export default {
     isLeaf (node) {
       return !(node.children && node.children.length)
     },
-    /* @method adding child nodes
+    /* @method adding child node
      * @param node parent node
      * @param newnode  new node
     */
     addNode (parent, newNode) {
-      Vue.set(parent, 'expanded', true)
+      this.$set(parent, 'expanded', true)
       let addnode = null
       if (typeof newNode === 'undefined') {
         throw new ReferenceError('newNode is required but undefined')
@@ -177,13 +170,18 @@ export default {
         addnode = newNode
       }
       if (this.isLeaf(parent)) {
-        Vue.set(parent, 'children', [])
+        this.$set(parent, 'children', [])
         parent.children.push(addnode)
       } else {
         parent.children.push(addnode)
       }
       this.$emit('addNode', { parentNode: parent, newNode: newNode })
     },
+
+    /* @method adding children nodes
+     * @param node parent node
+     * @param newnode  new node
+    */
     addNodes (node, children) {
       for (let n of children) {
         this.addNode(node, n)
@@ -201,12 +199,19 @@ export default {
       this.$emit('delNode', { parentNode: parent, delNode: node })
     },
     /*
-     *@method change the check box status event
+     *@method change the check box status method
      *@param node current node
      *@param $event event object
      */
     changeCheckStatus (node, $event) {
-      this.$emit('nodeSelected', node, $event.target.checked)
+      this.$emit('nodeCheckStatusChange', node, $event.target.checked)
+    },
+    /*
+     * @method select the node method
+     * @param node current node
+    */
+    selectClick (node) {
+      this.$set(node, 'checked', true)
     }
   }
 }
@@ -272,8 +277,6 @@ export default {
         z-index:1;
         color:#ffffff;
     }
-    .halo-tree .inputCheck.box-checked {
-	}
     .halo-tree .inputCheck.box-checked:after {
         content:"\2713";
         display:block;
@@ -282,8 +285,6 @@ export default {
         width:100%;
         text-align:center;
     }
-    .halo-tree.inputCheck.box-unchecked {
-	}
     .halo-tree .box-halfchecked {
         background-color: #888888;
     }
