@@ -5,11 +5,11 @@
               <span @click="expandNode(item)" v-if="item.children">
                 <span v-show="item.expanded" class="tree-open"></span>
                 <span v-show='!item.expanded' class="tree-close"></span>
-              </span> selected: {{item.lastselectTime}}
+              </span>
               <div :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
                   <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
-              </div>
-              <Render :node="item" :tpl ='tpl'/>
+              </div>{{item.selected}}
+              <Render :node="item" :tpl ='tpl'/> {{`${level}-${index}`}}
           </div>
           <transition name="bounce">
             <tree v-if="!isLeaf(item)" :searchexpression='searchexpression' v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
@@ -20,7 +20,7 @@
 <script>
 import Vue from 'vue'
 import Render from './render'
-
+import { execFunc } from './str2js'
 export default {
   name: 'Tree',
   props: {
@@ -64,12 +64,8 @@ export default {
       this.initHandle()
     },
     searchexpression  (newVal, oldVal) {
-      const evalFunc = (fn) => {
-        let F = Function
-        return new F('return ' + fn)()
-      }
       for (let node of this.data) {
-        let searched = newVal.indexOf('=>') > -1 ? evalFunc(newVal)(node) : node.title.indexOf(newVal) > -1
+        let searched = newVal.indexOf('=>') > -1 ? execFunc(newVal)(node) : node.title.indexOf(newVal) > -1
         Vue.set(node, 'searched', searched)
         this.$emit('shownode', node, searched)
       }
@@ -122,10 +118,22 @@ export default {
       }
     })
 
+     /*
+     * @event monitor the node show event
+     */
     this.$on('shownode', (node, isShow) => {
       Vue.set(node, 'show', isShow)
       if (isShow && node.parent) {
         this.$emit('shownode', node.parent, isShow)
+      }
+    })
+
+    this.$on('cancelSelect', (root) => {
+      for (let child of root.$children) {
+        for (let node of child.data) {
+          child.$set(node, 'selected', false)
+        }
+        if (child.$children) child.$emit('cancelSelect', child)
       }
     })
     this.initHandle()
@@ -207,10 +215,12 @@ export default {
       this.$emit('nodeSelected', node, $event.target.checked)
     },
 
-    setSelectedNode (node) {
-      window.lastSelected = new Date()
-      Vue.set(node, 'lastselectTime', window.lastSelected)
-      Vue.set(node, 'selected', true)
+    setSelectedNode (level) {
+      // 点击三级 0-0-0-0
+      // this.$parent.$parent.$parent
+      let root = this.$parent.$parent.$parent
+      // todo: thinking...
+      this.$emit('cancelSelect', root)
     }
   }
 }
