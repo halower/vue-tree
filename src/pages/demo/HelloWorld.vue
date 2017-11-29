@@ -80,12 +80,6 @@ export default {
       <span class={titleClass} domPropsInnerHTML={node.title} onClick={() => ctx.parent.nodeSelected(ctx.props.node)}></span>
       <button style='color:green; background-color:pink' onClick={() => this.asyncLoad(node)}>异步加载</button>
       <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.delNode(node.parent, node)}>删除</button>
-        <button style='color:green; background-color:pink' onClick={() => this.asyncLoad(node)}>异步加载</button>
-      <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.delNode(node.parent, node)}>删除</button>
-        <button style='color:green; background-color:pink' onClick={() => this.asyncLoad(node)}>异步加载</button>
-      <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.delNode(node.parent, node)}>删除</button>
-        <button style='color:green; background-color:pink' onClick={() => this.asyncLoad(node)}>异步加载</button>
-      <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.delNode(node.parent, node)}>删除</button>
       </span>
     },
     async asyncLoad (node) {
