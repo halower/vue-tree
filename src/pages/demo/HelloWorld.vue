@@ -73,9 +73,13 @@ export default {
       })
     },
     tpl (node, ctx) {
+      let titleClass = node.selected ? 'node-title node-selected' : 'node-title'
+      if (node.searched) {
+        titleClass += ' node-searched'
+      }
       return <span>
         <button style='color:blue; background-color:pink' onClick={() => this.$refs.tree.addNode(node, {title: '同步节点'})}>+</button>
-      <span style='bold' domPropsInnerHTML={node.title} onClick={() => ctx.parent.nodeSelected(ctx.props.node)}></span>
+      <span class={titleClass} domPropsInnerHTML={node.title} onClick={() => ctx.parent.nodeSelected(ctx.props.node)}></span>
       <button style='color:green; background-color:pink' onClick={() => this.asyncLoad(node)}>异步加载</button>
       <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.delNode(node.parent, node)}>删除</button>
       </span>
