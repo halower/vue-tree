@@ -6,6 +6,8 @@ export default {
     tpl: Function
   },
   render (h, ctx) {
-    return ctx.props.tpl ? ctx.props.tpl(ctx.props.node, ctx) : <span domPropsInnerHTML={ctx.props.node.title} onClick={() => ctx.parent.expandNode(ctx.props.node)}></span>
+    let titleClass = ctx.props.node.selected ? 'node-title node-selected' : 'node-title'
+    if (ctx.props.node.searched) titleClass += ' node-searched'
+    return ctx.props.tpl ? ctx.props.tpl(ctx.props.node, ctx) : <span domPropsInnerHTML={ctx.props.node.title} class={titleClass} onClick={() => ctx.parent.nodeSelected(ctx.props.node)}></span>
   }
 }
