@@ -9,7 +9,7 @@
               <div :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
                   <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
               </div>{{item.selected}}
-              <Render :node="item" :tpl ='tpl'/> {{`${level}-${index}`}}
+              <Render :node="item" :tpl ='tpl'/>
           </div>
           <transition name="bounce">
             <tree v-if="!isLeaf(item)" :searchexpression='searchexpression' v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
@@ -128,12 +128,12 @@ export default {
       }
     })
 
-    this.$on('cancelSelect', (root) => {
+    this.$on('cancleOtherSelected', (root) => {
       for (let child of root.$children) {
         for (let node of child.data) {
           child.$set(node, 'selected', false)
         }
-        if (child.$children) child.$emit('cancelSelect', child)
+        if (child.$children) child.$emit('cancleOtherSelected', child)
       }
     })
     this.initHandle()
@@ -207,7 +207,7 @@ export default {
       this.$emit('delNode', { parentNode: parent, delNode: node })
     },
     /*
-     *@method change the check box status event
+     *@method change the check box status method
      *@param node current node
      *@param $event event object
      */
@@ -215,12 +215,21 @@ export default {
       this.$emit('nodeSelected', node, $event.target.checked)
     },
 
-    setSelectedNode (level) {
-      // 点击三级 0-0-0-0
-      // this.$parent.$parent.$parent
-      let root = this.$parent.$parent.$parent
-      // todo: thinking...
-      this.$emit('cancelSelect', root)
+      /*
+     *@method change the node selected  method
+     *@param node current node
+     */
+    nodeSelected (node) {
+      const upNode = (el) => {
+        if (el.$parent.$el.nodeName === 'UL') {
+          el = el.$parent
+          return upNode(el)
+        } return el
+      }
+      let root = upNode(this)
+      for (let rn of root.data) Vue.set(rn, 'selected', false)
+      this.$emit('cancleOtherSelected', root)
+      Vue.set(node, 'selected', !node.selected)
     }
   }
 }
@@ -286,8 +295,6 @@ export default {
         z-index:1;
         color:#ffffff;
     }
-    .halo-tree .inputCheck.box-checked {
-	}
     .halo-tree .inputCheck.box-checked:after {
         content:"\2713";
         display:block;
@@ -296,8 +303,6 @@ export default {
         width:100%;
         text-align:center;
     }
-    .halo-tree.inputCheck.box-unchecked {
-	}
     .halo-tree .box-halfchecked {
         background-color: #888888;
     }
