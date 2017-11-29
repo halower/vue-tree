@@ -28,6 +28,7 @@ export default {
       treeData: [{
         title: '一级节点',
         expanded: true,
+        selected: true,
         children: [{
           title: '二级节点1',
           expanded: true,
@@ -74,7 +75,7 @@ export default {
     tpl (node, ctx) {
       return <span>
         <button style='color:blue; background-color:pink' onClick={() => this.$refs.tree.addNode(node, {title: '同步节点'})}>+</button>
-      <span style='bold' domPropsInnerHTML={node.title} onClick={() => ctx.parent.setSelectedNode(ctx.props.node)}></span>
+      <span style='bold' domPropsInnerHTML={node.title} onClick={() => ctx.parent.nodeSelected(ctx.props.node)}></span>
       <button style='color:green; background-color:pink' onClick={() => this.asyncLoad(node)}>异步加载</button>
       <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.delNode(node.parent, node)}>删除</button>
       </span>
