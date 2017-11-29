@@ -1,3 +1,4 @@
+<script src="config/apistore.js"></script>
 <template>
   <div id="app">
     <img src="./assets/logo.png">
@@ -38,5 +39,19 @@ export default {
   -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
   -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
   transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.halo-tree .node-title {
+  padding: 3px 3px;
+  border: 1px solid #FFFFFF;
+  border-radius: 3px;
+  cursor: pointer;
+  margin: 0 2px;
+}
+.halo-tree .node-selected {
+  border: 1px solid #DDDDDD;
+  background-color: #DDDDDD;
+}
+.halo-tree .node-title.node-searched {
+  border: 1px solid #FF8247;
 }
 </style>
