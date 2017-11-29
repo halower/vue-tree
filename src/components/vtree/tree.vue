@@ -4,7 +4,7 @@
           <div class="tree-node-el">
               <span @click="expandNode(item)" v-if="item.children" :class="item.expanded ? 'tree-open' : 'tree-close'">
               </span>
-              <div :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
+              <div v-if='multiple' :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
                   <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
               </div>
               <Render :node="item" :tpl ='tpl'/>
@@ -63,9 +63,9 @@ export default {
     },
     searchexpression  (newVal, oldVal) {
       for (let node of this.data) {
-        let searched = newVal.indexOf('=>') > -1 ? execFunc(newVal)(node) : node.title.indexOf(newVal) > -1
+        let searched = newVal ? (newVal.indexOf('=>') > -1 ? execFunc(newVal)(node) : node.title.indexOf(newVal) > -1) : false
         Vue.set(node, 'searched', searched)
-        this.$emit('shownode', node, searched)
+        this.$emit('shownode', node, newVal ? searched : true)
       }
     }
   },
