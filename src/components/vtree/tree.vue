@@ -2,13 +2,11 @@
   <ul class="halo-tree">
       <li v-for="(item, index) in data" :key="item.title" :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1}"  v-show="item.show">
           <div class="tree-node-el">
-              <span @click="expandNode(item)" v-if="item.children">
-                <span v-show="item.expanded" class="tree-open"></span>
-                <span v-show='!item.expanded' class="tree-close"></span>
+              <span @click="expandNode(item)" v-if="item.children" :class="item.expanded ? 'tree-open' : 'tree-close'">
               </span>
               <div :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
                   <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
-              </div>{{item.selected}}
+              </div>
               <Render :node="item" :tpl ='tpl'/>
           </div>
           <transition name="bounce">
@@ -381,7 +379,7 @@ export default {
         width:14px;
         height:14px;
         text-align: center;
-        line-height: 14px;
+        line-height: 13px;
         border: 1px solid #888888;
         border-radius: 2px;
         background: #FFFFFF;
