@@ -1,24 +1,51 @@
-<template>
- <div>
-   <h3>{{$t('test.title')}}</h3>
-    <h2>{{$t('test.currentcode')}}：{{code}}</h2>
-    <h2>{{$t('test.precode')}}: {{precode}}</h2>
-    <button @click='changeCode'>{{$t('test.changecode')}}</button>
-    <button @click='alert'>{{$t('test.simplealert')}}</button>
-    <select v-model='lang' @change='$i18n.locale = lang'>
-       <option value='zh'>中文</option>
-       <option value='en'>Engilsh</option>
-    </select>
-     <input type="text" v-model="searchword"/>
-    <button type="button" @click="search">手动搜索</button>
-    <v-tree ref='tree' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'/>
- </div>
-</template>
+# Version: 2.0  
+## API Document
+###  Node 属性
+| 参数      | 说明    | 类型      | 可选值 | 默认值  |
+|---------- |-------- |---------- |---------- |---------- |
+|title     | 节点名称 | String | N | — |
+|expanded |  节点是否展开 | Boolean | Y | false |
+|checked |  节点复选框是否选中 | Boolean | Y | false |
+|halfcheck |  节点是否为半选（下级被选中） | Boolean | Y | false |
+|visible |  节点是否可见 | Boolean | Y | false |
+|selected |  节点是否被选中 | Boolean | Y | false |
+|children |  子节点 | Array[Object] | Y | — |
 
-<script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('test')
+###  Tree 属性
+| 参数      | 说明    | 类型      | 可选值 | 默认值  |
+|---------- |-------- |---------- |---------- |---------- |
+|data     | 树数据源 | Array[Object] | N | — |
+|multiple |  开启复选模式 | Boolean | Y | false |
+|tpl |  自定义模板 | JSX | Y | false |
+|halfcheck |  开启半选模式 | Boolean | Y | 全选 |
+|scoped |  隔离节点选中状态 | Boolean | Y | false |
 
+### 方法
+| 方法名      | 说明    | 参数      |
+|---------- |-------- |---------- |
+| getSelectedNodes  | 返回目前被选中的节点所组成的数组 | - |
+| getCheckedNodes  |返回目前复选框选中的节点组成的数组 | - |
+| searchNodes  |搜索 | customFilter： function / String |
+
+### How to use
+
+```
+npm install VTree --save
+import VTree from 'vtree'
+
+Vue.use(VTree)
+```
+
+### Demo
+
+`Html`
+```
+  <v-tree ref='tree' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'/>
+     <input type="text" v-model="searchword" />
+    <button type="button" @click="search">GO</button>
+```
+`JS`
+```
 export default {
   name: 'HelloWorld',
   data () {
@@ -54,23 +81,6 @@ export default {
     ...mapGetters(['precode'])
   },
   methods: {
-    ...mapActions(['changeCode']),
-    alert () {
-      this.$modal.show('dialog', {
-        title: this.$t('test.alerttitle'),
-        text: `<span style='color:red'>${this.$t('test.code')}</span> = ${this
-          .code}`,
-        buttons: [
-          {
-            title: this.$t('test.ok'),
-            handler: () => {
-              alert(this.$t('test.welcome'))
-            }
-          },
-          { title: this.$t('test.close') }
-        ]
-      })
-    },
     tpl (node, ctx) {
       let titleClass = node.selected ? 'node-title node-selected' : 'node-title'
       if (node.searched) titleClass += ' node-searched'
@@ -93,3 +103,5 @@ export default {
   }
 }
 </script>
+
+```
