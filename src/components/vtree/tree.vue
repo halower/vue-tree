@@ -269,12 +269,6 @@ export default {
      *@param data current nodes
      */
     searchNodes (customFilter, data) {
-      const showParentNode = (node) => {
-        if (node.parent) {
-          Vue.set(node, 'show', true)
-          showParentNode(node.parent)
-        }
-      }
       data = data || this.data
       for (const node of data) {
         let searched = customFilter ? (typeof customFilter === 'function' ? customFilter(node) : node.title.indexOf(customFilter) > -1) : false
