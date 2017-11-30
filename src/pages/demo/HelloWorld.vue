@@ -9,8 +9,9 @@
        <option value='zh'>中文</option>
        <option value='en'>Engilsh</option>
     </select>
-    <input type="text" v-model="searchexpression" :class="{'halo-tree-searching': searchexpression, 'halo-tree-search-box': true}"/>
     <tree ref='tree' :searchexpression='searchexpression' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'></tree>
+    <input type="text" v-model="searchexpression" :class="{'halo-tree-searching': searchexpression, 'halo-tree-search-box': true}"/>
+    <button type="button" @click="search">手动搜索</button>
  </div>
 </template>
 
@@ -86,6 +87,9 @@ export default {
     },
     async asyncLoad (node) {
       this.$refs.tree.addNodes(node, await this.$api.demo.getChild())
+    },
+    search () {
+      this.$refs.tree.searchNodes(this.searchexpression)
     }
   },
   components: { Tree }

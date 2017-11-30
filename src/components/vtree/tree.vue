@@ -10,7 +10,7 @@
               <Render :node="item" :tpl ='tpl'/>
           </div>
           <transition name="bounce">
-            <tree v-if="!isLeaf(item)" :searchexpression='searchexpression' v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+            <tree v-if="!isLeaf(item)" v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
           </transition>
       </li>
   </ul>
@@ -18,7 +18,6 @@
 <script>
 import Vue from 'vue'
 import Render from './render'
-import { execFunc } from './str2js'
 export default {
   name: 'Tree',
   props: {
@@ -60,13 +59,6 @@ export default {
   watch: {
     data () {
       this.initHandle()
-    },
-    searchexpression  (newVal, oldVal) {
-      for (let node of this.data) {
-        let searched = newVal ? (newVal.indexOf('=>') > -1 ? execFunc(newVal)(node) : node.title.indexOf(newVal) > -1) : false
-        Vue.set(node, 'searched', searched)
-        this.$emit('shownode', node, newVal ? searched : true)
-      }
     }
   },
   mounted () {
@@ -119,10 +111,10 @@ export default {
      /*
      * @event monitor the node show event
      */
-    this.$on('shownode', (node, isShow) => {
+    this.$on('toggleshow', (node, isShow) => {
       Vue.set(node, 'show', isShow)
       if (isShow && node.parent) {
-        this.$emit('shownode', node.parent, isShow)
+        this.$emit('toggleshow', node.parent, isShow)
       }
     })
 
@@ -269,6 +261,29 @@ export default {
      */
     getCheckedNodes () {
       return this.getNodes(this.data, {selected: true})
+    },
+
+      /*
+     *@method search nessary nodes methods
+     *@param customFilter string or predicate expression
+     *@param data current nodes
+     */
+    searchNodes (customFilter, data) {
+      const showParentNode = (node) => {
+        if (node.parent) {
+          Vue.set(node, 'show', true)
+          showParentNode(node.parent)
+        }
+      }
+      data = data || this.data
+      for (const node of data) {
+        let searched = customFilter ? (typeof customFilter === 'function' ? customFilter(node) : node.title.indexOf(customFilter) > -1) : false
+        Vue.set(node, 'searched', searched)
+        this.$emit('toggleshow', node, customFilter ? searched : true)
+        if (node.children && node.children.length) {
+          this.searchNodes(customFilter, node.children)
+        }
+      }
     }
   }
 }
