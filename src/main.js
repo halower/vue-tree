@@ -11,11 +11,13 @@ import eventbus from '@/store/eventbus'
 import VModal from 'vue-js-modal'
 import VueI18n from 'vue-i18n'
 import messages from '@/config/i18n'
+import VTree from '@/components'
 
 Vue.use(directive)
 Vue.use(Router)
 Vue.use(VModal, { dialog: true })
 Vue.use(VueI18n)
+Vue.use(VTree)
 
 const router = new Router({
   routes: routestore,
