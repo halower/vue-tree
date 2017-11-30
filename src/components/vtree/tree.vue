@@ -1,6 +1,6 @@
 <template>
   <ul class="halo-tree">
-      <li v-for="(item, index) in data" :key="item.title" :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1}"  v-show="item.show">
+      <li v-for="(item, index) in data" :key="item.title" :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1}"  v-show="item.hasOwnProperty('visible') ? item.visible : true">
           <div class="tree-node-el">
               <span @click="expandNode(item)" v-if="item.children" :class="item.expanded ? 'tree-open' : 'tree-close'">
               </span>
@@ -109,10 +109,10 @@ export default {
     })
 
      /*
-     * @event monitor the node show event
+     * @event monitor the node visible event
      */
     this.$on('toggleshow', (node, isShow) => {
-      Vue.set(node, 'show', isShow)
+      Vue.set(node, 'visible', isShow)
       if (isShow && node.parent) {
         this.$emit('toggleshow', node.parent, isShow)
       }
@@ -135,7 +135,6 @@ export default {
     initHandle () {
       for (let node of this.data) {
         Vue.set(node, 'parent', this.parent)
-        Vue.set(node, 'show', true)
       }
     },
     /* @method expand or close node
@@ -273,8 +272,10 @@ export default {
       for (const node of data) {
         let searched = customFilter ? (typeof customFilter === 'function' ? customFilter(node) : node.title.indexOf(customFilter) > -1) : false
         Vue.set(node, 'searched', searched)
+        Vue.set(node, 'visible', false)
         this.$emit('toggleshow', node, customFilter ? searched : true)
         if (node.children && node.children.length) {
+          if (searched) Vue.set(node, 'expanded', true)
           this.searchNodes(customFilter, node.children)
         }
       }
