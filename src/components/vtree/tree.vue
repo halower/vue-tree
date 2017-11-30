@@ -10,7 +10,7 @@
               <Render :node="item" :tpl ='tpl'/>
           </div>
           <transition name="bounce">
-            <tree v-if="!isLeaf(item)" v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :level="`${level}-${index}`"  :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+            <tree v-if="!isLeaf(item)" v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
           </transition>
       </li>
   </ul>
@@ -37,19 +37,7 @@ export default {
       type: Boolean,
       default: false
     },
-    level: {
-      type: String,
-      default: '0'
-    },
-    searchexpression: {
-      type: String,
-      default: ''
-    },
     scoped: {
-      type: Boolean,
-      default: false
-    },
-    searchable: {
       type: Boolean,
       default: false
     },
