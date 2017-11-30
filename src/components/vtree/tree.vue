@@ -126,12 +126,12 @@ export default {
       }
     })
 
-    this.$on('cancleOtherSelected', (root) => {
+    this.$on('cancelSelected', (root) => {
       for (let child of root.$children) {
         for (let node of child.data) {
           child.$set(node, 'selected', false)
         }
-        if (child.$children) child.$emit('cancleOtherSelected', child)
+        if (child.$children) child.$emit('cancelSelected', child)
       }
     })
     this.initHandle()
@@ -218,16 +218,57 @@ export default {
      *@param node current node
      */
     nodeSelected (node) {
-      const upNode = (el) => {
+      const getRoot = (el) => {
         if (el.$parent.$el.nodeName === 'UL') {
           el = el.$parent
-          return upNode(el)
+          return getRoot(el)
         } return el
       }
-      let root = upNode(this)
-      for (let rn of root.data) Vue.set(rn, 'selected', false)
-      this.$emit('cancleOtherSelected', root)
+      let root = getRoot(this)
+      if (!this.multiple) {
+        for (let rn of root.data) Vue.set(rn, 'selected', false)
+        this.$emit('cancelSelected', root)
+      }
+      if (this.multiple) Vue.set(node, 'checked', !node.selected)
       Vue.set(node, 'selected', !node.selected)
+    },
+
+    /*
+     *@method get Nodes by options method
+     *@param data nodes
+     *@param opt the options that filter the node
+     */
+    getNodes (data, opt) {
+      data = data || this.data
+      let res = []
+      for (const node of data) {
+        let tmp = true
+        for (const [key, value] of Object.entries(opt)) {
+          if (node[key] !== value) {
+            tmp = false
+            break
+          }
+        }
+        if (tmp) res.push(node)
+        if (node.children && node.children.length) {
+          res = res.concat(this.getNodes(node.children, opt))
+        }
+      }
+      return res
+    },
+
+     /*
+     *@method get Nodes that selected
+     */
+    getSelectedNodes () {
+      return this.getNodes(this.data, {selected: true})
+    },
+
+    /*
+     *@method get Nodes that checked
+     */
+    getCheckedNodes () {
+      return this.getNodes(this.data, {selected: true})
     }
   }
 }
