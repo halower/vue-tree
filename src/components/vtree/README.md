@@ -29,11 +29,29 @@
 
 ### How to use
 
+Step1: install plugins
 ```
+npm install\
+  babel-plugin-syntax-jsx\
+  babel-plugin-transform-vue-jsx\
+  babel-helper-vue-jsx-merge-props\
+  babel-preset-env\
+  --save-dev
+
 npm install VTree --save
+```
+Step2： In your main.js
+```
 import VTree from 'vtree'
 
 Vue.use(VTree)
+```
+Step3: In your .babelrc
+```
+{
+  "presets": ["env"],
+  "plugins": ["transform-vue-jsx"]
+}
 ```
 
 ### Demo
