@@ -1,5 +1,5 @@
 # Version: 2.0  
-`if you want If you want to see [version 1.0](https://github.com/halower/vue2-tree/tree/1.x)`
+`if you want If you want to see` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x)
 ## API Document
 ###  Node 属性
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
