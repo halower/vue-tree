@@ -116,5 +116,5 @@ export default {
 </script>
 
 ```
-### 扫码支持本项目
-![](https://github.com/halower/vue2-tree/blob/master/src/assets/hello.png?raw=true)
+### 如果你觉得这个项目帮助到了你，你可以帮作者买一杯果汁表示鼓励
+<img src="https://github.com/halower/vue2-tree/blob/master/src/assets/hello.png" width=256 height=256 />
