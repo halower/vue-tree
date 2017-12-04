@@ -1,9 +1,5 @@
 # Version: 2.0  
-## API Document
-
-**************************************
-## English Document
-**************************************
+## API Document 
 ### Node Property
 | Parameters | Description | Type | Optional values | Default value |
 |---------- |-------- |---------- |---------- |---------- |
@@ -33,38 +29,6 @@
 | getCheckedNodes | returns the array of nodes selected by the current check box | - |
 | searchNodes | customfilter:function/string |
 
-**************************************
-## 中文文档
-**************************************
-
-###  Node 属性
-| 参数      | 说明    | 类型      | 可选值 | 默认值  |
-|---------- |-------- |---------- |---------- |---------- |
-|title     | 节点名称 | String | N | — |
-|expanded |  节点是否展开 | Boolean | Y | false |
-|checked |  节点复选框是否选中 | Boolean | Y | false |
-|halfcheck |  节点是否为半选（下级被选中） | Boolean | Y | false |
-|visible |  节点是否可见 | Boolean | Y | false |
-|selected |  节点是否被选中 | Boolean | Y | false |
-|children |  子节点 | Array[Object] | Y | — |
-
-###  Tree 属性
-| 参数      | 说明    | 类型      | 可选值 | 默认值  |
-|---------- |-------- |---------- |---------- |---------- |
-|data     | 树数据源 | Array[Object] | N | — |
-|multiple |  开启复选模式 | Boolean | Y | false |
-|tpl |  自定义模板 | JSX | Y | false |
-|halfcheck |  开启半选模式 | Boolean | Y | 全选 |
-|scoped |  隔离节点选中状态 | Boolean | Y | false |
-|draggable | 是否支持拖拽 | Boolean | Y | false |
-|dragAfterExpanded | 拖拽后展开   | Boolean | Y | true |
-
-### 方法
-| 方法名      | 说明    | 参数      |
-|---------- |-------- |---------- |
-| getSelectedNodes  | 返回目前被选中的节点所组成的数组 | - |
-| getCheckedNodes  |返回目前复选框选中的节点组成的数组 | - |
-| searchNodes  |搜索 | customFilter： function / String |
 
 ### How to use
 
