@@ -1,6 +1,6 @@
 # Version: 2.0  ([中文文档](https://github.com/halower/vue2-tree/blob/master/README_CN.md))
 ```QQ Group: 255965810``` <br/>
-`if you want If you want to see` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x)
+`we guess you may also see` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x) 
 ### Node Property
 | Parameters | Description | Type | Optional values | Default value |
 |---------- |-------- |---------- |---------- |---------- |
@@ -18,9 +18,9 @@
 |data | tree Data Source | Array[object] | N | -
 |multiple | turn on Check mode | Boolean | Y | false |
 |tpl | custom templates | JSX | Y | False |
-|halfcheck | turn on semi-select mode | Boolean | Y | select All |
-|scoped | quarantine node Selected state | Boolean | Y | dalse |
-|draggable | support drag? | Boolean | Y | dalse |
+|halfcheck | turn on semi-select mode | Boolean | Y | select all |
+|scoped | quarantine node Selected state | Boolean | Y | false |
+|draggable | support drag? | Boolean | Y | false |
 |dragafterexpanded | ro expand after dragging | Boolean | Y | true |
 
 ### method
