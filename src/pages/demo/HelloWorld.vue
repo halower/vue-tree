@@ -11,7 +11,7 @@
     </select>
      <input type="text" v-model="searchword"/>
     <button type="button" @click="search">手动搜索</button>
-    <v-tree ref='tree' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'/>
+    <v-tree ref='tree' :data='treeData' :draggable='true' :multiple='true' :tpl='tpl' :halfcheck='true'/>
  </div>
 </template>
 
