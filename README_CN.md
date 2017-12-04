@@ -1,4 +1,4 @@
-# Version: 2.0  ([中文文档](https://github.com/halower/vue2-tree/blob/master/README_CN.md))
+# Version: 2.0  ([English Document](https://github.com/halower/vue2-tree/blob/master/README.md))
 ```QQ Group: 255965810``` <br/>
 `if you want If you want to see` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x)
 # Version: 2.0  
