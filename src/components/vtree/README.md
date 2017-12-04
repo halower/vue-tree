@@ -132,10 +132,6 @@ export default {
       }]
     }
   },
-  computed: {
-    ...mapState(['code']),
-    ...mapGetters(['precode'])
-  },
   methods: {
     tpl (node, ctx) {
       let titleClass = node.selected ? 'node-title node-selected' : 'node-title'
