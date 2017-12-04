@@ -1,16 +1,17 @@
 <template>
   <ul class="halo-tree">
-      <li v-for="(item, index) in data" :key="item.title" :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1}"  v-show="item.hasOwnProperty('visible') ? item.visible : true">
-          <div class="tree-node-el">
+      <li v-for="(item, index) in data"@drop="drop(item, $event)" @dragover="dragover($event)" :key="item.title" :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1}"  v-show="item.hasOwnProperty('visible') ? item.visible : true">
+          <div class="tree-node-el" draggable="true" @dragstart="drag(item, $event)">
               <span @click="expandNode(item)" v-if="item.children" :class="item.expanded ? 'tree-open' : 'tree-close'">
               </span>
               <div v-if='multiple' :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
                   <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
               </div>
               <Render :node="item" :tpl ='tpl'/>
+              {{item.level}}
           </div>
           <transition name="bounce">
-            <tree v-if="!isLeaf(item)" v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+            <tree v-if="!isLeaf(item)" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
           </transition>
       </li>
   </ul>
@@ -18,8 +19,10 @@
 <script>
 import Vue from 'vue'
 import Render from './render'
+import mixins from './mixins'
 export default {
   name: 'Tree',
+  mixins: [mixins],
   props: {
     data: {
       type: Array,
@@ -117,6 +120,33 @@ export default {
     this.initHandle()
   },
   methods: {
+    drop (node, ev) {
+      ev.preventDefault()
+      ev.stopPropagation()
+      let guid = ev.dataTransfer.getData('guid')
+      let drag = this.getDragNode(guid)
+      // if drag node's parent is enter node or root node
+      if (drag.parent === node || drag.parent === null) return false
+      // drag from parent node to child node
+      if (this.hasInGenerations(drag, node)) return false
+      let dragHost = drag.parent.children
+      if (node.children && node.children.indexOf(drag) === -1) {
+        node.children.push(drag)
+        dragHost.splice(dragHost.indexOf(drag), 1)
+      } else {
+        Vue.set(node, 'children', [drag])
+        dragHost.splice(dragHost.indexOf(drag), 1)
+      }
+    },
+    drag (node, ev) {
+      let guid = this.guid()
+      this.setDragNode(guid, node)
+      ev.dataTransfer.setData('guid', guid)
+    },
+    dragover (ev) {
+      ev.preventDefault()
+      ev.stopPropagation()
+    },
     /*
     * @method dynamically add an 'parent' attribute for every node
     */
