@@ -17,7 +17,7 @@
 |---------- |-------- |---------- |---------- |---------- |
 |data | tree Data Source | Array[object] | N | -
 |multiple | turn on Check mode | Boolean | Y | false |
-|tpl | custom templates | JSX | Y | False |
+|tpl | custom templates | JSX | Y | false |
 |halfcheck | turn on semi-select mode | Boolean | Y | select all |
 |scoped | quarantine node Selected state | Boolean | Y | false |
 |draggable | support drag? | Boolean | Y | false |
