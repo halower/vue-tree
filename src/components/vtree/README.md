@@ -1,5 +1,42 @@
 # Version: 2.0  
 ## API Document
+
+**************************************
+## English Document
+**************************************
+### Node Property
+| Parameters | Description | Type | Optional values | Default value |
+|---------- |-------- |---------- |---------- |---------- |
+|title | node name | String | N | -
+|expanded | node Expansion | Boolean | Y | false |
+|checked | whether the node check box is selected | Boolean | Y | false |
+|halfcheck | Whether the node is half optional (subordinate selected) | Boolean | Y | false |
+|visible | is the node visible | Boolean | Y | false |
+|selected | whether the node is selected | Boolean | Y | false |
+|children | child nodes | Array[object] | Y | -
+
+### Tree Property
+| Parameters | Description | Type | Optional values | default value |
+|---------- |-------- |---------- |---------- |---------- |
+|data | tree Data Source | Array[object] | N | -
+|multiple | turn on Check mode | Boolean | Y | false |
+|tpl | custom templates | JSX | Y | False |
+|halfcheck | turn on semi-select mode | Boolean | Y | select All |
+|scoped | quarantine node Selected state | Boolean | Y | dalse |
+|draggable | support drag? | Boolean | Y | dalse |
+|dragafterexpanded | ro expand after dragging | Boolean | Y | true |
+
+### method
+| Method name | Description | Parameters |
+|---------- |-------- |---------- |
+| getSelectedNodes | returns an array of currently selected nodes | - |
+| getCheckedNodes | returns the array of nodes selected by the current check box | - |
+| searchNodes | customfilter:function/string |
+
+**************************************
+## 中文文档
+**************************************
+
 ###  Node 属性
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
 |---------- |-------- |---------- |---------- |---------- |
@@ -70,27 +107,26 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      lang: 'zh',
       searchword: '',
       treeData: [{
-        title: '一级节点',
+        title: 'First-level nodes',
         expanded: true,
         children: [{
-          title: '二级节点1',
+          title: 'Level Two Node 1',
           expanded: true,
           children: [{
-            title: '三级节点1-1'
+            title: 'Level Three node 1-1'
           }, {
-            title: '三级节点1-2'
+            title: 'Level Three node 1-1'
           }, {
-            title: '三级节点1-3'
+            title: 'Level Three node 1-1'
           }]
         }, {
-          title: '二级节点2',
+          title: 'Level Two Node 2',
           children: [{
-            title: "<span style='color: red'>三级节点2-1</span>"
+            title: "<span style='color: red'>Level Three node 2-1</span>"
           }, {
-            title: "<span style='color: red'>三级节点2-2</span>"
+            title: "<span style='color: red'>Level Three node 2-2</span>"
           }]
         }]
       }]
@@ -105,13 +141,13 @@ export default {
       let titleClass = node.selected ? 'node-title node-selected' : 'node-title'
       if (node.searched) titleClass += ' node-searched'
       return <span>
-        <button style='color:blue; background-color:pink' onClick={() => this.$refs.tree.addNode(node, {title: '同步节点'})}>+</button>
+        <button style='color:blue; background-color:pink' onClick={() => this.$refs.tree.addNode(node, {title: 'Synchronous loading'})}>+</button>
       <span class={titleClass} domPropsInnerHTML={node.title} onClick={() => {
         ctx.parent.nodeSelected(ctx.props.node)
         console.log(ctx.parent.getSelectedNodes())
       }}></span>
-      <button style='color:green; background-color:pink' onClick={() => this.asyncLoad(node)}>异步加载</button>
-      <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.delNode(node.parent, node)}>删除</button>
+      <button style='color:green; background-color:pink' onClick={() => this.asyncLoad(node)}>Asynchronous loading</button>
+      <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.delNode(node.parent, node)}>Delete</button>
       </span>
     },
     async asyncLoad (node) {
