@@ -1,25 +1,27 @@
 <template>
   <ul class="halo-tree">
-      <li v-for="(item, index) in data" :key="item.title" :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1}"  v-show="item.hasOwnProperty('visible') ? item.visible : true">
-          <div class="tree-node-el">
-              <span @click="expandNode(item)" v-if="item.children" :class="item.expanded ? 'tree-open' : 'tree-close'">
+      <li v-for="(item, index) in data"@drop="drop(item, $event)" @dragover="dragover($event)" :key="item.title" :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1}"  v-show="item.hasOwnProperty('visible') ? item.visible : true">
+          <div class="tree-node-el" :draggable="draggable" @dragstart="drag(item, $event)">
+              <span @click="expandNode(item)" v-if="item.children && item.children.length > 0" :class="item.expanded ? 'tree-open' : 'tree-close'">
               </span>
               <div v-if='multiple' :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
                   <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
               </div>
               <Render :node="item" :tpl ='tpl'/>
+              {{item.level}}
           </div>
           <transition name="bounce">
-            <tree v-if="!isLeaf(item)" v-show="item.expanded" :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+            <tree v-if="!isLeaf(item)" :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
           </transition>
       </li>
   </ul>
 </template>
 <script>
-import Vue from 'vue'
 import Render from './render'
+import mixins from './mixins'
 export default {
   name: 'Tree',
+  mixins: [mixins],
   props: {
     data: {
       type: Array,
@@ -32,6 +34,14 @@ export default {
     multiple: {
       type: Boolean,
       default: false
+    },
+    draggable: {
+      type: Boolean,
+      default: false
+    },
+    dragAfterExpanded: {
+      type: Boolean,
+      default: true
     },
     halfcheck: {
       type: Boolean,
@@ -56,24 +66,25 @@ export default {
     this.$on('childSelected', (node, checked) => {
       if (node.children && node.children.length) {
         for (let child of node.children) {
-          Vue.set(child, 'checked', checked)
+          this.$set(child, 'checked', checked)
           this.$emit('nodeSelected', child, checked)
         }
       }
     })
+
     /*
      * @event monitor the parent nodes seleted event
      */
     this.$on('parentSeleted', (node, checked) => {
-      Vue.set(node, 'checked', checked)
+      this.$set(node, 'checked', checked)
       if (!node.parent) return false
       let someBortherNodeChecked = node.parent.children.some(node => node.checked)
       let allBortherNodeChecked = node.parent.children.every(node => node.checked)
       if (this.halfcheck) {
         // all / some / none
-        allBortherNodeChecked ? Vue.set(node.parent, 'halfcheck', false) : someBortherNodeChecked ? Vue.set(node.parent, 'halfcheck', true) : Vue.set(node.parent, 'halfcheck', false)
+        allBortherNodeChecked ? this.$set(node.parent, 'halfcheck', false) : someBortherNodeChecked ? this.$set(node.parent, 'halfcheck', true) : this.$set(node.parent, 'halfcheck', false)
         if (!checked && someBortherNodeChecked) {
-          Vue.set(node.parent, 'halfcheck', true)
+          this.$set(node.parent, 'halfcheck', true)
           return false
         }
         this.$emit('parentSeleted', node.parent, checked)
@@ -82,6 +93,7 @@ export default {
         if (!checked) this.$emit('parentSeleted', node.parent, checked)
       }
     })
+
     /*
      * @event monitor the node seleted event
      */
@@ -90,18 +102,20 @@ export default {
         this.$emit('parentSeleted', node, checked)
         this.$emit('childSelected', node, checked)
       } else {
-        Vue.set(node, 'checked', checked)
+        this.$set(node, 'checked', checked)
       }
     })
+
      /*
      * @event monitor the node visible event
      */
     this.$on('toggleshow', (node, isShow) => {
-      Vue.set(node, 'visible', isShow)
+      this.$set(node, 'visible', isShow)
       if (isShow && node.parent) {
         this.$emit('toggleshow', node.parent, isShow)
       }
     })
+
     this.$on('cancelSelected', (root) => {
       for (let child of root.$children) {
         for (let node of child.data) {
@@ -113,19 +127,47 @@ export default {
     this.initHandle()
   },
   methods: {
+    drop (node, ev) {
+      ev.preventDefault()
+      ev.stopPropagation()
+      let guid = ev.dataTransfer.getData('guid')
+      let drag = this.getDragNode(guid)
+      // if drag node's parent is enter node or root node
+      if (drag.parent === node || drag.parent === null) return false
+      // drag from parent node to child node
+      if (this.hasInGenerations(drag, node)) return false
+      let dragHost = drag.parent.children
+      if (node.children && node.children.indexOf(drag) === -1) {
+        node.children.push(drag)
+        dragHost.splice(dragHost.indexOf(drag), 1)
+      } else {
+        this.$set(node, 'children', [drag])
+        dragHost.splice(dragHost.indexOf(drag), 1)
+      }
+      this.$set(node, 'expanded', this.dragAfterExpanded)
+    },
+    drag (node, ev) {
+      let guid = this.guid()
+      this.setDragNode(guid, node)
+      ev.dataTransfer.setData('guid', guid)
+    },
+    dragover (ev) {
+      ev.preventDefault()
+      ev.stopPropagation()
+    },
     /*
     * @method dynamically add an 'parent' attribute for every node
     */
     initHandle () {
       for (let node of this.data) {
-        Vue.set(node, 'parent', this.parent)
+        this.$set(node, 'parent', this.parent)
       }
     },
     /* @method expand or close node
      * @param node current node
     */
     expandNode (node) {
-      Vue.set(node, 'expanded', !node.expanded)
+      this.$set(node, 'expanded', !node.expanded)
     },
     /* @method Determine whether it is a leaf node
      * @param node current node
@@ -138,7 +180,7 @@ export default {
      * @param newnode  new node
     */
     addNode (parent, newNode) {
-      Vue.set(parent, 'expanded', true)
+      this.$set(parent, 'expanded', true)
       let addnode = null
       if (typeof newNode === 'undefined') {
         throw new ReferenceError('newNode is required but undefined')
@@ -152,7 +194,7 @@ export default {
         addnode = newNode
       }
       if (this.isLeaf(parent)) {
-        Vue.set(parent, 'children', [])
+        this.$set(parent, 'children', [])
         parent.children.push(addnode)
       } else {
         parent.children.push(addnode)
@@ -187,6 +229,7 @@ export default {
     changeCheckStatus (node, $event) {
       this.$emit('nodeSelected', node, $event.target.checked)
     },
+
       /*
      *@method change the node selected  method
      *@param node current node
@@ -200,12 +243,13 @@ export default {
       }
       let root = getRoot(this)
       if (!this.multiple) {
-        for (let rn of root.data) Vue.set(rn, 'selected', false)
+        for (let rn of root.data) this.$set(rn, 'selected', false)
         this.$emit('cancelSelected', root)
       }
-      if (this.multiple) Vue.set(node, 'checked', !node.selected)
-      Vue.set(node, 'selected', !node.selected)
+      if (this.multiple) this.$set(node, 'checked', !node.selected)
+      this.$set(node, 'selected', !node.selected)
     },
+
     /*
      *@method get Nodes by options method
      *@param data nodes
@@ -229,18 +273,21 @@ export default {
       }
       return res
     },
+
      /*
      *@method get Nodes that selected
      */
     getSelectedNodes () {
       return this.getNodes(this.data, {selected: true})
     },
+
     /*
      *@method get Nodes that checked
      */
     getCheckedNodes () {
       return this.getNodes(this.data, {selected: true})
     },
+
       /*
      *@method search nessary nodes methods
      *@param customFilter string or predicate expression
@@ -250,11 +297,11 @@ export default {
       data = data || this.data
       for (const node of data) {
         let searched = customFilter ? (typeof customFilter === 'function' ? customFilter(node) : node.title.indexOf(customFilter) > -1) : false
-        Vue.set(node, 'searched', searched)
-        Vue.set(node, 'visible', false)
+        this.$set(node, 'searched', searched)
+        this.$set(node, 'visible', false)
         this.$emit('toggleshow', node, customFilter ? searched : true)
         if (node.children && node.children.length) {
-          if (searched) Vue.set(node, 'expanded', true)
+          if (searched) this.$set(node, 'expanded', true)
           this.searchNodes(customFilter, node.children)
         }
       }
@@ -379,6 +426,7 @@ export default {
         top: -8px;
         width: 1px;
     }
+
     .halo-tree li:after {
         border-top: 1px dashed #999;
         height: 20px;
@@ -397,6 +445,7 @@ export default {
     .halo-tree > ul {
         padding-left: 0
     }
+
     .halo-tree ul {
         padding-left: 17px;
         padding-top: 10px;
@@ -432,6 +481,7 @@ export default {
     .halo-tree li.leaf {
         padding-left: 19px;
     }
+
     .halo-tree li.leaf:after {
         content: '';
         left: -7px;
@@ -443,6 +493,7 @@ export default {
         top: 17px;
         width: 25px;
     }
+
     /*Dynamic style part*/
     .halo-tree-search-box {
         height: 18px;
