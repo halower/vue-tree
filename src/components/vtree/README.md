@@ -19,6 +19,8 @@
 |tpl |  自定义模板 | JSX | Y | false |
 |halfcheck |  开启半选模式 | Boolean | Y | 全选 |
 |scoped |  隔离节点选中状态 | Boolean | Y | false |
+|draggable | 是否支持拖拽 | Boolean | Y | false |
+|dragAfterExpanded | 拖拽后展开   | Boolean | Y | true |
 
 ### 方法
 | 方法名      | 说明    | 参数      |

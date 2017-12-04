@@ -11,7 +11,7 @@
               {{item.level}}
           </div>
           <transition name="bounce">
-            <tree v-if="!isLeaf(item)" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+            <tree v-if="!isLeaf(item)" :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
           </transition>
       </li>
   </ul>
@@ -38,6 +38,10 @@ export default {
     draggable: {
       type: Boolean,
       default: false
+    },
+    dragAfterExpanded: {
+      type: Boolean,
+      default: true
     },
     halfcheck: {
       type: Boolean,
@@ -140,6 +144,7 @@ export default {
         this.$set(node, 'children', [drag])
         dragHost.splice(dragHost.indexOf(drag), 1)
       }
+      this.$set(node, 'expanded', this.dragAfterExpanded)
     },
     drag (node, ev) {
       let guid = this.guid()
