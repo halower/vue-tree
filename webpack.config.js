@@ -8,7 +8,7 @@ module.exports = {
   //   publicPath: '/dist/',
   //   filename: 'build.js'
   // },
-  entry: './src/lib/index.js',
+  entry: './src/components/index.js',
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
