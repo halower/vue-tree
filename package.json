@@ -3,7 +3,7 @@
   "description": "This tree component is based on the Vue.js 2.0",
   "version": "1.1.0",
   "author": "halower (youzisoft@qq.com)",
-  "keywords": "vue-tree",
+  "keywords": "vue, vue-tree",
   "license": "MIT",
   "private": false,
   "main": "dist/v2-tree.js",
