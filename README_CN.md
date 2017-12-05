@@ -43,11 +43,11 @@ npm install\
   babel-preset-env\
   --save-dev
 
-npm install vue-halower-tree --save
+npm install vue-tree-halower  --save
 ```
 Step2： In your main.js
 ```
-import VTree from 'vue-halower-tree'
+import VTree from 'vue-tree-halower '
 
 Vue.use(VTree)
 ```
