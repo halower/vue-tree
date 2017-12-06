@@ -53,6 +53,7 @@ npm install vue-tree-halower  --save
 ```
 Step2： In your main.js
 ```
+import 'vue-tree-halower/dist/halower-tree.min.css' // 你可以自定义树的样式
 import VTree from 'vue-tree-halower '
 
 Vue.use(VTree)

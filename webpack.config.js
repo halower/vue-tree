@@ -46,8 +46,8 @@ module.exports = {
       }
     ]
   },
-  plugins: [ //这个不添加allChunks参数的话，不会抽离chunk的css
-    new ExtractTextPlugin({filename: 'halower-tree.css', allChunks: true})
+  plugins: [
+    new ExtractTextPlugin({filename: 'halower-tree.min.css', allChunks: true})
   ],
   resolve: {
     alias: {

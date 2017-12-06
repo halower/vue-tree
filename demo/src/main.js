@@ -11,7 +11,9 @@ import eventbus from '@/store/eventbus'
 import VModal from 'vue-js-modal'
 import VueI18n from 'vue-i18n'
 import messages from '@/config/i18n'
-import VTree from '@/components'
+
+import 'vue-tree-halower/dist/halower-tree.min.css'
+import VTree from 'vue-tree-halower '
 
 Vue.use(directive)
 Vue.use(Router)
