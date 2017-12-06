@@ -311,15 +311,16 @@ export default {
      *@param filter string or predicate expression
      *@param data current nodes
      */
-    filterNodes (filter) {
-      for (const node of this.data) {
-        let searched = filter ? (typeof filterNodes === 'function' ? filter(node) : node.title.indexOf(filter) > -1) : false
+    searchNodes (filter, data) {
+      data = data || this.data
+      for (const node of data) {
+        let searched = filter ? (typeof filter === 'function' ? filter(node) : node.title.indexOf(filter) > -1) : false
         this.$set(node, 'searched', searched)
         this.$set(node, 'visible', false)
         this.$emit('toggleshow', node, filter ? searched : true)
         if (node.children && node.children.length) {
           if (searched) this.$set(node, 'expanded', true)
-          this.filterNodes(filter, node.children)
+          this.searchNodes(filter, node.children)
         }
       }
     }
