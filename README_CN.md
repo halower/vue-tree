@@ -13,8 +13,8 @@
 |visible |  节点是否可见 | Boolean | Y | false |
 |selected |  节点是否被选中 | Boolean | Y | false |
 |children |  子节点 | Array[Object] | Y | — |
-|nocheck | 多复选框开启时指定某一节点不渲染复选框 | Boolean | N | false |
-|chkDisabled | 禁用某一结点的复选框的功能 | Boolean | N | false |
+|nocheck | 多复选框开启时指定某一节点不渲染复选框 | Boolean | Y | false |
+|chkDisabled | 禁用某一结点的复选框的功能 | Boolean | Y | false |
 
 ###  Tree 属性
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |

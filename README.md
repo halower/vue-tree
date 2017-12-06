@@ -11,8 +11,8 @@
 |visible | is the node visible | Boolean | Y | false |
 |selected | whether the node is selected | Boolean | Y | false |
 |checked | whether the node check box is selected | Boolean | Y | false |
-|nocheck | Specifies that a node does not render check box when multiple checkboxes are open | Boolean | N | false |
-|chkDisabled | disable the function of a check box for a node | Boolean | N | false |
+|nocheck | Specifies that a node does not render check box when multiple checkboxes are open | Boolean | Y | false |
+|chkDisabled | disable the function of a check box for a node | Boolean | Y | false |
 
 ### Tree Property
 | Parameters | Description | Type | Optional values | default value |
