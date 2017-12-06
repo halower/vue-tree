@@ -9,7 +9,7 @@
        <option value='zh'>中文</option>
        <option value='en'>Engilsh</option>
     </select>
-     <input type="text" v-model="searchword"/>
+     <input type="text" v-model="searchword" placeholder="searchword"/>
     <button type="button" @click="search">手动搜索</button>
     <v-tree ref='tree' @node-click='nodeClick' :data='treeData' :draggable='true' :multiple='true' :tpl='tpl' :halfcheck='true'/>
  </div>
