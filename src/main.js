@@ -13,6 +13,7 @@ import VueI18n from 'vue-i18n'
 import messages from '@/config/i18n'
 import VTree from '@/components'
 
+import 'vue-tree-halower/dist/halower-tree.css'
 Vue.use(directive)
 Vue.use(Router)
 Vue.use(VModal, { dialog: true })
