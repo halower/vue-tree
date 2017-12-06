@@ -5,7 +5,7 @@
               <span @click="expandNode(item)" v-if="item.children && item.children.length > 0" :class="item.expanded ? 'tree-open' : 'tree-close'">
               </span>
               <div v-if='multiple' :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
-                  <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
+                  <input class="check" v-if='multiple' type="checkbox" @change="changeNodeCheckStatus(item, $event)" v-model="item.checked"/>
               </div>
               <Render :node="item" :tpl ='tpl'/>
               {{item.level}}
@@ -243,7 +243,7 @@ export default {
      *@param node current node
      *@param $event event object
      */
-    changeCheckStatus (node, $event) {
+    changeNodeCheckStatus (node, $event) {
       this.$emit('nodeChecked', node, $event.target.checked)
     },
 
