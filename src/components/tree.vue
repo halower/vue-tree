@@ -5,13 +5,13 @@
               <span @click="expandNode(item)" v-if="item.children && item.children.length > 0" :class="item.expanded ? 'tree-open' : 'tree-close'">
               </span>
               <div v-if='multiple' :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
-                  <input class="check" v-if='multiple' type="checkbox" @change="changeCheckStatus(item, $event)" v-model="item.checked"/>
+                  <input class="check" v-if='multiple' type="checkbox" @change="changeNodeCheckStatus(item, $event)" v-model="item.checked"/>
               </div>
               <Render :node="item" :tpl ='tpl'/>
               {{item.level}}
           </div>
           <transition name="bounce">
-            <tree v-if="!isLeaf(item)" :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+            <tree v-if="!isLeaf(item)" @node-click='nodeClick' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
           </transition>
       </li>
   </ul>
@@ -63,11 +63,11 @@ export default {
     /*
      * @event monitor the children nodes seleted event
      */
-    this.$on('childSelected', (node, checked) => {
+    this.$on('childChecked', (node, checked) => {
       if (node.children && node.children.length) {
         for (let child of node.children) {
           this.$set(child, 'checked', checked)
-          this.$emit('nodeSelected', child, checked)
+          this.$emit('nodeChecked', child, checked)
         }
       }
     })
@@ -75,7 +75,7 @@ export default {
     /*
      * @event monitor the parent nodes seleted event
      */
-    this.$on('parentSeleted', (node, checked) => {
+    this.$on('parentChecked', (node, checked) => {
       this.$set(node, 'checked', checked)
       if (!node.parent) return false
       let someBortherNodeChecked = node.parent.children.some(node => node.checked)
@@ -87,20 +87,20 @@ export default {
           this.$set(node.parent, 'halfcheck', true)
           return false
         }
-        this.$emit('parentSeleted', node.parent, checked)
+        this.$emit('parentChecked', node.parent, checked)
       } else {
-        if (checked && allBortherNodeChecked) this.$emit('parentSeleted', node.parent, checked)
-        if (!checked) this.$emit('parentSeleted', node.parent, checked)
+        if (checked && allBortherNodeChecked) this.$emit('parentChecked', node.parent, checked)
+        if (!checked) this.$emit('parentChecked', node.parent, checked)
       }
     })
 
     /*
      * @event monitor the node seleted event
      */
-    this.$on('nodeSelected', (node, checked) => {
+    this.$on('nodeChecked', (node, checked) => {
       if (!this.scoped) {
-        this.$emit('parentSeleted', node, checked)
-        this.$emit('childSelected', node, checked)
+        this.$emit('parentChecked', node, checked)
+        this.$emit('childChecked', node, checked)
       } else {
         this.$set(node, 'checked', checked)
       }
@@ -127,6 +127,10 @@ export default {
     this.initHandle()
   },
   methods: {
+    /* @method drop node
+     * @param node droped node
+     * @param ev  $event
+    */
     drop (node, ev) {
       ev.preventDefault()
       ev.stopPropagation()
@@ -146,11 +150,18 @@ export default {
       }
       this.$set(node, 'expanded', this.dragAfterExpanded)
     },
+    /* @method drag node
+     * @param node draged node
+     * @param ev  $event
+    */
     drag (node, ev) {
       let guid = this.guid()
       this.setDragNode(guid, node)
       ev.dataTransfer.setData('guid', guid)
     },
+    /* @method dragover node
+     * @param ev  $event
+    */
     dragover (ev) {
       ev.preventDefault()
       ev.stopPropagation()
@@ -210,6 +221,12 @@ export default {
         this.addNode(node, n)
       }
     },
+    /* @event passing the node-click event to the parent component
+     * @param node clicked node
+     */
+    nodeClick (node) {
+      this.$emit('node-click', node)
+    },
     /* @method delete a node
      * @param  parent parent node
      * @param  node current node
@@ -226,8 +243,8 @@ export default {
      *@param node current node
      *@param $event event object
      */
-    changeCheckStatus (node, $event) {
-      this.$emit('nodeSelected', node, $event.target.checked)
+    changeNodeCheckStatus (node, $event) {
+      this.$emit('nodeChecked', node, $event.target.checked)
     },
 
       /*
@@ -248,6 +265,7 @@ export default {
       }
       if (this.multiple) this.$set(node, 'checked', !node.selected)
       this.$set(node, 'selected', !node.selected)
+      this.$emit('node-click', node)
     },
 
     /*
@@ -255,7 +273,7 @@ export default {
      *@param data nodes
      *@param opt the options that filter the node
      */
-    getNodes (data, opt) {
+    getNodes (opt, data) {
       data = data || this.data
       let res = []
       for (const node of data) {
@@ -268,7 +286,7 @@ export default {
         }
         if (tmp) res.push(node)
         if (node.children && node.children.length) {
-          res = res.concat(this.getNodes(node.children, opt))
+          res = res.concat(this.getNodes(opt, node.children))
         }
       }
       return res
@@ -278,250 +296,33 @@ export default {
      *@method get Nodes that selected
      */
     getSelectedNodes () {
-      return this.getNodes(this.data, {selected: true})
+      return this.getNodes({selected: true}, this.data)
     },
 
     /*
      *@method get Nodes that checked
      */
     getCheckedNodes () {
-      return this.getNodes(this.data, {selected: true})
+      return this.getNodes({selected: true}, this.data)
     },
 
       /*
-     *@method search nessary nodes methods
-     *@param customFilter string or predicate expression
+     *@method filter nessary nodes methods
+     *@param filter string or predicate expression
      *@param data current nodes
      */
-    searchNodes (customFilter, data) {
-      data = data || this.data
-      for (const node of data) {
-        let searched = customFilter ? (typeof customFilter === 'function' ? customFilter(node) : node.title.indexOf(customFilter) > -1) : false
+    filterNodes (filter) {
+      for (const node of this.data) {
+        let searched = filter ? (typeof filterNodes === 'function' ? filter(node) : node.title.indexOf(filter) > -1) : false
         this.$set(node, 'searched', searched)
         this.$set(node, 'visible', false)
-        this.$emit('toggleshow', node, customFilter ? searched : true)
+        this.$emit('toggleshow', node, filter ? searched : true)
         if (node.children && node.children.length) {
           if (searched) this.$set(node, 'expanded', true)
-          this.searchNodes(customFilter, node.children)
+          this.filterNodes(filter, node.children)
         }
       }
     }
   }
 }
 </script>
-<style>
-    .halo-tree .bounce-enter-active {
-        animation:bounce-in .5s;
-    }
-    .halo-tree .bounce-leave-active {
-        animation:bounce-in .5s reverse;
-    }
-    @keyframes bounce-in {
-        0% {
-            transform:scale(0);
-        }
-        50% {
-            transform:scale(1.5);
-        }
-        100% {
-            transform:scale(1);
-        }
-    }
-    .halo-tree .expand-enter-active {
-        transition:all 3s ease;
-        height:50px;
-        overflow:hidden;
-    }
-    .halo-tree .expand-leave-active {
-        transition:all 3s ease;
-        height:0px;
-        overflow:hidden;
-    }
-    .halo-tree .expand-enter, .halo-tree .expand-leave {
-        height:0;
-        opacity:0;
-    }
-    .halo-tree {
-        font-size:14px;
-    }
-    .halo-tree ul,.halo-tree li {
-        list-style-type:none;
-        text-align:left;
-    }
-    .halo-tree .inputCheck {
-        display:inline-block;
-        position:relative;
-        width:14px;
-        height:14px;
-        border:1px solid #888888;
-        border-radius:2px;
-        top:4px;
-        text-align:center;
-        font-size:14px;
-        line-height:14px;
-    }
-    .halo-tree .inputCheck.notAllNodes:before {
-        content:"\2713";
-        display:block;
-        position:absolute;
-        width:100%;
-        height:100%;
-        background-color:#888888;
-        z-index:1;
-        color:#ffffff;
-    }
-    .halo-tree .inputCheck.box-checked:after {
-        content:"\2713";
-        display:block;
-        position:absolute;
-        z-index:1;
-        width:100%;
-        text-align:center;
-    }
-    .halo-tree .box-halfchecked {
-        background-color: #888888;
-    }
-    .halo-tree .box-halfchecked:after {
-        content:"\2713";
-        display:block;
-        position:absolute;
-        z-index:1;
-        width:100%;
-        text-align:center;
-        color: #FFFFFF;
-    }
-    .halo-tree .check{
-        display:block;
-        position:absolute;
-        font-size:14px;
-        width:16px;
-        height:16px;
-        left:-5px;
-        top:-4px;
-        border:1px solid #000000;
-        opacity:0;
-        cursor:pointer;
-        -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-        filter:alpha(opacity=0);
-        z-index:2;
-    }
-    .halo-tree li {
-        margin: 0;
-        padding: 5px 5px 5px 0;
-        position: relative;
-        list-style: none;
-    }
-    .halo-tree li:after,
-    .halo-tree li:before {
-        content: '';
-        left: -8px;
-        position: absolute;
-        right: auto;
-        border-width: 1px
-    }
-    .halo-tree li:before {
-        border-left: 1px dashed #999;
-        bottom: 50px;
-        height: 100%;
-        top: -8px;
-        width: 1px;
-    }
-
-    .halo-tree li:after {
-        border-top: 1px dashed #999;
-        height: 20px;
-        top: 17px;
-        width: 12px
-    }
-    .halo-tree li:last-child::before {
-        height: 26px
-    }
-    .halo-tree>li.first-node:before {
-        border-left: none;
-    }
-    .halo-tree>li.only-node:after {
-        border-top: none;
-    }
-    .halo-tree > ul {
-        padding-left: 0
-    }
-
-    .halo-tree ul {
-        padding-left: 17px;
-        padding-top: 10px;
-    }
-    .halo-tree .tree-open,
-    .halo-tree .tree-close {
-        display: inline-block;
-        width:14px;
-        height:14px;
-        text-align: center;
-        line-height: 13px;
-        border: 1px solid #888888;
-        border-radius: 2px;
-        background: #FFFFFF;
-    }
-    .halo-tree .tree-open {
-        line-height: 13px;
-    }
-    .halo-tree .tree-close:after {
-        content: "+";
-        font-style: normal;
-    }
-    .halo-tree .tree-open:after {
-        content: "\2013";
-        font-style: normal;
-    }
-    .halo-tree .tree-node-el {
-        background-color: #FFFFFF;
-        padding-left: 2px;
-        position: relative;
-        z-index: 3;
-    }
-    .halo-tree li.leaf {
-        padding-left: 19px;
-    }
-
-    .halo-tree li.leaf:after {
-        content: '';
-        left: -7px;
-        position: absolute;
-        right: auto;
-        border-width: 1px;
-        border-top: 1px dashed #999;
-        height: 20px;
-        top: 17px;
-        width: 25px;
-    }
-
-    /*Dynamic style part*/
-    .halo-tree-search-box {
-        height: 18px;
-        line-height: 18px;
-        outline: none;
-        border: 1px solid #888888;
-        border-radius: 3px;
-    }
-    .halo-tree-search-box:focus {
-        border: 1px solid rgb(16, 142, 233);
-        -webkit-box-shadow: 0 2px 2px rgba(16, 142, 233, .2);
-        box-shadow: 0 2px 2px rgba(16, 142, 233,.2);
-        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    }
-    .halo-tree .node-title {
-        padding: 3px 3px;
-        border: 1px solid #FFFFFF;
-        border-radius: 3px;
-        cursor: pointer;
-        margin: 0 2px;
-    }
-    .halo-tree .node-selected {
-        border: 1px solid #DDDDDD;
-        background-color: #DDDDDD;
-    }
-    .halo-tree .node-title.node-searched {
-        border: 1px solid #FF8247;
-    }
-</style>
