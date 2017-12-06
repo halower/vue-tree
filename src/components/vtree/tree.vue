@@ -11,7 +11,7 @@
               {{item.level}}
           </div>
           <transition name="bounce">
-            <tree v-if="!isLeaf(item)" :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+            <tree v-if="!isLeaf(item)" @node-click='nodeClick' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
           </transition>
       </li>
   </ul>
@@ -63,11 +63,11 @@ export default {
     /*
      * @event monitor the children nodes seleted event
      */
-    this.$on('childSelected', (node, checked) => {
+    this.$on('childChecked', (node, checked) => {
       if (node.children && node.children.length) {
         for (let child of node.children) {
           this.$set(child, 'checked', checked)
-          this.$emit('nodeSelected', child, checked)
+          this.$emit('nodeChecked', child, checked)
         }
       }
     })
@@ -75,7 +75,7 @@ export default {
     /*
      * @event monitor the parent nodes seleted event
      */
-    this.$on('parentSeleted', (node, checked) => {
+    this.$on('parentChecked', (node, checked) => {
       this.$set(node, 'checked', checked)
       if (!node.parent) return false
       let someBortherNodeChecked = node.parent.children.some(node => node.checked)
@@ -87,20 +87,20 @@ export default {
           this.$set(node.parent, 'halfcheck', true)
           return false
         }
-        this.$emit('parentSeleted', node.parent, checked)
+        this.$emit('parentChecked', node.parent, checked)
       } else {
-        if (checked && allBortherNodeChecked) this.$emit('parentSeleted', node.parent, checked)
-        if (!checked) this.$emit('parentSeleted', node.parent, checked)
+        if (checked && allBortherNodeChecked) this.$emit('parentChecked', node.parent, checked)
+        if (!checked) this.$emit('parentChecked', node.parent, checked)
       }
     })
 
     /*
      * @event monitor the node seleted event
      */
-    this.$on('nodeSelected', (node, checked) => {
+    this.$on('nodeChecked', (node, checked) => {
       if (!this.scoped) {
-        this.$emit('parentSeleted', node, checked)
-        this.$emit('childSelected', node, checked)
+        this.$emit('parentChecked', node, checked)
+        this.$emit('childChecked', node, checked)
       } else {
         this.$set(node, 'checked', checked)
       }
@@ -127,6 +127,10 @@ export default {
     this.initHandle()
   },
   methods: {
+    /* @method drop node
+     * @param node droped node
+     * @param ev  $event
+    */
     drop (node, ev) {
       ev.preventDefault()
       ev.stopPropagation()
@@ -146,11 +150,18 @@ export default {
       }
       this.$set(node, 'expanded', this.dragAfterExpanded)
     },
+    /* @method drag node
+     * @param node draged node
+     * @param ev  $event
+    */
     drag (node, ev) {
       let guid = this.guid()
       this.setDragNode(guid, node)
       ev.dataTransfer.setData('guid', guid)
     },
+    /* @method dragover node
+     * @param ev  $event
+    */
     dragover (ev) {
       ev.preventDefault()
       ev.stopPropagation()
@@ -210,6 +221,12 @@ export default {
         this.addNode(node, n)
       }
     },
+    /* @event passing the node-click event to the parent component
+     * @param node clicked node
+     */
+    nodeClick (node) {
+      this.$emit('node-click', node)
+    },
     /* @method delete a node
      * @param  parent parent node
      * @param  node current node
@@ -227,7 +244,7 @@ export default {
      *@param $event event object
      */
     changeCheckStatus (node, $event) {
-      this.$emit('nodeSelected', node, $event.target.checked)
+      this.$emit('nodeChecked', node, $event.target.checked)
     },
 
       /*
@@ -248,6 +265,7 @@ export default {
       }
       if (this.multiple) this.$set(node, 'checked', !node.selected)
       this.$set(node, 'selected', !node.selected)
+      this.$emit('node-click', node)
     },
 
     /*
@@ -255,7 +273,7 @@ export default {
      *@param data nodes
      *@param opt the options that filter the node
      */
-    getNodes (data, opt) {
+    getNodes (opt, data) {
       data = data || this.data
       let res = []
       for (const node of data) {
@@ -268,7 +286,7 @@ export default {
         }
         if (tmp) res.push(node)
         if (node.children && node.children.length) {
-          res = res.concat(this.getNodes(node.children, opt))
+          res = res.concat(this.getNodes(opt, node.children))
         }
       }
       return res
@@ -278,31 +296,30 @@ export default {
      *@method get Nodes that selected
      */
     getSelectedNodes () {
-      return this.getNodes(this.data, {selected: true})
+      return this.getNodes({selected: true}, this.data)
     },
 
     /*
      *@method get Nodes that checked
      */
     getCheckedNodes () {
-      return this.getNodes(this.data, {selected: true})
+      return this.getNodes({selected: true}, this.data)
     },
 
       /*
-     *@method search nessary nodes methods
-     *@param customFilter string or predicate expression
+     *@method filter nessary nodes methods
+     *@param filter string or predicate expression
      *@param data current nodes
      */
-    searchNodes (customFilter, data) {
-      data = data || this.data
-      for (const node of data) {
-        let searched = customFilter ? (typeof customFilter === 'function' ? customFilter(node) : node.title.indexOf(customFilter) > -1) : false
+    filterNodes (filter) {
+      for (const node of this.data) {
+        let searched = filter ? (typeof filterNodes === 'function' ? filter(node) : node.title.indexOf(filter) > -1) : false
         this.$set(node, 'searched', searched)
         this.$set(node, 'visible', false)
-        this.$emit('toggleshow', node, customFilter ? searched : true)
+        this.$emit('toggleshow', node, filter ? searched : true)
         if (node.children && node.children.length) {
           if (searched) this.$set(node, 'expanded', true)
-          this.searchNodes(customFilter, node.children)
+          this.filterNodes(filter, node.children)
         }
       }
     }

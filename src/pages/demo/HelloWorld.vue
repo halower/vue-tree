@@ -11,7 +11,7 @@
     </select>
      <input type="text" v-model="searchword"/>
     <button type="button" @click="search">手动搜索</button>
-    <v-tree ref='tree' :data='treeData' :draggable='true' :multiple='true' :tpl='tpl' :halfcheck='true'/>
+    <v-tree ref='tree' @node-click='nodeClick' :data='treeData' :draggable='true' :multiple='true' :tpl='tpl' :halfcheck='true'/>
  </div>
 </template>
 
@@ -88,7 +88,11 @@ export default {
       this.$refs.tree.addNodes(node, await this.$api.demo.getChild())
     },
     search () {
-      this.$refs.tree.searchNodes(this.searchword)
+      this.$refs.tree.filterNodes(this.searchword)
+    },
+
+    nodeClick (node) {
+      alert(node.title)
     }
   }
 }
