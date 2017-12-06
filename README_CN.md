@@ -30,7 +30,13 @@
 |---------- |-------- |---------- |
 | getSelectedNodes  | 返回目前被选中的节点所组成的数组 | - |
 | getCheckedNodes  |返回目前复选框选中的节点组成的数组 | - |
-| searchNodes  |搜索 | customFilter： function / String |
+| getNodes | options: 可以包含一些过滤属性对象如{selected: true}，如果为空，请使用 {} |
+| filterNodes | filter:function/string |
+
+### 事件
+| 事件名      | 说明    | 参数      |
+|---------- |-------- |---------- |
+| node-click  | 单击节点触发的事件 | node: 当前节点 |
 
 ### 如何使用
 
