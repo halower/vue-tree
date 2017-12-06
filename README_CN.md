@@ -30,8 +30,8 @@
 |---------- |-------- |---------- |
 | getSelectedNodes  | 返回目前被选中的节点所组成的数组 | - |
 | getCheckedNodes  |返回目前复选框选中的节点组成的数组 | - |
-| getNodes | options: 可以包含一些过滤属性对象如{selected: true}，如果为空，请使用 {} |
-| searchNodes | filter:function/string |node: 每个节点对象|
+| getNodes | options: 可以包含一些过滤属性对象如{selected: true}，如果为空，请使用 {} |options|
+| searchNodes | filter:function/string (如果是函数则最终会返回一个boolean类型) |node: 每个节点对象|
 
 ### 事件
 | 事件名      | 说明    | 参数      |
