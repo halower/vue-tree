@@ -34,7 +34,7 @@
 ### events
 | Event name | Description | Parameters |
 |---------- |-------- |---------- |
-| Node-click | click the node to trigger the event | node: current Node |
+| node-click | click the node to trigger the event | node: current Node |
 
 ### How to use
 
