@@ -28,11 +28,13 @@ export default {
       treeData: [{
         title: '一级节点',
         expanded: true,
+        nocheck: true,
         children: [{
           title: '二级节点1',
           expanded: true,
           children: [{
-            title: '三级节点1-1'
+            title: '三级节点1-1',
+            chkDisabled: true
           }, {
             title: '三级节点1-2'
           }, {
