@@ -1,6 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
-
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
   entry: './src/components/index.js',
   output: {
@@ -13,17 +13,21 @@ module.exports = {
   },
   module: {
     rules: [
-      {
+      {     //处理js中引入的css
         test: /\.css$/,
-        use: [
-          'vue-style-loader',
-          'css-loader'
-        ],
-      },      {
+        loader: ExtractTextPlugin.extract({
+            use: ['vue-style-loader', 'css-loader']
+        })
+      },
+      {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
           loaders: {
+            css: ExtractTextPlugin.extract({
+              use: 'css-loader',
+              fallback: 'vue-style-loader'
+            })
           }
           // other vue-loader options go here
         }
@@ -42,6 +46,9 @@ module.exports = {
       }
     ]
   },
+  plugins: [ //这个不添加allChunks参数的话，不会抽离chunk的css
+    new ExtractTextPlugin({filename: 'css/halower-tree.css', allChunks: true})
+  ],
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
