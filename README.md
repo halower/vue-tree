@@ -28,8 +28,8 @@
 |---------- |-------- |---------- |
 | getSelectedNodes | returns an array of currently selected nodes | - |
 | getCheckedNodes | returns the array of nodes selected by the current check box | - |
-| getNodes | you can contain some filter property objects such as {selected:true}, if empty, use {} |
-| searchNodes | filter:function/string |node: every node object|
+| getNodes |the options objects such as {selected:true}, if empty, use {} | options|
+| searchNodes | filter:function/string (If it is a function, it will eventually return a Boolean type) |node: every node object|
 
 ### events
 | Event name | Description | Parameters |
