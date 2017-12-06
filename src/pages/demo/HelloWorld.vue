@@ -88,7 +88,7 @@ export default {
       this.$refs.tree.addNodes(node, await this.$api.demo.getChild())
     },
     search () {
-      this.$refs.tree.filterNodes(this.searchword)
+      this.$refs.tree.searchNodes(this.searchword)
     },
 
     nodeClick (node) {
