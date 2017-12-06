@@ -7,7 +7,7 @@
 |title | node name | String | N | -
 |expanded | node Expansion | Boolean | Y | false |
 |checked | whether the node check box is selected | Boolean | Y | false |
-|halfcheck | Whether the node is half optional (subordinate selected) | Boolean | Y | false |
+|halfcheck | whether the node is half optional (subordinate selected) | Boolean | Y | false |
 |visible | is the node visible | Boolean | Y | false |
 |selected | whether the node is selected | Boolean | Y | false |
 |children | child nodes | Array[object] | Y | -
