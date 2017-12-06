@@ -4,8 +4,8 @@
           <div class="tree-node-el" :draggable="draggable" @dragstart="drag(item, $event)">
               <span @click="expandNode(item)" v-if="item.children && item.children.length > 0" :class="item.expanded ? 'tree-open' : 'tree-close'">
               </span>
-              <div v-if='multiple' :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
-                  <input class="check" v-if='multiple' type="checkbox" @change="changeNodeCheckStatus(item, $event)" v-model="item.checked"/>
+              <div v-if='multiple && !item.nocheck' :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
+                  <input :disabled="item.chkDisabled" :class="['check', item.chkDisabled ? 'chkDisabled' : '']" v-if='multiple' type="checkbox" @change="changeNodeCheckStatus(item, $event)" v-model="item.checked"/>
               </div>
               <Render :node="item" :tpl ='tpl'/>
               {{item.level}}
@@ -423,6 +423,13 @@ export default {
         filter:alpha(opacity=0);
         z-index:2;
     }
+
+    .halo-tree .chkDisabled {
+      background-color: #F5F5F5;
+      opacity: 1;
+      cursor: not-allowed;
+    }
+
     .halo-tree li {
         margin: 0;
         padding: 5px 5px 5px 0;
