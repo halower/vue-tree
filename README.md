@@ -1,21 +1,23 @@
-# Version: 2.0  ([中文文档](https://github.com/halower/vue2-tree/blob/master/README_CN.md))
+# Version: 2.x  ([中文文档](https://github.com/halower/vue2-tree/blob/master/README_CN.md))
 ```QQ Group: 255965810``` <br/>
 `we guess you may also see` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x) 
 ### Node Property
 | Parameters | Description | Type | Optional values | Default value |
 |---------- |-------- |---------- |---------- |---------- |
-|title | node name | String | N | -
+|title | node name | String | N | -|
+|children | child nodes | Array[object] | Y | -|
 |expanded | node Expansion | Boolean | Y | false |
-|checked | whether the node check box is selected | Boolean | Y | false |
-|halfcheck | Whether the node is half optional (subordinate selected) | Boolean | Y | false |
+|halfcheck | whether the node is half optional (subordinate selected) | Boolean | Y | false |
 |visible | is the node visible | Boolean | Y | false |
 |selected | whether the node is selected | Boolean | Y | false |
-|children | child nodes | Array[object] | Y | -
+|checked | whether the node check box is selected | Boolean | Y | false |
+|nocheck | specifies that a node does not render check box when multiple checkboxes are open | Boolean | Y | false |
+|chkDisabled | disable the function of a check box for a node | Boolean | Y | false |
 
 ### Tree Property
 | Parameters | Description | Type | Optional values | default value |
 |---------- |-------- |---------- |---------- |---------- |
-|data | tree Data Source | Array[object] | N | -
+|data | tree Data Source | Array[object] | N | -|
 |multiple | turn on Check mode | Boolean | Y | false |
 |tpl | custom templates | JSX | Y | false |
 |halfcheck | turn on semi-select mode | Boolean | Y | select all |
@@ -29,7 +31,7 @@
 | getSelectedNodes | returns an array of currently selected nodes | - |
 | getCheckedNodes | returns the array of nodes selected by the current check box | - |
 | getNodes |the options objects such as {selected:true}, if empty, use {} | options|
-| searchNodes | filter:function/string (If it is a function, it will eventually return a Boolean type) |node: every node object|
+| searchNodes | filter:function/string (If it is a function, it will eventually return a Boolean type) |node|
 
 ### events
 | Event name | Description | Parameters |

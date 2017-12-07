@@ -1,4 +1,4 @@
-# Version: 2.0  ([English Document](https://github.com/halower/vue2-tree/blob/master/README.md))
+# Version: 2.x  ([English Document](https://github.com/halower/vue2-tree/blob/master/README.md))
 ```QQ Group: 255965810``` <br/>
 `如果看老版本请点击这里` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x)
 ## API 文档
@@ -13,6 +13,8 @@
 |visible |  节点是否可见 | Boolean | Y | false |
 |selected |  节点是否被选中 | Boolean | Y | false |
 |children |  子节点 | Array[Object] | Y | — |
+|nocheck | 多复选框开启时指定某一节点不渲染复选框 | Boolean | Y | false |
+|chkDisabled | 禁用某一结点的复选框的功能 | Boolean | Y | false |
 
 ###  Tree 属性
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
