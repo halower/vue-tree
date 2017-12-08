@@ -1,3 +1,9 @@
+[![npm](https://img.shields.io/npm/v/vue-tree-halower.svg )](https://www.npmjs.com/package/vue-tree-halower)
+[![npm](https://img.shields.io/npm/dw/vue-tree-halower.svg)](https://www.npmjs.com/package/vue-tree-halower)
+[![GitHub stars](https://img.shields.io/github/stars/halower/vue-tree.svg?style=social&label=Stars&style=for-the-badge)](https://github.com/halower/vue-tree/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/halower/vue-tree.svg?style=social&label=Fork&style=for-the-badge)](https://github.com/halower/vue-tree/network)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
+
 # Version: 2.x  ([English Document](https://github.com/halower/vue2-tree/blob/master/README.md))
 ```QQ Group: 255965810``` <br/>
 `如果看老版本请点击这里` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x)
