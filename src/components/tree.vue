@@ -2,15 +2,16 @@
   <ul class="halo-tree">
       <li v-for="(item, index) in data"@drop="drop(item, $event)" @dragover="dragover($event)" :key="item.title" :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1}"  v-show="item.hasOwnProperty('visible') ? item.visible : true">
           <div class="tree-node-el" :draggable="draggable" @dragstart="drag(item, $event)">
-              <span @click="expandNode(item)" v-if="item.children && item.children.length > 0" :class="item.expanded ? 'tree-open' : 'tree-close'"> </span>
+              <span @click="expandNode(item)" v-if="item.children && item.children.length > 0" :class="item.expanded ? 'tree-open' : 'tree-close'">
+              </span>
               <div v-if='multiple && !item.nocheck' :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
-                <input :disabled="item.chkDisabled" :class="['check', item.chkDisabled ? 'chkDisabled' : '']" v-if='multiple' type="checkbox" @change="changeNodeCheckStatus(item, $event)" v-model="item.checked"/>
+                  <input :disabled="item.chkDisabled" :class="['check', item.chkDisabled ? 'chkDisabled' : '']" v-if='multiple' type="checkbox" @change="changeNodeCheckStatus(item, $event)" v-model="item.checked"/>
               </div>
               <Render :node="item" :tpl ='tpl'/>
               {{item.level}}
           </div>
           <transition name="bounce">
-            <tree v-if="!isLeaf(item)" @node-click='nodeClick' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+            <tree v-if="!isLeaf(item)" @node-click='nodeClick' @drag-node-end='dragNodeEnd' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
           </transition>
       </li>
   </ul>
@@ -148,6 +149,7 @@ export default {
         dragHost.splice(dragHost.indexOf(drag), 1)
       }
       this.$set(node, 'expanded', this.dragAfterExpanded)
+      this.$emit('drag-node-end', {dragNode: drag, targetNode: node})
     },
     /* @method drag node
      * @param node draged node
@@ -225,6 +227,13 @@ export default {
      */
     nodeClick (node) {
       this.$emit('node-click', node)
+    },
+
+    /* @event passing the drag-node-end event to the parent component
+     * @param node clicked node
+     */
+    dragNodeEnd (event) {
+      this.$emit('drag-node-end', event)
     },
     /* @method delete a node
      * @param  parent parent node
@@ -326,7 +335,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
     .halo-tree .bounce-enter-active {
         animation:bounce-in .5s;
     }

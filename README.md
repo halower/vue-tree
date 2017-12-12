@@ -42,8 +42,8 @@
 ### events
 | Event name | Description | Parameters |
 |---------- |-------- |---------- |
-| node-click | click the node to trigger the event | node: current Node |
-
+| node-click | click the node to trigger the event | node: Object |
+| drag-node-end | drag node end trigger the event | {dragNode: Object, targetNode: Object} |
 ### How to use
 
 Step1: install plugins

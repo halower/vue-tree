@@ -39,12 +39,13 @@
 | getSelectedNodes  | 返回目前被选中的节点所组成的数组 | - |
 | getCheckedNodes  |返回目前复选框选中的节点组成的数组 | - |
 | getNodes | options: 可以包含一些过滤属性对象如{selected: true}，如果为空，请使用 {} |options|
-| searchNodes | filter:function/string (如果是函数则最终会返回一个boolean类型) |node: 每个节点对象|
+| searchNodes | filter:function/string (如果是函数则最终会返回一个boolean类型) |node: Object|
 
 ### 事件
 | 事件名      | 说明    | 参数      |
 |---------- |-------- |---------- |
-| node-click  | 单击节点触发的事件 | node: 当前节点 |
+| node-click  | 单击节点触发的事件 | node: Object |
+| drag-node-end | 节点拖拽结束后触发事件 | {dragNode: Object, targetNode: Object} |
 
 ### 如何使用
 
