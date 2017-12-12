@@ -11,7 +11,7 @@
               {{item.level}}
           </div>
           <transition name="bounce">
-            <tree v-if="!isLeaf(item)" @node-click='nodeClick' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+            <tree v-if="!isLeaf(item)" @node-click='nodeClick' @drag-node-end = 'dragNodeEnd' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
           </transition>
       </li>
   </ul>
@@ -149,6 +149,7 @@ export default {
         dragHost.splice(dragHost.indexOf(drag), 1)
       }
       this.$set(node, 'expanded', this.dragAfterExpanded)
+      this.$emit('drag-node-end', {dragNode: drag, targetNode: node})
     },
     /* @method drag node
      * @param node draged node
@@ -226,6 +227,13 @@ export default {
      */
     nodeClick (node) {
       this.$emit('node-click', node)
+    },
+
+    /* @event passing the drag-node-end event to the parent component
+     * @param node clicked node
+     */
+    dragNodeEnd (event) {
+      this.$emit('drag-node-end', event)
     },
     /* @method delete a node
      * @param  parent parent node

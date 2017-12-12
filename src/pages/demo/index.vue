@@ -11,7 +11,7 @@
     </select>
      <input type="text" v-model="searchword" placeholder="searchword"/>
     <button type="button" @click="search">手动搜索</button>
-    <v-tree ref='tree' @node-click='nodeClick' :data='treeData' :draggable='true' :multiple='true' :tpl='tpl' :halfcheck='true'/>
+    <v-tree ref='tree' @node-click='nodeClick' @drag-node-end='dragNodeEnd' :data='treeData' :draggable='true' :multiple='true' :tpl='tpl' :halfcheck='true'/>
  </div>
 </template>
 
@@ -72,6 +72,9 @@ export default {
           { title: this.$t('test.close') }
         ]
       })
+    },
+    dragNodeEnd (e) {
+      console.log(e)
     },
     tpl (node, ctx) {
       let titleClass = node.selected ? 'node-title node-selected' : 'node-title'

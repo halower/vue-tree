@@ -1,7 +1,7 @@
 const routes = [
   {
     path: '/',
-    component: () => import('@/pages/demo/HelloWorld')
+    component: () => import('@/pages/demo/index')
   }
 ]
 
