@@ -539,10 +539,15 @@ export default {
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 .halo-tree .node-title {
-    padding: 3px 3px;
+     display: inline-block;
     border-radius: 3px;
     cursor: pointer;
     margin: 0 2px;
+    max-width: calc(100% - 30px);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow:hidden;
+    vertical-align: bottom;
 }
 .halo-tree .node-selected {
     border: 1px solid #DDDDDD;
