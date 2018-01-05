@@ -14,7 +14,7 @@
 |children | child nodes | Array[object] | Y | -|
 |expanded | node Expansion | Boolean | Y | false |
 |halfcheck | whether the node is half optional (subordinate selected) | Boolean | Y | false |
-|visible | is the node visible | Boolean | Y | false |
+|visible | is the node visible | Boolean | Y | true |
 |selected | whether the node is selected | Boolean | Y | false |
 |checked | whether the node check box is selected | Boolean | Y | false |
 |nocheck | specifies that a node does not render check box when multiple checkboxes are open | Boolean | Y | false |
