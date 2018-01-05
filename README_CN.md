@@ -16,7 +16,7 @@
 |expanded |  节点是否展开 | Boolean | Y | false |
 |checked |  节点复选框是否选中 | Boolean | Y | false |
 |halfcheck |  节点是否为半选（下级被选中） | Boolean | Y | false |
-|visible |  节点是否可见 | Boolean | Y | false |
+|visible |  节点是否可见 | Boolean | Y | true |
 |selected |  节点是否被选中 | Boolean | Y | false |
 |children |  子节点 | Array[Object] | Y | — |
 |nocheck | 多复选框开启时指定某一节点不渲染复选框 | Boolean | Y | false |
