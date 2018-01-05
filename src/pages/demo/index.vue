@@ -11,7 +11,7 @@
     </select>
      <input type="text" v-model="searchword" placeholder="searchword"/>
     <button type="button" @click="search">手动搜索</button>
-    <v-tree ref='tree' @node-click='nodeClick' @drag-node-end='dragNodeEnd' :data='treeData' :draggable='true' :multiple='true' :tpl='tpl' :halfcheck='true'/>
+    <v-tree ref='tree' @node-click='nodeClick' @node-expanded='nodeExpanded' @drag-node-end='dragNodeEnd' :data='treeData' :draggable='true' :multiple='true' :tpl='tpl' :halfcheck='true'/>
  </div>
 </template>
 
@@ -91,6 +91,16 @@ export default {
     },
     async asyncLoad (node) {
       this.$refs.tree.addNodes(node, await this.$api.demo.getChild())
+    },
+    async nodeExpanded (node) {
+      // for (let n of await this.$api.demo.getChild()) {
+      //   node.children.push(n)
+      // }
+      this.$set(node, 'loading', true)
+      node.children = Object.assign([], node.children.concat(await this.$api.demo.getChild()))
+      setTimeout(() => {
+        this.$set(node, 'loading', false)
+      }, 2000)
     },
     search () {
       this.$refs.tree.searchNodes(this.searchword)
