@@ -1,7 +1,7 @@
 {
   "name": "vue-tree-halower",
   "description": "This tree component is based on the Vue.js 2.0",
-  "version": "1.2.6",
+  "version": "1.2.8",
   "author": "halower (youzisoft@qq.com)",
   "license": "MIT",
   "private": false,

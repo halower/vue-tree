@@ -19,6 +19,7 @@
 |visible |  节点是否可见 | Boolean | Y | true |
 |selected |  节点是否被选中 | Boolean | Y | false |
 |children |  子节点 | Array[Object] | Y | — |
+|loading | 开启加载效果 | Boolean | Y | false |
 |nocheck | 多复选框开启时指定某一节点不渲染复选框 | Boolean | Y | false |
 |chkDisabled | 禁用某一结点的复选框的功能 | Boolean | Y | false |
 
@@ -45,6 +46,7 @@
 | 事件名      | 说明    | 参数      |
 |---------- |-------- |---------- |
 | node-click  | 单击节点触发的事件 | node: Object |
+| node-expanded | 节点展开事件，一般用于实现异步加载 | node: Object |
 | drag-node-end | 节点拖拽结束后触发事件 | {dragNode: Object, targetNode: Object} |
 
 ### 如何使用
@@ -130,7 +132,14 @@ export default {
       </span>
     },
     async asyncLoad (node) {
-      this.$refs.tree.addNodes(node, await this.$api.demo.getChild())
+      // method1:
+      // this.$refs.tree.addNodes(node, await this.$api.demo.getChild())
+      // method2:
+      this.$set(node, 'loading', true)
+      let data = await this.$api.demo.getChild())
+      this.$set(node, 'children', data)
+      this.$set(node, 'loading', false)
+      // method3: use concat 
     },
     search () {
       this.$refs.tree.searchNodes(this.searchword)

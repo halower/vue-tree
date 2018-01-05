@@ -18,6 +18,7 @@
 |selected | whether the node is selected | Boolean | Y | false |
 |checked | whether the node check box is selected | Boolean | Y | false |
 |nocheck | specifies that a node does not render check box when multiple checkboxes are open | Boolean | Y | false |
+|loading | open Load Effect | Boolean | Y | false |
 |chkDisabled | disable the function of a check box for a node | Boolean | Y | false |
 
 ### Tree Property
@@ -43,6 +44,7 @@
 | Event name | Description | Parameters |
 |---------- |-------- |---------- |
 | node-click | click the node to trigger the event | node: Object |
+| node-expanded | node expansion event, commonly used to implement asynchronous loading | node: Object |
 | drag-node-end | drag node end trigger the event | {dragNode: Object, targetNode: Object} |
 ### How to use
 
@@ -126,7 +128,14 @@ export default {
       </span>
     },
     async asyncLoad (node) {
-      this.$refs.tree.addNodes(node, await this.$api.demo.getChild())
+      // method1:
+      // this.$refs.tree.addNodes(node, await this.$api.demo.getChild())
+      // method2:
+      this.$set(node, 'loading', true)
+      let data = await this.$api.demo.getChild())
+      this.$set(node, 'children', data)
+      this.$set(node, 'loading', false)
+      // method3: use concat 
     },
     search () {
       this.$refs.tree.searchNodes(this.searchword)
