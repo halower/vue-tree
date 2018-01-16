@@ -10,6 +10,7 @@
 ### Node Property
 | Parameters | Description | Type | Optional values | Default value |
 |---------- |-------- |---------- |---------- |---------- |
+|id | node index | String | Y | title field |
 |title | node name | String | N | -|
 |children | child nodes | Array[object] | Y | -|
 |expanded | node Expansion | Boolean | Y | false |
