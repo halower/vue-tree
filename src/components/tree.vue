@@ -471,7 +471,7 @@ export default {
     height: 26px
 }
 .halo-tree>li.first-node:before {
-    border-left: none;
+    top: 17px;
 }
 .halo-tree>li.only-node:after {
     border-top: none;
