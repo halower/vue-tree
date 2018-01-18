@@ -473,6 +473,9 @@ export default {
 .halo-tree>li.first-node:before {
     top: 17px;
 }
+.halo-tree>li.first-node.only-node::before {
+    border-left: none;
+}
 .halo-tree>li.only-node:after {
     border-top: none;
 }
