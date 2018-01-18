@@ -1,6 +1,6 @@
 <template>
   <ul class="halo-tree">
-      <li v-for="(item, index) in data" @drop="drop(item, $event)" @dragover="dragover($event)" :key="item.title" :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1}"  v-show="item.hasOwnProperty('visible') ? item.visible : true">
+      <li v-for="(item, index) in data" @drop="drop(item, $event)" @dragover="dragover($event)" :key="item.id ? item.id : item.title" :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1}"  v-show="item.hasOwnProperty('visible') ? item.visible : true">
            <div class="tree-node-el" :draggable="draggable" @dragstart="drag(item, $event)">
               <span @click="expandNode(item)" v-if="!item.parent ||item.children && item.children.length > 0" :class="item.expanded ? 'tree-open' : 'tree-close'">
               </span>
@@ -201,17 +201,18 @@ export default {
      * @param newnode  new node
     */
     addNode (parent, newNode) {
-      this.$set(parent, 'expanded', true)
       let addnode = null
+      this.$set(parent, 'expanded', true)
       if (typeof newNode === 'undefined') {
         throw new ReferenceError('newNode is required but undefined')
       }
       if (typeof newNode === 'string') {
         addnode = {title: newNode}
-      } else {
-        if (newNode && !newNode.hasOwnProperty('title')) {
-          throw new ReferenceError('the property (title) is missed')
-        }
+      }
+      if (typeof newNode === 'object' && !newNode.hasOwnProperty('title')) {
+        throw new ReferenceError('the title property is missed')
+      }
+      if (typeof newNode === 'object' && newNode.hasOwnProperty('title')) {
         addnode = newNode
       }
       if (this.isLeaf(parent)) {

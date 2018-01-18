@@ -12,6 +12,7 @@
 ###  Node 属性
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
 |---------- |-------- |---------- |---------- |---------- |
+|id     | 当这个属性为空，title属性将作为key | String | Y | — |
 |title     | 节点名称 | String | N | — |
 |expanded |  节点是否展开 | Boolean | Y | false |
 |checked |  节点复选框是否选中 | Boolean | Y | false |

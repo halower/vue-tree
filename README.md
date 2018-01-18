@@ -10,6 +10,7 @@
 ### Node Property
 | Parameters | Description | Type | Optional values | Default value |
 |---------- |-------- |---------- |---------- |---------- |
+|id | when this property is empty, the title property will be used as the key | String | Y | -|
 |title | node name | String | N | -|
 |children | child nodes | Array[object] | Y | -|
 |expanded | node Expansion | Boolean | Y | false |
@@ -18,7 +19,7 @@
 |selected | whether the node is selected | Boolean | Y | false |
 |checked | whether the node check box is selected | Boolean | Y | false |
 |nocheck | specifies that a node does not render check box when multiple checkboxes are open | Boolean | Y | false |
-|loading | open Load Effect | Boolean | Y | false |
+|loading | open load effect | Boolean | Y | false |
 |chkDisabled | disable the function of a check box for a node | Boolean | Y | false |
 
 ### Tree Property
@@ -38,7 +39,7 @@
 | getSelectedNodes | returns an array of currently selected nodes | - |
 | getCheckedNodes | returns the array of nodes selected by the current check box | - |
 | getNodes |the options objects such as {selected:true}, if empty, use {} | options|
-| searchNodes | filter:function/string (If it is a function, it will eventually return a Boolean type) |node|
+| searchNodes | filter:function/string (if it is a function, it will eventually return a Boolean type) |node|
 
 ### events
 | Event name | Description | Parameters |
