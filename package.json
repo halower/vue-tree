@@ -2,7 +2,7 @@
   "name": "treedemo",
   "version": "1.0.0",
   "description": "基于Vue.js的前端项目",
-  "author": "谢海龙 <xiehailong@163.com>",
+  "author": "halower <youzisoft@qq.com>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
@@ -19,7 +19,7 @@
     "vue-i18n": "^7.3.2",
     "vue-js-modal": "^1.3.4",
     "vue-router": "^3.0.1",
-    "vue-tree-halower": "^1.2.0",
+    "vue-tree-halower": "^1.3.1",
     "vuex": "^3.0.0"
   },
   "devDependencies": {
