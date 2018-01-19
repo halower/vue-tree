@@ -11,14 +11,15 @@
               <Render :node="item" :tpl ='tpl'/>
               {{item.level}}
           </div>
-        <transition name="fade">
+        <collapse-transition>
           <tree v-if="!isLeaf(item)" @node-expanded.once='nodeExpanded' @node-click='nodeClick' @drag-node-end='dragNodeEnd' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
-        </transition>
+        </collapse-transition>
       </li>
   </ul>
 </template>
 <script>
 import mixins from './mixins'
+
 export default {
   name: 'Tree',
   mixins: [mixins],
@@ -53,7 +54,7 @@ export default {
     },
     tpl: Function
   },
-  components: { Render: () => import('./render'), Loading: () => import('./loading') },
+  components: {Render: () => import('./render'), Loading: () => import('./loading'), CollapseTransition: () => import('./collapse-transition')},
   watch: {
     data () {
       this.initHandle()
@@ -344,6 +345,10 @@ export default {
 }
 </script>
 <style scoped>
+.collapse-transition {
+    transition: 0.3s height ease-in-out, 0.3s padding-top ease-in-out, 0.3s padding-bottom ease-in-out;
+}
+
 .halo-tree li span:hover {
   background-color: #dddddde3
 }
