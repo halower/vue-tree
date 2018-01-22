@@ -11,9 +11,9 @@
               <Render :node="item" :tpl ='tpl'/>
               {{item.level}}
           </div>
-        <transition name="fade">
+        <collapse-transition>
           <tree v-if="!isLeaf(item)" @node-expanded.once='nodeExpanded' @node-click='nodeClick' @drag-node-end='dragNodeEnd' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
-        </transition>
+        </collapse-transition>
       </li>
   </ul>
 </template>
@@ -21,6 +21,7 @@
 import mixins from './mixins'
 import Render from './render'
 import Loading from './loading'
+import CollapseTransition from './collapse-transition'
 export default {
   name: 'Tree',
   mixins: [mixins],
@@ -55,7 +56,7 @@ export default {
     },
     tpl: Function
   },
-  components: { Render, Loading },
+  components: {Render, Loading, CollapseTransition},
   watch: {
     data () {
       this.initHandle()
@@ -201,20 +202,18 @@ export default {
      * @param newnode  new node
     */
     addNode (parent, newNode) {
-      this.$set(parent, 'expanded', true)
       let addnode = null
+      this.$set(parent, 'expanded', true)
       if (typeof newNode === 'undefined') {
         throw new ReferenceError('newNode is required but undefined')
       }
       if (typeof newNode === 'string') {
-        addnode = {
-          id: (Math.random().toString(36)+'00000000000000000').slice(2, 7), // Generate random id of 5 characters
-          title: newNode
-        }
-      } else {
-        if (newNode && !newNode.hasOwnProperty('title')) {
-          throw new ReferenceError('the property (title) is missed')
-        }
+        addnode = { title: newNode }
+      }
+      if (typeof newNode === 'object' && !newNode.hasOwnProperty('title')) {
+        throw new ReferenceError('the title property is missed')
+      }
+      if (typeof newNode === 'object' && newNode.hasOwnProperty('title')) {
         addnode = newNode
       }
       if (this.isLeaf(parent)) {
@@ -348,6 +347,10 @@ export default {
 }
 </script>
 <style scoped>
+.collapse-transition {
+    transition: 0.3s height ease-in-out, 0.3s padding-top ease-in-out, 0.3s padding-bottom ease-in-out;
+}
+
 .halo-tree li span:hover {
   background-color: #dddddde3
 }
@@ -545,15 +548,10 @@ export default {
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 .halo-tree .node-title {
-     display: inline-block;
+    padding: 3px 3px;
     border-radius: 3px;
     cursor: pointer;
     margin: 0 2px;
-    max-width: calc(100% - 30px);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow:hidden;
-    vertical-align: bottom;
 }
 .halo-tree .node-selected {
     border: 1px solid #DDDDDD;
