@@ -208,7 +208,7 @@ export default {
         throw new ReferenceError('newNode is required but undefined')
       }
       if (typeof newNode === 'string') {
-        addnode = {title: newNode}
+        addnode = { title: newNode }
       }
       if (typeof newNode === 'object' && !newNode.hasOwnProperty('title')) {
         throw new ReferenceError('the title property is missed')
@@ -474,6 +474,9 @@ export default {
     height: 26px
 }
 .halo-tree>li.first-node:before {
+    top: 17px;
+}
+.halo-tree>li.first-node.only-node::before {
     border-left: none;
 }
 .halo-tree>li.only-node:after {
