@@ -6,7 +6,7 @@
 
 # Version: 2.x  ([中文文档](https://github.com/halower/vue2-tree/blob/master/README_CN.md))
 ```QQ Group: 255965810``` <br/>
-`we guess you may also see` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x) 
+`we guess you may also see` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x)
 ### Node Property
 | Parameters | Description | Type | Optional values | Default value |
 |---------- |-------- |---------- |---------- |---------- |
@@ -44,6 +44,7 @@
 ### events
 | Event name | Description | Parameters |
 |---------- |-------- |---------- |
+| node-mouse-over | over the node to trigger the event | node: Object |
 | node-click | click the node to trigger the event | node: Object |
 | node-expanded | node expansion event, commonly used to implement asynchronous loading | node: Object |
 | drag-node-end | drag node end trigger the event | {dragNode: Object, targetNode: Object} |
@@ -136,7 +137,7 @@ export default {
       let data = await this.$api.demo.getChild())
       this.$set(node, 'children', data)
       this.$set(node, 'loading', false)
-      // method3: use concat 
+      // method3: use concat
     },
     search () {
       this.$refs.tree.searchNodes(this.searchword)
