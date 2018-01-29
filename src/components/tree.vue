@@ -239,7 +239,12 @@ export default {
     nodeClick (node) {
       this.$emit('node-click', node)
     },
-
+    /* @event passing the node-mouse-over event to the parent component
+     * @param node overed node
+     */
+    nodeMouseOver (node) {
+      this.$emit('node-mouse-over', node)
+    },
     /* @event passing the drag-node-end event to the parent component
      * @param node clicked node
      */
