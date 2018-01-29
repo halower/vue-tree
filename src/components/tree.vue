@@ -327,7 +327,7 @@ export default {
      *@method get Nodes that checked
      */
     getCheckedNodes () {
-      return this.getNodes({selected: true}, this.data)
+      return this.getNodes({checked: true}, this.data)
     },
 
       /*

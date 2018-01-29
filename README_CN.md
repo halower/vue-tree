@@ -47,6 +47,7 @@
 | 事件名      | 说明    | 参数      |
 |---------- |-------- |---------- |
 | node-click  | 单击节点触发的事件 | node: Object |
+| node-mouse-over | 鼠标滑过节点触发事件 | node: Object |
 | node-expanded | 节点展开事件，一般用于实现异步加载 | node: Object |
 | drag-node-end | 节点拖拽结束后触发事件 | {dragNode: Object, targetNode: Object} |
 
