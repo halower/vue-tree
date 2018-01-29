@@ -64,7 +64,7 @@ npm install vue-tree-halower  --save
 Step2： In your main.js
 ```
 import 'vue-tree-halower/dist/halower-tree.min.css' // you can customize the style of the tree
-import VTree from 'vue-tree-halower '
+import VTree from 'vue-tree-halower'
 
 Vue.use(VTree)
 ```
