@@ -8,7 +8,7 @@
 ```QQ Group: 255965810``` <br/>
 `we guess you may also see` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x)
 # Online Demo
-[https://halower.github.io/vue-tree](https://halower.github.io/vue-tree)
+[https://halower.github.io/vue-tree](http://120.77.84.4/)
 ### Node Property
 | Parameters | Description | Type | Optional values | Default value |
 |---------- |-------- |---------- |---------- |---------- |
