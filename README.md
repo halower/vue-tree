@@ -49,7 +49,6 @@
 |---------- |-------- |---------- |
 | node-click | click the node to trigger the event | node: Object |
 | node-mouse-over | over the node to trigger the event | node: Object |
-~~| node-expanded | node expansion event, commonly used to implement asynchronous loading | node: Object |~~
 | async-load-nodes | event used to implement asynchronous loading | node: Object |
 | drag-node-end | drag node end trigger the event | {dragNode: Object, targetNode: Object} |
 ### How to use
