@@ -7,8 +7,9 @@
 # Version: 2.x  ([English Document](https://github.com/halower/vue2-tree/blob/master/README.md))
 ```QQ Group: 255965810``` <br/>
 `如果看老版本请点击这里` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x)
+# Online Demo
+[https://halower.github.io/vue-tree](http://120.77.84.4/)
 ## API 文档
-
 ###  Node 属性
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
 |---------- |-------- |---------- |---------- |---------- |
