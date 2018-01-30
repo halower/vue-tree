@@ -20,6 +20,7 @@
 |visible |  节点是否可见 | Boolean | Y | true |
 |selected |  节点是否被选中 | Boolean | Y | false |
 |children |  子节点 | Array[Object] | Y | — |
+|async | 是否异步加载子节点 | Boolean | Y | false |
 |loading | 开启加载效果 | Boolean | Y | false |
 |nocheck | 多复选框开启时指定某一节点不渲染复选框 | Boolean | Y | false |
 |chkDisabled | 禁用某一结点的复选框的功能 | Boolean | Y | false |
@@ -48,7 +49,8 @@
 |---------- |-------- |---------- |
 | node-click  | 单击节点触发的事件 | node: Object |
 | node-mouse-over | 鼠标滑过节点触发事件 | node: Object |
-| node-expanded | 节点展开事件，一般用于实现异步加载 | node: Object |
+~~| node-expanded | 节点展开事件，一般用于实现异步加载 | node: Object |~~
+| async-load-nodes | 用于实现异步加载 | node: Object |
 | drag-node-end | 节点拖拽结束后触发事件 | {dragNode: Object, targetNode: Object} |
 
 ### 如何使用

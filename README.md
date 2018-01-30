@@ -7,12 +7,15 @@
 # Version: 2.x  ([中文文档](https://github.com/halower/vue2-tree/blob/master/README_CN.md))
 ```QQ Group: 255965810``` <br/>
 `we guess you may also see` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x)
+# Online Demo
+[tree demo](https://github.com/halower/vue-tree)
 ### Node Property
 | Parameters | Description | Type | Optional values | Default value |
 |---------- |-------- |---------- |---------- |---------- |
 |id | when this property is empty, the title property will be used as the key | String | Y | -|
 |title | node name | String | N | -|
 |children | child nodes | Array[object] | Y | -|
+|async | whether to load child nodes asynchronously | Boolean | Y | false |
 |expanded | node Expansion | Boolean | Y | false |
 |halfcheck | whether the node is half optional (subordinate selected) | Boolean | Y | false |
 |visible | is the node visible | Boolean | Y | true |
@@ -46,7 +49,8 @@
 |---------- |-------- |---------- |
 | node-click | click the node to trigger the event | node: Object |
 | node-mouse-over | over the node to trigger the event | node: Object |
-| node-expanded | node expansion event, commonly used to implement asynchronous loading | node: Object |
+~~| node-expanded | node expansion event, commonly used to implement asynchronous loading | node: Object |~~
+| async-load-nodes | event used to implement asynchronous loading | node: Object |
 | drag-node-end | drag node end trigger the event | {dragNode: Object, targetNode: Object} |
 ### How to use
 

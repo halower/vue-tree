@@ -2,7 +2,7 @@
   <ul class="halo-tree">
       <li v-for="(item, index) in data" @drop="drop(item, $event)" @dragover="dragover($event)" :key="item.id ? item.id : item.title" :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1}"  v-show="item.hasOwnProperty('visible') ? item.visible : true">
            <div class="tree-node-el" :draggable="draggable" @dragstart="drag(item, $event)">
-              <span @click="expandNode(item)" v-if="!item.parent ||item.children && item.children.length > 0" :class="item.expanded ? 'tree-open' : 'tree-close'">
+              <span @click="expandNode(item)" v-if="!item.parent ||item.children && item.children.length > 0 || item.async" :class="item.expanded ? 'tree-open' : 'tree-close'">
               </span>
               <span v-if='multiple && !item.nocheck' :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
                   <input :disabled="item.chkDisabled" :class="['check', item.chkDisabled ? 'chkDisabled' : '']" v-if='multiple' type="checkbox" @change="changeNodeCheckStatus(item, $event)" v-model="item.checked"/>
@@ -12,7 +12,7 @@
               {{item.level}}
           </div>
         <collapse-transition>
-          <tree v-if="!isLeaf(item)" @node-expanded.once='nodeExpanded' @node-click='nodeClick' @drag-node-end='dragNodeEnd' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+          <tree v-if="!isLeaf(item)" @node-expanded='asyncLoadNodes' @node-click='nodeClick' @drag-node-end='dragNodeEnd' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
         </collapse-transition>
       </li>
   </ul>
@@ -188,8 +188,10 @@ export default {
     /* @event passing the node-click event to the parent component
      * @param node clicked node
      */
-    nodeExpanded (node) {
-      this.$emit('node-expanded', node)
+    asyncLoadNodes (node) {
+      if (node.async && !node.children) {
+        this.$emit('async-load-nodes', node)
+      }
     },
     /* @method Determine whether it is a leaf node
      * @param node current node
