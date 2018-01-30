@@ -5,7 +5,7 @@
       <input type="text" v-model="searchword" placeholder="searchword"/>
     <button type="button" @click="search">search node</button>
     </div>
-    <v-tree ref='tree1' @node-click='nodeClick' :data='treeData1' :draggable='true' :multiple='true' :tpl='tpl' :halfcheck='true'/>
+    <v-tree ref='tree1' :data='treeData1' :draggable='true' :multiple='true' :tpl='tpl' :halfcheck='true'/>
    <div style="text-align: left"> <h1>Default</h1></div>
     <v-tree ref="tree2" :data='treeData2' :multiple='true' @async-load-nodes='asyncLoad2'/>
  </div>
