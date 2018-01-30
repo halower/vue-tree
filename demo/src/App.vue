@@ -1,9 +1,6 @@
-<script src="config/apistore.js"></script>
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <router-view/>
-    <v-dialog/>
   </div>
 </template>
 
