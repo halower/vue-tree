@@ -452,7 +452,7 @@ export default {
 }
 .halo-tree li {
     margin: 0;
-    padding: 5px 5px 5px 0;
+    padding: 5px 5px 5px 15px;
     position: relative;
     list-style: none;
 }
@@ -475,7 +475,7 @@ export default {
     border-top: 1px dashed #999;
     height: 20px;
     top: 17px;
-    width: 12px
+    width: 28px
 }
 .halo-tree li:last-child::before {
     height: 26px
@@ -525,7 +525,7 @@ export default {
     z-index: 3;
 }
 .halo-tree li.leaf {
-    padding-left: 19px;
+    padding-left: 15px;
 }
 .halo-tree li.leaf:after {
     content: '';
