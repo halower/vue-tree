@@ -8,6 +8,6 @@ export default {
   render (h, ctx) {
     let titleClass = ctx.props.node.selected ? 'node-title node-selected' : 'node-title'
     if (ctx.props.node.searched) titleClass += ' node-searched'
-    return ctx.props.tpl ? ctx.props.tpl(ctx.props.node, ctx) : <span domPropsInnerHTML={ctx.props.node.title} class={titleClass} onMouseover={() => ctx.parent.nodeMouseOver(ctx.props.node)} onClick={() => ctx.parent.nodeSelected(ctx.props.node)}></span>
+    return ctx.props.tpl ? ctx.props.tpl(ctx.props.node, ctx) : <span domPropsInnerHTML={ctx.props.node.title} title={ctx.props.node.title} class={titleClass} onMouseover={() => ctx.parent.nodeMouseOver(ctx.props.node)} onClick={() => ctx.parent.nodeSelected(ctx.props.node)}></span>
   }
 }
