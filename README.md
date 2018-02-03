@@ -134,7 +134,7 @@ export default {
     },
     async asyncLoad (node) {
       // method1:
-      this.$refs.tree.addNodes(node, await this.$api.demo.getChild())
+      this.$refs.tree.addNodes(node, await this.$api.demo.getChild()
       // method2:
       // this.$set(node, 'loading', true)
       // let data = await this.$api.demo.getChild()
