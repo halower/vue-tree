@@ -8,11 +8,10 @@
                   <input :disabled="item.chkDisabled" :class="['check', item.chkDisabled ? 'chkDisabled' : '']" v-if='multiple' type="checkbox" @change="changeNodeCheckStatus(item, $event)" v-model="item.checked"/>
               </span>
                <loading v-if="item.loading && item.expanded"/>
-              <Render :node="item" :tpl ='tpl'/>
-              {{item.level}}
+               <Render :node="item" :tpl ='tpl'/>
           </div>
         <collapse-transition>
-          <tree v-if="!isLeaf(item)" @node-expanded='asyncLoadNodes' @node-click='nodeClick' @drag-node-end='dragNodeEnd' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+          <tree v-if="!isLeaf(item)" @async-load-nodes='asyncLoadNodes' @node-expanded='asyncLoadNodes' @node-click='nodeClick' @drag-node-end='dragNodeEnd' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
         </collapse-transition>
       </li>
   </ul>
@@ -185,7 +184,7 @@ export default {
       this.$set(node, 'expanded', !node.expanded)
       this.$emit('node-expanded', node)
     },
-    /* @event passing the node-click event to the parent component
+    /* @event passing the async-load-nodes event to the parent component
      * @param node clicked node
      */
     asyncLoadNodes (node) {
@@ -193,6 +192,7 @@ export default {
         this.$emit('async-load-nodes', node)
       }
     },
+
     /* @method Determine whether it is a leaf node
      * @param node current node
     */

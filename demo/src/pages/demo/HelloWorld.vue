@@ -70,10 +70,15 @@ export default {
     },
     async asyncLoad2 (node) {
       this.$set(node, 'loading', true)
-      let pro = new Promise((resolve, reject) => {
-        setTimeout(resolve, 2000, ['async node1', 'async node2'])
+      let pro = await new Promise((resolve, reject) => {
+        setTimeout(resolve, 2000, [{title: 'test1', async: true}, {title: 'test2', async: true}])
       })
-      this.$refs.tree2.addNodes(node, await pro)
+      pro.forEach((el) => {
+        if (!node.hasOwnProperty('children')) {
+          this.$set(node, 'children', [])
+        }
+        node.children.push({title: 'test1', async: true})
+      })
       this.$set(node, 'loading', false)
     },
     search () {
