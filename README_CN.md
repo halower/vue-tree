@@ -9,17 +9,20 @@
 `如果看老版本请点击这里` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x)
 # Online Demo
 [https://halower.github.io/vue-tree](http://120.77.84.4/)
+
 # SelectTree API （2018-4-15 ）
-  最新的发布版本已经支持下拉树功能, 在基本属性和事件(与 Tree Api一致)不变的前提下扩展了如下
-  | 参数      | 说明    | 类型      | 可选值 | 默认值  |
+**最新的发布版本已经支持下拉树功能, 在基本属性和事件(与 [TreeApi](https://github.com/halower/vue-tree#tree-api-doc)一致)不变的前提下扩展了如下 **
+| 参数      | 说明    | 类型      | 可选值 | 默认值  |
 |---------- |-------- |---------- |---------- |---------- |
 |searchable     | 是否需要搜索功能 | Boolean | Y | true |
 |pleasechoosetext     | 下拉框默认提示本文 | String | Y | please choose... |
 |serchtext     | 搜索框框默认提示本文 | String | Y | search... |
 |searchFilter | 自定义搜索下拉树过滤函数 | Function | Y | node => mode.title.indexOf(this.searchworld) > -1 |
-### 效果图（这里不做Demo，其它效果和OnlineDemo一样）
 
+### 效果图（这里不做Demo，其它效果和OnlineDemo一样）
+![效果图](https://github.com/halower/vue-tree/blob/master/screenshots/selectTree.png)
 ### 如何使用
+
 ```
 import { VTree, VSelectTree } from '@/components'
 Vue.use(VTree)
