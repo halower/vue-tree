@@ -11,7 +11,8 @@
 [https://halower.github.io/vue-tree](http://120.77.84.4/)
 
 # SelectTree API （2018-4-15 ）
-**最新的发布版本已经支持下拉树功能, 在基本属性和事件(与 [TreeApi](https://github.com/halower/vue-tree#tree-api-doc)一致)不变的前提下扩展了如下 **
+最新的发布版本已经支持下拉树功能, 在基本属性和事件(与 [TreeApi](https://github.com/halower/vue-tree#tree-api-doc)一致)不变的前提下扩展了如下 
+
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
 |---------- |-------- |---------- |---------- |---------- |
 |searchable     | 是否需要搜索功能 | Boolean | Y | true |
