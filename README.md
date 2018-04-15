@@ -20,7 +20,7 @@
 |serchtext | Search box default prompts this article | String | Y |Search ... | 
 |searchfilter | Custom search pull down tree filter function | Function | Y |Node => mode.title.indexOf (This.searchworld) > 1 | 
  ## Effect Chart (no demo here, other effects like Onlinedemo)
-
+![](https://github.com/halower/vue-tree/blob/master/screenshots/selectTree.png)
 ### How to use
 Please read the [Tree API](https://github.com/halower/vue-tree#tree-api-doc) documentation before using the selectTree
 ```
