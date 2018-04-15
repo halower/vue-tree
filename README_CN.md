@@ -9,7 +9,25 @@
 `如果看老版本请点击这里` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x)
 # Online Demo
 [https://halower.github.io/vue-tree](http://120.77.84.4/)
-## API 文档
+# SelectTree API （2018-4-15 ）
+  最新的发布版本已经支持下拉树功能, 在基本属性和事件(与 Tree Api一致)不变的前提下扩展了如下
+  | 参数      | 说明    | 类型      | 可选值 | 默认值  |
+|---------- |-------- |---------- |---------- |---------- |
+|searchable     | 是否需要搜索功能 | Boolean | Y | true |
+|pleasechoosetext     | 下拉框默认提示本文 | String | Y | please choose... |
+|serchtext     | 搜索框框默认提示本文 | String | Y | search... |
+|searchFilter | 自定义搜索下拉树过滤函数 | Function | Y | node => mode.title.indexOf(this.searchworld) > -1 |
+### 效果图（这里不做Demo，其它效果和OnlineDemo一样）
+
+### 如何使用
+```
+import { VTree, VSelectTree } from '@/components'
+Vue.use(VTree)
+Vue.use(VSelectTree)
+-------------------
+  <v-select-tree ref='xxx' :data='treeData' v-model="['node-1-2']"/>
+```
+# Tree API 文档
 ###  Node 属性
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
 |---------- |-------- |---------- |---------- |---------- |
@@ -50,7 +68,6 @@
 |---------- |-------- |---------- |
 | node-click  | 单击节点触发的事件 | node: Object |
 | node-mouse-over | 鼠标滑过节点触发事件 | node: Object |
-~~| node-expanded | 节点展开事件，一般用于实现异步加载 | node: Object |~~
 | async-load-nodes | 用于实现异步加载 | node: Object |
 | drag-node-end | 节点拖拽结束后触发事件 | {dragNode: Object, targetNode: Object} |
 

@@ -1,5 +1,5 @@
 export default {
-  name: 'inlineMenu',
+  name: 'render',
   functional: true,
   props: {
     node: Object,

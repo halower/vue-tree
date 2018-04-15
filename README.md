@@ -9,6 +9,26 @@
 `we guess you may also see` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x)
 # Online Demo
 [https://halower.github.io/vue-tree](http://120.77.84.4/)
+
+# Selecttree API (2018-4-15)
+  The latest release has the ability to support the dropdown tree, extending the following with the same basic attributes and events (consistent with the tree API) 
+  | Parameters | Description | Type | Optional value |Default value |
+|---------- |-------- |---------- |---------- |---------- |
+ |searchable | Search Functionality Required | Boolean | Y |true |
+  |pleasechoosetext | Dropdown box default prompts this article | String | Y |Please choose ... |
+ |serchtext | Search box default prompts this article | String | Y |Search ... | 
+ |searchfilter | Custom search pull down tree filter function | Function | Y |Node => mode.title.indexOf (This.searchworld) > 1 | 
+ # # Effect Chart (no demo here, other effects like Onlinedemo)
+
+### How to use
+```
+Import {vtree, vselecttree} from ' @/components '
+Vue.use (Vtree)
+Vue.use (Vselecttree)
+ -------------------
+<v-select-tree ref='xxx' :data='treeData' v-model=""['node-1-2']"/">
+ ```
+# Tree API Doc
 ### Node Property
 | Parameters | Description | Type | Optional values | Default value |
 |---------- |-------- |---------- |---------- |---------- |

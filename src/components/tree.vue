@@ -11,7 +11,7 @@
                <Render :node="item" :tpl ='tpl'/>
           </div>
         <collapse-transition>
-          <tree v-if="!isLeaf(item)" @async-load-nodes='asyncLoadNodes' @node-expanded='asyncLoadNodes' @node-click='nodeClick' @drag-node-end='dragNodeEnd' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
+          <tree v-if="!isLeaf(item)" @dropTreeNodeChecked='nodeCheckStatusChange' @async-load-nodes='asyncLoadNodes' @node-expanded='asyncLoadNodes' @node-click='nodeClick' @drag-node-end='dragNodeEnd' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
         </collapse-transition>
       </li>
   </ul>
@@ -69,6 +69,7 @@ export default {
       if (node.children && node.children.length) {
         for (let child of node.children) {
           this.$set(child, 'checked', checked)
+          this.$set(child, 'selected', checked)
           this.$emit('nodeChecked', child, checked)
         }
       }
@@ -79,6 +80,7 @@ export default {
      */
     this.$on('parentChecked', (node, checked) => {
       this.$set(node, 'checked', checked)
+      this.$set(node, 'selected', checked)
       if (!node.parent) return false
       let someBortherNodeChecked = node.parent.children.some(node => node.checked)
       let allBortherNodeChecked = node.parent.children.every(node => node.checked)
@@ -105,7 +107,10 @@ export default {
         this.$emit('childChecked', node, checked)
       } else {
         this.$set(node, 'checked', checked)
+        this.$set(node, 'seleted', checked)
       }
+
+      this.$emit('dropTreeNodeChecked', node, checked)
     })
 
      /*
@@ -241,6 +246,13 @@ export default {
     nodeClick (node) {
       this.$emit('node-click', node)
     },
+
+     /* @event passing the nodeChecked event to the parent component
+     * @param node check status change node
+     */
+    nodeCheckStatusChange (node, checked) {
+      this.$emit('dropTreeNodeChecked', node, checked)
+    },
     /* @event passing the node-mouse-over event to the parent component
      * @param node overed node
      */
@@ -299,20 +311,24 @@ export default {
      *@param data nodes
      *@param opt the options that filter the node
      */
-    getNodes (opt, data) {
+    getNodes (opt, data, isOriginal) {
       data = data || this.data
       let res = []
       for (const node of data) {
-        let tmp = true
         for (const [key, value] of Object.entries(opt)) {
-          if (node[key] !== value) {
-            tmp = false
-            break
+          if (node[key] === value) {
+            if (isOriginal) {
+              res.push(node)
+            } else {
+              let n = Object.assign({}, node)
+              delete n['parent']
+              delete n['children']
+              res.push(n)
+            }
           }
         }
-        if (tmp) res.push(node)
         if (node.children && node.children.length) {
-          res = res.concat(this.getNodes(opt, node.children))
+          res = res.concat(this.getNodes(opt, node.children, isOriginal))
         }
       }
       return res
@@ -321,15 +337,15 @@ export default {
      /*
      *@method get Nodes that selected
      */
-    getSelectedNodes () {
-      return this.getNodes({selected: true}, this.data)
+    getSelectedNodes (isOriginal) {
+      return this.getNodes({selected: true}, this.data, isOriginal)
     },
 
     /*
      *@method get Nodes that checked
      */
-    getCheckedNodes () {
-      return this.getNodes({checked: true}, this.data)
+    getCheckedNodes (isOriginal) {
+      return this.getNodes({checked: true}, this.data, isOriginal)
     },
 
       /*
@@ -338,6 +354,7 @@ export default {
      *@param data current nodes
      */
     searchNodes (filter, data) {
+      debugger
       data = data || this.data
       for (const node of data) {
         let searched = filter ? (typeof filter === 'function' ? filter(node) : node.title.indexOf(filter) > -1) : false
@@ -353,7 +370,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
 .collapse-transition {
     transition: 0.3s height ease-in-out, 0.3s padding-top ease-in-out, 0.3s padding-bottom ease-in-out;
 }
