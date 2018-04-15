@@ -11,14 +11,15 @@
 [https://halower.github.io/vue-tree](http://120.77.84.4/)
 
 # SelectTree API (2018-4-15)
-  The latest release has the ability to support the dropdown tree, extending the following with the same basic attributes and events (consistent with the tree API) 
-  | Parameters | Description | Type | Optional value |Default value |
+ The latest release has the ability to support the dropdown tree, extending the following with the same basic attributes and events (consistent with the [Tree API](https://github.com/halower/vue-tree#tree-api-doc)) 
+ 
+| Parameters | Description | Type | Optional value |Default value |
 |---------- |-------- |---------- |---------- |---------- |
- |searchable | Search Functionality Required | Boolean | Y |true |
-  |pleasechoosetext | Dropdown box default prompts this article | String | Y |Please choose ... |
- |serchtext | Search box default prompts this article | String | Y |Search ... | 
- |searchfilter | Custom search pull down tree filter function | Function | Y |Node => mode.title.indexOf (This.searchworld) > 1 | 
- # # Effect Chart (no demo here, other effects like Onlinedemo)
+|searchable | Search Functionality Required | Boolean | Y |true |
+|pleasechoosetext | Dropdown box default prompts this article | String | Y |Please choose ... |
+|serchtext | Search box default prompts this article | String | Y |Search ... | 
+|searchfilter | Custom search pull down tree filter function | Function | Y |Node => mode.title.indexOf (This.searchworld) > 1 | 
+ ## Effect Chart (no demo here, other effects like Onlinedemo)
 
 ### How to use
 Please read the [Tree API](https://github.com/halower/vue-tree#tree-api-doc) documentation before using the selectTree
