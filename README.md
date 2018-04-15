@@ -24,9 +24,9 @@
 ### How to use
 Please read the [Tree API](https://github.com/halower/vue-tree#tree-api-doc) documentation before using the selectTree
 ```
-Import {vtree, vselecttree} from ' @/components '
-Vue.use (Vtree)
-Vue.use (Vselecttree)
+import { VTree, VSelectTree } from 'vue-tree-halower'
+Vue.use (VTree)
+Vue.use (VSelectTree)
  -------------------
 <v-select-tree :data='treeData' v-model="['node-1-2']"/>
  ```
