@@ -23,7 +23,7 @@
 ### 效果图（这里不做Demo，其它效果和OnlineDemo一样）
 ![效果图](https://github.com/halower/vue-tree/blob/master/screenshots/selectTree.png)
 ### 如何使用
-使用选择树组建请先阅读[Tree API](https://github.com/halower/vue-tree/blob/master/README_CN.md#tree-api-%E6%96%87%E6%A1%A3) 文档
+使用选择树组件请先阅读[Tree API](https://github.com/halower/vue-tree/blob/master/README_CN.md#tree-api-%E6%96%87%E6%A1%A3) 文档
 
 ```
 import { VTree, VSelectTree } from 'vue-tree-halower'
