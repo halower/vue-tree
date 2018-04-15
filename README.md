@@ -10,24 +10,24 @@
 # Online Demo
 [https://halower.github.io/vue-tree](http://120.77.84.4/)
 
-# Selecttree API (2018-4-15)
- The latest release has the ability to support the dropdown tree, extending the following with the same basic attributes and events (consistent with the [TreeAPI](https://github.com/halower/vue-tree#tree-api-doc)) 
- 
-| Parameters | Description | Type | Optional value |Default value |
+# SelectTree API (2018-4-15)
+  The latest release has the ability to support the dropdown tree, extending the following with the same basic attributes and events (consistent with the tree API) 
+  | Parameters | Description | Type | Optional value |Default value |
 |---------- |-------- |---------- |---------- |---------- |
-|searchable | Search Functionality Required | Boolean | Y |true |
-|pleasechoosetext | Dropdown box default prompts this article | String | Y |Please choose ... |
-|serchtext | Search box default prompts this article | String | Y |Search ... | 
-|searchfilter | Custom search pull down tree filter function | Function | Y |Node => mode.title.indexOf (This.searchworld) > 1 | 
- ## Effect Chart (no demo here, other effects like Onlinedemo)
-![效果图](https://github.com/halower/vue-tree/blob/master/screenshots/selectTree.png)
+ |searchable | Search Functionality Required | Boolean | Y |true |
+  |pleasechoosetext | Dropdown box default prompts this article | String | Y |Please choose ... |
+ |serchtext | Search box default prompts this article | String | Y |Search ... | 
+ |searchfilter | Custom search pull down tree filter function | Function | Y |Node => mode.title.indexOf (This.searchworld) > 1 | 
+ # # Effect Chart (no demo here, other effects like Onlinedemo)
+
 ### How to use
+Please read the [Tree API](https://github.com/halower/vue-tree#tree-api-doc) documentation before using the selectTree
 ```
 Import {vtree, vselecttree} from ' @/components '
 Vue.use (Vtree)
 Vue.use (Vselecttree)
  -------------------
-<v-select-tree ref='xxx' :data='treeData' v-model=""['node-1-2']"/">
+<v-select-tree :data='treeData' v-model="['node-1-2']"/>
  ```
 # Tree API Doc
 ### Node Property
@@ -76,29 +76,25 @@ Vue.use (Vselecttree)
 
 Step1: install plugins
 ```
-npm install\
-  babel-plugin-syntax-jsx\
-  babel-plugin-transform-vue-jsx\
-  babel-helper-vue-jsx-merge-props\
-  babel-preset-env\
-  --save-dev
+npm install babel-plugin-syntax-jsx babel-plugin-transform-vue-jsx babel-helper-vue-jsx-merge-props babel-preset-env --save-dev
 
 npm install vue-tree-halower  --save
 ```
-Step2： In your main.js
-```
-import 'vue-tree-halower/dist/halower-tree.min.css' // you can customize the style of the tree
-import VTree from 'vue-tree-halower'
-
-Vue.use(VTree)
-```
-Step3: In your .babelrc
+Step2: In your .babelrc
 ```
 {
   "presets": ["env"],
   "plugins": ["transform-vue-jsx"]
 }
 ```
+Step3： In your main.js
+```
+import 'vue-tree-halower/dist/halower-tree.min.css' // you can customize the style of the tree
+import VTree from 'vue-tree-halower'
+
+Vue.use(VTree)
+```
+
 
 ### Demo
 

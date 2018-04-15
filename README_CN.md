@@ -11,7 +11,7 @@
 [https://halower.github.io/vue-tree](http://120.77.84.4/)
 
 # SelectTree API （2018-4-15 ）
-最新的发布版本已经支持下拉树功能, 在基本属性和事件(与 [TreeApi](https://github.com/halower/vue-tree#tree-api-doc)一致)不变的前提下扩展了如下 
+最新的发布版本已经支持下拉树功能, 在基本属性和事件(与 [Tree API](https://github.com/halower/vue-tree#tree-api-doc)一致)不变的前提下扩展了如下 
 
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
 |---------- |-------- |---------- |---------- |---------- |
@@ -23,6 +23,7 @@
 ### 效果图（这里不做Demo，其它效果和OnlineDemo一样）
 ![效果图](https://github.com/halower/vue-tree/blob/master/screenshots/selectTree.png)
 ### 如何使用
+使用选择树组建请先阅读[Tree API](https://github.com/halower/vue-tree#tree-api-doc) 文档
 
 ```
 import { VTree, VSelectTree } from '@/components'
@@ -79,28 +80,25 @@ Vue.use(VSelectTree)
 
 Step1: install plugins
 ```
-npm install\
-  babel-plugin-syntax-jsx\
-  babel-plugin-transform-vue-jsx\
-  babel-helper-vue-jsx-merge-props\
-  babel-preset-env\
-  --save-dev
+npm install babel-plugin-syntax-jsx babel-plugin-transform-vue-jsx babel-helper-vue-jsx-merge-props babel-preset-env --save-dev
 
 npm install vue-tree-halower  --save
 ```
-Step2： In your main.js
 ```
-import 'vue-tree-halower/dist/halower-tree.min.css' // 你可以自定义树的样式
-import VTree from 'vue-tree-halower'
-
-Vue.use(VTree)
-```
-Step3: In your .babelrc
+Step2: In your .babelrc
 ```
 {
   "presets": ["env"],
   "plugins": ["transform-vue-jsx"]
 }
+
+Step3： In your main.js
+```
+import 'vue-tree-halower/dist/halower-tree.min.css' // 你可以自定义树的样式
+import VTree from 'vue-tree-halower'
+
+Vue.use(VTree)
+
 ```
 
 ### Demo
