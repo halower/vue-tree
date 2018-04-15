@@ -26,11 +26,11 @@
 使用选择树组建请先阅读[Tree API](https://github.com/halower/vue-tree/blob/master/README_CN.md#tree-api-%E6%96%87%E6%A1%A3) 文档
 
 ```
-import { VTree, VSelectTree } from '@/components'
-Vue.use(VTree)
-Vue.use(VSelectTree)
--------------------
-  <v-select-tree ref='xxx' :data='treeData' v-model="['node-1-2']"/>
+import { VTree, VSelectTree } from 'vue-tree-halower'
+Vue.use (VTree)
+Vue.use (VSelectTree)
+ -------------------
+<v-select-tree :data='treeData' v-model="['node-1-2']"/>
 ```
 # Tree API 文档
 ###  Node 属性
