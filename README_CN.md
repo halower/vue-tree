@@ -11,7 +11,7 @@
 [https://halower.github.io/vue-tree](http://120.77.84.4/)
 
 # SelectTree API （2018-4-15 ）
-最新的发布版本已经支持下拉树功能, 在基本属性和事件(与 [Tree API](https://github.com/halower/vue-tree#tree-api-doc)一致)不变的前提下扩展了如下 
+最新的发布版本已经支持下拉树功能, 在基本属性和事件(与 [Tree API](https://github.com/halower/vue-tree/blob/master/README_CN.md#tree-api-%E6%96%87%E6%A1%A3)一致)不变的前提下扩展了如下 
 
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
 |---------- |-------- |---------- |---------- |---------- |
@@ -23,7 +23,7 @@
 ### 效果图（这里不做Demo，其它效果和OnlineDemo一样）
 ![效果图](https://github.com/halower/vue-tree/blob/master/screenshots/selectTree.png)
 ### 如何使用
-使用选择树组建请先阅读[Tree API](https://github.com/halower/vue-tree#tree-api-doc) 文档
+使用选择树组建请先阅读[Tree API](https://github.com/halower/vue-tree/blob/master/README_CN.md#tree-api-%E6%96%87%E6%A1%A3) 文档
 
 ```
 import { VTree, VSelectTree } from '@/components'
