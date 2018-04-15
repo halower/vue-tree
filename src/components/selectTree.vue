@@ -19,6 +19,7 @@
     </div>
 </template>
 <script>
+import VTree from './tree'
 export default {
   name: 'selectTree',
   model: {
@@ -182,7 +183,7 @@ export default {
       }
     }
   },
-  components: { VTree: () => import('./tree') }
+  components: { VTree }
 }
 </script>
 <style>
