@@ -1,20 +1,39 @@
 <template>
-  <ul class="halo-tree">
-      <li v-for="(item, index) in data" @drop="drop(item, $event)" @dragover="dragover($event)" :key="item.id ? item.id : item.title" :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1}"  v-show="item.hasOwnProperty('visible') ? item.visible : true">
-           <div class="tree-node-el" :draggable="draggable" @dragstart="drag(item, $event)">
-              <span @click="expandNode(item)" v-if="!item.parent ||item.children && item.children.length > 0 || item.async" :class="item.expanded ? 'tree-open' : 'tree-close'">
-              </span>
-              <span v-if='multiple && !item.nocheck' :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
-                  <input :disabled="item.chkDisabled" :class="['check', item.chkDisabled ? 'chkDisabled' : '']" v-if='multiple' type="checkbox" @change="changeNodeCheckStatus(item, $event)" v-model="item.checked"/>
-              </span>
-               <loading v-if="item.loading && item.expanded"/>
-               <Render :node="item" :tpl ='tpl'/>
-          </div>
-        <collapse-transition>
-          <tree v-if="!isLeaf(item)" @dropTreeNodeChecked='nodeCheckStatusChange' @async-load-nodes='asyncLoadNodes' @node-expanded='asyncLoadNodes' @node-click='nodeClick' @drag-node-end='dragNodeEnd' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" v-show="item.expanded"  :tpl ="tpl" :data="item.children" :halfcheck='halfcheck' :scoped='scoped' :parent ='item' :multiple="multiple"></tree>
-        </collapse-transition>
-      </li>
-  </ul>
+  <collapse-transition>
+      <ul class="halo-tree">
+          <li v-for="(item, index) in data"
+              @drop="drop(item, $event)"
+              @dragover="dragover($event)"
+              :key="item.id ? item.id : item.title"
+              :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1, 'second-node': !parent && index === 1}"
+              v-show="item.hasOwnProperty('visible') ? item.visible : true">
+               <div class="tree-node-el" :draggable="draggable" @dragstart="drag(item, $event)">
+                  <span @click="expandNode(item)" v-if="!item.parent ||item.children && item.children.length > 0 || item.async" :class="item.expanded ? 'tree-open' : 'tree-close'">
+                  </span>
+                  <span v-if='multiple && !item.nocheck' :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
+                      <input :disabled="item.chkDisabled" :class="['check', item.chkDisabled ? 'chkDisabled' : '']" v-if='multiple' type="checkbox" @change="changeNodeCheckStatus(item, $event)" v-model="item.checked"/>
+                  </span>
+                   <loading v-if="item.loading && item.expanded"/>
+                   <Render :node="item" :tpl ='tpl'/>
+              </div>
+              <tree v-if="!isLeaf(item)"
+                    @dropTreeNodeChecked='nodeCheckStatusChange'
+                    @async-load-nodes='asyncLoadNodes'
+                    @node-expanded='asyncLoadNodes'
+                    @node-click='nodeClick'
+                    @drag-node-end='dragNodeEnd'
+                    :dragAfterExpanded="dragAfterExpanded"
+                    :draggable="draggable"
+                    v-show="item.expanded"
+                    :tpl ="tpl"
+                    :data="item.children"
+                    :halfcheck='halfcheck'
+                    :scoped='scoped'
+                    :parent ='item'
+                    :multiple="multiple"></tree>
+          </li>
+      </ul>
+  </collapse-transition>
 </template>
 <script>
 import mixins from './mixins'
@@ -139,12 +158,12 @@ export default {
      * @param ev  $event
     */
     drop (node, ev) {
-      ev.preventDefault()
-      ev.stopPropagation()
-      let guid = ev.dataTransfer.getData('guid')
-      let drag = this.getDragNode(guid)
+      ev.preventDefault();
+      ev.stopPropagation();
+      let guid = ev.dataTransfer.getData('guid');
+      let drag = this.getDragNode(guid);
       // if drag node's parent is enter node or root node
-      if (drag.parent === node || drag.parent === null) return false
+      if (drag.parent === node || drag.parent === null || drag === node) return false
       // drag from parent node to child node
       if (this.hasInGenerations(drag, node)) return false
       let dragHost = drag.parent.children
@@ -499,6 +518,9 @@ export default {
 }
 .halo-tree>li.first-node:before {
     top: 17px;
+}
+.halo-tree>li.second-node:before {
+    top: 4px;
 }
 .halo-tree>li.first-node.only-node::before {
     border-left: none;
