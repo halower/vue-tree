@@ -5,7 +5,7 @@
               @drop="drop(item, $event)"
               @dragover="dragover($event)"
               :key="item.id ? item.id : item.title"
-              :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1}"
+              :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1, 'second-node': !parent && index === 1}"
               v-show="item.hasOwnProperty('visible') ? item.visible : true">
                <div class="tree-node-el" :draggable="draggable" @dragstart="drag(item, $event)">
                   <span @click="expandNode(item)" v-if="!item.parent ||item.children && item.children.length > 0 || item.async" :class="item.expanded ? 'tree-open' : 'tree-close'">
@@ -518,6 +518,9 @@ export default {
 }
 .halo-tree>li.first-node:before {
     top: 17px;
+}
+.halo-tree>li.second-node:before {
+    top: 4px;
 }
 .halo-tree>li.first-node.only-node::before {
     border-left: none;
