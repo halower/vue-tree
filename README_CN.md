@@ -10,6 +10,10 @@
 # Online Demo
 [https://halower.github.io/vue-tree](http://120.77.84.4/)
 
+
+# Last Version Update Log(1.5.2)
+add a ```node-check``` event, ande remove ```nodeChecked``` event， because the ```nodeChecked``` event may be bubbling
+
 # SelectTree API （2018-4-15 ）
 最新的发布版本已经支持下拉树功能, 在基本属性和事件(与 [Tree API](https://github.com/halower/vue-tree/blob/master/README_CN.md#tree-api-%E6%96%87%E6%A1%A3)一致)不变的前提下扩展了如下 
 
