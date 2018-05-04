@@ -4,6 +4,8 @@
 [![GitHub forks](https://img.shields.io/github/forks/halower/vue-tree.svg?style=social&label=Fork&style=for-the-badge)](https://github.com/halower/vue-tree/network)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 
+# Last Version Update (1.5.2)
+add a ```node-check``` event, ande remove ```nodeChecked``` event， because the ```nodeChecked``` event may be bubbling
 # Version: 2.x  ([中文文档](https://github.com/halower/vue2-tree/blob/master/README_CN.md))
 ```QQ Group: 255965810``` <br/>
 `we guess you may also see` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x)
@@ -70,6 +72,7 @@ Vue.use (VSelectTree)
 | Event name | Description | Parameters |
 |---------- |-------- |---------- |
 | node-click | click the node to trigger the event | node: Object |
+| node-check | click the checkbox to trigger the event | node: Object, checked: boolean |
 | node-mouse-over | over the node to trigger the event | node: Object |
 | async-load-nodes | event used to implement asynchronous loading | node: Object |
 | drag-node-end | drag node end trigger the event | {dragNode: Object, targetNode: Object} |

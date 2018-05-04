@@ -21,6 +21,7 @@
                     @async-load-nodes='asyncLoadNodes'
                     @node-expanded='asyncLoadNodes'
                     @node-click='nodeClick'
+                    @node-single-check = 'nodeCheck'
                     @drag-node-end='dragNodeEnd'
                     :dragAfterExpanded="dragAfterExpanded"
                     :draggable="draggable"
@@ -89,7 +90,7 @@ export default {
         for (let child of node.children) {
           this.$set(child, 'checked', checked)
           this.$set(child, 'selected', checked)
-          this.$emit('nodeChecked', child, checked)
+          this.$emit('node-check', child, checked)
         }
       }
     })
@@ -120,7 +121,7 @@ export default {
     /*
      * @event monitor the node seleted event
      */
-    this.$on('nodeChecked', (node, checked) => {
+    this.$on('node-check', (node, checked) => {
       if (!this.scoped) {
         this.$emit('parentChecked', node, checked)
         this.$emit('childChecked', node, checked)
@@ -266,6 +267,12 @@ export default {
       this.$emit('node-click', node)
     },
 
+    /* @event passing the node-check event to the parent component
+     * @param node clicked node
+     */
+    nodeCheck (node,checked) {
+      this.$emit('node-check', node, checked)
+    },
      /* @event passing the nodeChecked event to the parent component
      * @param node check status change node
      */
@@ -301,7 +308,8 @@ export default {
      *@param $event event object
      */
     changeNodeCheckStatus (node, $event) {
-      this.$emit('nodeChecked', node, $event.target.checked)
+      this.$emit('node-check', node, $event.target.checked)
+      this.$emit('node-single-check', node, $event.target.checked)
     },
 
       /*

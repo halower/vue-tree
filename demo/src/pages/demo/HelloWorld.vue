@@ -7,7 +7,7 @@
     </div>
     <v-tree ref='tree1' :data='treeData1' :draggable='true' :multiple='true' :tpl='tpl' :halfcheck='true'/>
    <div style="text-align: left"> <h1>Default</h1></div>
-    <v-tree ref="tree2" :data='treeData2' :multiple='true' @async-load-nodes='asyncLoad2'/>
+    <v-tree ref="tree2" :data='treeData2' @node-check='nodechekced' :multiple='true' @async-load-nodes='asyncLoad2'/>
  </div>
 </template>
 
@@ -47,6 +47,9 @@ export default {
     }
   },
   methods: {
+    nodechekced (node, v) {
+      alert('that a node-check envent ...' + node.title + v)
+    },
     tpl (node, ctx) {
       let titleClass = node.selected ? 'node-title node-selected' : 'node-title'
       if (node.searched) titleClass += ' node-searched'
