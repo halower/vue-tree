@@ -19,7 +19,6 @@
               <tree v-if="!isLeaf(item)"
                     @dropTreeNodeChecked='nodeCheckStatusChange'
                     @async-load-nodes='asyncLoadNodes'
-                    @node-expanded='asyncLoadNodes'
                     @node-click='nodeClick'
                     @node-single-check = 'nodeCheck'
                     @drag-node-end='dragNodeEnd'
@@ -29,8 +28,9 @@
                     :tpl ="tpl"
                     :data="item.children"
                     :halfcheck='halfcheck'
-                    :scoped='scoped'
+                    :scoped ='scoped'
                     :parent ='item'
+                    :canDeleteRoot ='canDeleteRoot'
                     :multiple="multiple"></tree>
           </li>
       </ul>
@@ -70,6 +70,10 @@ export default {
       default: false
     },
     scoped: {
+      type: Boolean,
+      default: false
+    },
+    canDeleteRoot: {
       type: Boolean,
       default: false
     },
@@ -207,7 +211,10 @@ export default {
     */
     expandNode (node) {
       this.$set(node, 'expanded', !node.expanded)
-      this.$emit('node-expanded', node)
+      // this.$emit('node-expanded', node)
+      if (node.async && !node.children) {
+        this.$emit('async-load-nodes', node)
+      }
     },
     /* @event passing the async-load-nodes event to the parent component
      * @param node clicked node
@@ -264,6 +271,7 @@ export default {
      * @param node clicked node
      */
     nodeClick (node) {
+      this.$set(node, 'selected', !node.selected)
       this.$emit('node-click', node)
     },
 
@@ -297,9 +305,15 @@ export default {
      */
     delNode (parent, node) {
       if (parent === null || typeof parent === 'undefined') {
-        throw new ReferenceError('the root element can\'t deleted!')
+        if (this.canDeleteRoot) {
+          this.data.splice(0, 1)
+        } else {
+          throw new ReferenceError('the root element can\'t deleted!')
+        }
+        
+      } else {
+        parent.children.splice(parent.children.indexOf(node), 1)
       }
-      parent.children.splice(parent.children.indexOf(node), 1)
       this.$emit('delNode', { parentNode: parent, delNode: node })
     },
     /*
@@ -381,7 +395,6 @@ export default {
      *@param data current nodes
      */
     searchNodes (filter, data) {
-      debugger
       data = data || this.data
       for (const node of data) {
         let searched = filter ? (typeof filter === 'function' ? filter(node) : node.title.indexOf(filter) > -1) : false

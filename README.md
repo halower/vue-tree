@@ -4,7 +4,12 @@
 [![GitHub forks](https://img.shields.io/github/forks/halower/vue-tree.svg?style=social&label=Fork&style=for-the-badge)](https://github.com/halower/vue-tree/network)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 
-# Last Version Update (1.5.2)
+## last Version Update Log
+### (Version 1.5.3)
+1. Add  ```candeleteroot``` option to support the removal of root nodes
+2. Fix the ```async``` Invalid bug of the first level node
+3. cancel selected when the node is selected by click, is repaired
+### (Version 1.5.2)
 add a ```node-check``` event, ande remove ```nodeChecked``` event， because the ```nodeChecked``` event may be bubbling
 # Version: 2.x  ([中文文档](https://github.com/halower/vue2-tree/blob/master/README_CN.md))
 ```QQ Group: 255965810``` <br/>
@@ -59,7 +64,7 @@ Vue.use (VSelectTree)
 |scoped | quarantine node Selected state | Boolean | Y | false |
 |draggable | support drag? | Boolean | Y | false |
 |dragafterexpanded | ro expand after dragging | Boolean | Y | true |
-
+|canDeleteRoot |  can delete the root node  | Boolean | Y | false |
 ### method
 | Method name | Description | Parameters |
 |---------- |-------- |---------- |

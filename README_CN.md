@@ -11,7 +11,12 @@
 [https://halower.github.io/vue-tree](http://120.77.84.4/)
 
 
-# Last Version Update Log(1.5.2)
+## Last Version Update Log
+### (Version 1.5.3)
+1. 新增 ```canDeleteRoot```选项，用以支持是否可以删除根节点
+2. 修复一级节点的```async```无效的bug
+3. 修复点击选中节点后无法点击取消的功能
+###(Version 1.5.2)
 添加了一个 ```node-check``` 事件, 并移除了原有的```nodeChecked``` 事件，因为```nodeChecked``` 可能存在冒泡出发效果
 
 # SelectTree API （2018-4-15 ）
@@ -63,6 +68,7 @@ Vue.use (VSelectTree)
 |scoped |  隔离节点选中状态 | Boolean | Y | false |
 |draggable | 是否支持拖拽 | Boolean | Y | false |
 |dragAfterExpanded | 拖拽后展开   | Boolean | Y | true |
+|canDeleteRoot |  是否可以删除根节点 | Boolean | Y | false |
 
 ### 方法
 | 方法名      | 说明    | 参数      |

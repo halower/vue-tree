@@ -5,7 +5,7 @@
       <input type="text" v-model="searchword" placeholder="searchword"/>
     <button type="button" @click="search">search node</button>
     </div>
-    <v-tree ref='tree1' :data='treeData1' :draggable='true' :multiple='true' :tpl='tpl' :halfcheck='true'/>
+    <v-tree ref='tree1' :canDeleteRoot="true" :data='treeData1' :draggable='true' :multiple='true' :tpl='tpl' :halfcheck='true'/>
    <div style="text-align: left"> <h1>Default</h1></div>
     <v-tree ref="tree2" :data='treeData2' @node-check='nodechekced' :multiple='true' @async-load-nodes='asyncLoad2'/>
  </div>
@@ -41,8 +41,8 @@ export default {
       }],
       treeData2: [{
         title: 'node1',
-        expanded: true,
-        children: [{title: 'node 1-1', async: true}, {title: 'node 1-2', async: true}]
+        expanded: false,
+        async: true
       }]
     }
   },
@@ -72,6 +72,7 @@ export default {
       this.$set(node, 'loading', false)
     },
     async asyncLoad2 (node) {
+      debugger
       this.$set(node, 'loading', true)
       let pro = await new Promise((resolve, reject) => {
         setTimeout(resolve, 2000, [{title: 'test1', async: true}, {title: 'test2', async: true}])
