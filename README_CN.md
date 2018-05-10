@@ -3,6 +3,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/halower/vue-tree.svg?style=social&label=Stars&style=for-the-badge)](https://github.com/halower/vue-tree/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/halower/vue-tree.svg?style=social&label=Fork&style=for-the-badge)](https://github.com/halower/vue-tree/network)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
+
 `文档写得很简单，欢迎大家在使用的过程中完善文档，以更好的为其它人提供帮助。`
 # Version: 2.x  ([English Document](https://github.com/halower/vue2-tree/blob/master/README.md))
 ```QQ Group: 255965810``` <br/>
