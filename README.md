@@ -9,8 +9,8 @@ The document is poorly written and you are welcome to refine your documentation 
 `
 ## last Version Update Log
 ### (Version 1.5.3)
-1. Add  ```canDeleteRoot``` option to support the removal of root nodes
-2. Fix the ```async``` Invalid bug of the first level node
+1. add  ```canDeleteRoot``` option to support the removal of root nodes
+2. fix the ```async``` Invalid bug of the first level node
 3. cancel selected when the node is selected by click, is repaired
 ### (Version 1.5.2)
 add a ```node-check``` event, ande remove ```nodeChecked``` event， because the ```nodeChecked``` event may be bubbling
