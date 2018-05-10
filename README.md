@@ -4,6 +4,9 @@
 [![GitHub forks](https://img.shields.io/github/forks/halower/vue-tree.svg?style=social&label=Fork&style=for-the-badge)](https://github.com/halower/vue-tree/network)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 
+`
+The document is poorly written and you are welcome to refine your documentation in the process of using it to better help others.
+`
 ## last Version Update Log
 ### (Version 1.5.3)
 1. Add  ```canDeleteRoot``` option to support the removal of root nodes
