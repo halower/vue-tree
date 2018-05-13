@@ -13,6 +13,8 @@
 
 
 ## Last Version Update Log
+1. 修复上一个版本（1.5.3）造成的单选模式下某些节点不能选中的bug
+2. 完善domo 示例
 ### (Version 1.5.3)
 1. 新增 ```canDeleteRoot```选项，用以支持是否可以删除根节点
 2. 修复一级节点的```async```无效的bug
