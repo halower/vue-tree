@@ -163,10 +163,10 @@ export default {
      * @param ev  $event
     */
     drop (node, ev) {
-      ev.preventDefault();
-      ev.stopPropagation();
-      let guid = ev.dataTransfer.getData('guid');
-      let drag = this.getDragNode(guid);
+      ev.preventDefault()
+      ev.stopPropagation()
+      let guid = ev.dataTransfer.getData('guid')
+      let drag = this.getDragNode(guid)
       // if drag node's parent is enter node or root node
       if (drag.parent === node || drag.parent === null || drag === node) return false
       // drag from parent node to child node
@@ -271,14 +271,13 @@ export default {
      * @param node clicked node
      */
     nodeClick (node) {
-      this.$set(node, 'selected', !node.selected)
       this.$emit('node-click', node)
     },
 
     /* @event passing the node-check event to the parent component
      * @param node clicked node
      */
-    nodeCheck (node,checked) {
+    nodeCheck (node, checked) {
       this.$emit('node-check', node, checked)
     },
      /* @event passing the nodeChecked event to the parent component
@@ -310,7 +309,6 @@ export default {
         } else {
           throw new ReferenceError('the root element can\'t deleted!')
         }
-        
       } else {
         parent.children.splice(parent.children.indexOf(node), 1)
       }

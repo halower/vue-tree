@@ -11,7 +11,6 @@ The document is poorly written and you are welcome to refine your documentation 
 ### (Version 1.5.3)
 1. Add  ```canDeleteRoot``` option to support the removal of root nodes
 2. Fix the ```async``` Invalid bug of the first level node
-3. cancel selected when the node is selected by click, is repaired
 ### (Version 1.5.2)
 add a ```node-check``` event, ande remove ```nodeChecked``` event， because the ```nodeChecked``` event may be bubbling
 # Version: 2.x  ([中文文档](https://github.com/halower/vue2-tree/blob/master/README_CN.md))
