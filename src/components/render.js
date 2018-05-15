@@ -11,6 +11,7 @@ export default {
     return ctx.props.tpl ? ctx.props.tpl(ctx.props.node, ctx)
      : <span domPropsInnerHTML={ctx.props.node.title} title={ctx.props.node.title} class={titleClass}
         onMouseover={() => ctx.parent.nodeMouseOver(ctx.props.node)}
+        style='user-select: none'
         onClick={() => ctx.parent.nodeSelected(ctx.props.node)}>
     </span>
   }
