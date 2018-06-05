@@ -28,7 +28,7 @@ add a ```node-check``` event, ande remove ```nodeChecked``` event， because the
 |---------- |-------- |---------- |---------- |---------- |
 |searchable | Search Functionality Required | Boolean | Y |true |
 |pleasechoosetext | Dropdown box default prompts this article | String | Y |Please choose ... |
-|serchtext | Search box default prompts this article | String | Y |Search ... | 
+|searchtext | Search box default prompts this article | String | Y |Search ... | 
 |searchfilter | Custom search pull down tree filter function | Function | Y |Node => mode.title.indexOf (This.searchworld) > 1 | 
  ## Effect Chart (no demo here, other effects like Onlinedemo)
 ![](https://github.com/halower/vue-tree/blob/master/screenshots/selectTree.png)
