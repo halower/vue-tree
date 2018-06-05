@@ -28,7 +28,7 @@
 |---------- |-------- |---------- |---------- |---------- |
 |searchable     | 是否需要搜索功能 | Boolean | Y | true |
 |pleasechoosetext     | 下拉框默认提示本文 | String | Y | please choose... |
-|serchtext     | 搜索框框默认提示本文 | String | Y | search... |
+|searchtext     | 搜索框框默认提示本文 | String | Y | search... |
 |searchFilter | 自定义搜索下拉树过滤函数 | Function | Y | node => mode.title.indexOf(this.searchworld) > -1 |
 
 ### 效果图（这里不做Demo，其它效果和OnlineDemo一样）
