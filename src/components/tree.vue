@@ -1,40 +1,40 @@
 <template>
-  <collapse-transition>
-      <ul class="halo-tree">
-          <li v-for="(item, index) in data"
-              @drop="drop(item, $event)"
-              @dragover="dragover($event)"
-              :key="item.id ? item.id : item.title"
-              :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1, 'second-node': !parent && index === 1}"
-              v-show="item.hasOwnProperty('visible') ? item.visible : true">
-               <div class="tree-node-el" :draggable="draggable" @dragstart="drag(item, $event)">
-                  <span @click="expandNode(item)" v-if="!item.parent ||item.children && item.children.length > 0 || item.async" :class="item.expanded ? 'tree-open' : 'tree-close'">
-                  </span>
-                  <span v-if='multiple && !item.nocheck' :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
-                      <input :disabled="item.chkDisabled" :class="['check', item.chkDisabled ? 'chkDisabled' : '']" v-if='multiple' type="checkbox" @change="changeNodeCheckStatus(item, $event)" v-model="item.checked"/>
-                  </span>
-                   <loading v-if="item.loading && item.expanded"/>
-                   <Render :node="item" :tpl ='tpl'/>
-              </div>
-              <tree v-if="!isLeaf(item)"
-                    @dropTreeNodeChecked='nodeCheckStatusChange'
-                    @async-load-nodes='asyncLoadNodes'
-                    @node-click='nodeClick'
-                    @node-single-check = 'nodeCheck'
-                    @drag-node-end='dragNodeEnd'
-                    :dragAfterExpanded="dragAfterExpanded"
-                    :draggable="draggable"
-                    v-show="item.expanded"
-                    :tpl ="tpl"
-                    :data="item.children"
-                    :halfcheck='halfcheck'
-                    :scoped ='scoped'
-                    :parent ='item'
-                    :canDeleteRoot ='canDeleteRoot'
-                    :multiple="multiple"></tree>
-          </li>
-      </ul>
-  </collapse-transition>
+  <ul class="halo-tree">
+    <li v-for="(item, index) in data"
+        @drop="drop(item, $event)"
+        @dragover="dragover($event)"
+        :key="item.id ? item.id : item.title"
+        :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1, 'second-node': !parent && index === 1}"
+        v-show="item.hasOwnProperty('visible') ? item.visible : true">
+      <div class="tree-node-el" :draggable="draggable" @dragstart="drag(item, $event)">
+          <span @click="expandNode(item)" v-if="!item.parent ||item.children && item.children.length > 0 || item.async" :class="item.expanded ? 'tree-open' : 'tree-close'">
+          </span>
+          <span v-if='multiple && !item.nocheck' :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
+              <input :disabled="item.chkDisabled" :class="['check', item.chkDisabled ? 'chkDisabled' : '']" v-if='multiple' type="checkbox" @change="changeNodeCheckStatus(item, $event)" v-model="item.checked"/>
+          </span>
+           <loading v-if="item.loading && item.expanded"/>
+           <Render :node="item" :tpl ='tpl'/>
+      </div>
+      <collapse-transition>
+        <tree v-if="!isLeaf(item)"
+          @dropTreeNodeChecked='nodeCheckStatusChange'
+          @async-load-nodes='asyncLoadNodes'
+          @node-click='nodeClick'
+          @node-single-check = 'nodeCheck'
+          @drag-node-end='dragNodeEnd'
+          :dragAfterExpanded="dragAfterExpanded"
+          :draggable="draggable"
+          v-show="item.expanded"
+          :tpl ="tpl"
+          :data="item.children"
+          :halfcheck='halfcheck'
+          :scoped ='scoped'
+          :parent ='item'
+          :canDeleteRoot ='canDeleteRoot'
+          :multiple="multiple" />
+      </collapse-transition>
+    </li>
+  </ul>
 </template>
 <script>
 import mixins from './mixins'
@@ -409,10 +409,6 @@ export default {
 }
 </script>
 <style>
-.collapse-transition {
-    transition: 0.3s height ease-in-out, 0.3s padding-top ease-in-out, 0.3s padding-bottom ease-in-out;
-}
-
 .halo-tree li span:hover {
   background-color: #dddddde3
 }
@@ -438,6 +434,10 @@ export default {
 }
 .halo-tree {
     font-size:14px;
+    -webkit-transition: .3s height ease-in-out,.3s padding-top ease-in-out,.3s padding-bottom ease-in-out;
+}
+.halo-tree ul {
+  box-sizing: border-box;
 }
 .halo-tree ul,.halo-tree li {
     list-style-type:none;
