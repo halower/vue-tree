@@ -6,12 +6,17 @@
     <button type="button" @click="search">search node</button>
     </div>
     <v-tree ref='tree1' :canDeleteRoot="true" :data='treeData1' :draggable='true' :tpl='tpl' :halfcheck='true'/>
-   <div style="text-align: left"> <h1>Default</h1></div>
-    <v-tree ref="tree2" :data='treeData2' :multiple='false' @node-check='nodechekced' @async-load-nodes='asyncLoad2'/>
  </div>
 </template>
 
 <script>
+let child = []
+for (var i = 0; i < 300; i++) {
+  child.push({
+    title: `n-s-${i}`,
+    expanded: true
+  })
+}
 export default {
   name: 'HelloWorld',
   data () {
@@ -37,7 +42,7 @@ export default {
           }, {
             title: "<span style='color: red'>node 1-2-2</span>"
           }]
-        }]
+        }].concat(child)
       }],
       treeData2: [{
         title: 'node1',
