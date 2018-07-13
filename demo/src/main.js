@@ -13,7 +13,7 @@ import VueI18n from 'vue-i18n'
 import messages from '@/config/i18n'
 
 import 'vue-tree-halower/dist/halower-tree.min.css'
-import VTree from 'vue-tree-halower'
+import VTree from './components'
 
 Vue.use(directive)
 Vue.use(Router)
