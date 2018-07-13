@@ -8,7 +8,7 @@
 The document is poorly written and you are welcome to refine your documentation in the process of using it to better help others.
 `
 ## Last Version Update Log
-  Adjusted some style problems, perfected the demo demo
+  adjusted some style problems, perfected the demo 
 ### (Version 1.5.4)
 1. fix bugs that are not selected by some nodes in the radio mode caused by the previous version (1.5.3) 
 2. perfect Domo Example
