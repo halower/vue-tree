@@ -87,24 +87,24 @@ export default {
   },
   mounted () {
     /*
-     * @event monitor the children nodes seleted event
+     * @event monitor the children nodes selected event
      */
     this.$on('childChecked', (node, checked) => {
       if (node.children && node.children.length) {
         for (let child of node.children) {
           this.$set(child, 'checked', checked)
-          this.$set(child, 'selected', checked)
+          // this.$set(child, 'selected', checked)
           this.$emit('node-check', child, checked)
         }
       }
     })
 
     /*
-     * @event monitor the parent nodes seleted event
+     * @event monitor the parent nodes selected event
      */
     this.$on('parentChecked', (node, checked) => {
       this.$set(node, 'checked', checked)
-      this.$set(node, 'selected', checked)
+      // this.$set(node, 'selected', checked)
       if (!node.parent) return false
       let someBortherNodeChecked = node.parent.children.some(node => node.checked)
       let allBortherNodeChecked = node.parent.children.every(node => node.checked)
@@ -123,7 +123,7 @@ export default {
     })
 
     /*
-     * @event monitor the node seleted event
+     * @event monitor the node selected event
      */
     this.$on('node-check', (node, checked) => {
       if (!this.scoped) {
@@ -131,7 +131,7 @@ export default {
         this.$emit('childChecked', node, checked)
       } else {
         this.$set(node, 'checked', checked)
-        this.$set(node, 'seleted', checked)
+        // this.$set(node, 'selected', checked)
       }
 
       this.$emit('dropTreeNodeChecked', node, checked)
@@ -410,7 +410,8 @@ export default {
 </script>
 <style>
 .halo-tree li span:hover {
-  background-color: #dddddde3
+  background-color: transparent;
+  /* padding: 6px 0; */
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity .2s
@@ -619,6 +620,9 @@ export default {
     border-radius: 3px;
     cursor: pointer;
     margin: 0 2px;
+}
+.halo-tree .node-title:hover{
+  background-color: #ccc;
 }
 .halo-tree .node-selected {
     border: 1px solid #DDDDDD;

@@ -1,12 +1,11 @@
 <template>
    <div class="tree-container" >
-      <span class="ding" v-show="selectedItems.length>2">{{selectedItems.length}}</span>
       <div class="tag-box-container">
-        <div class="tag-box"  v-clickoutside ref="txtbox" @click="open = !open" @mouseleave="leaveTextTag">
+        <div class="tag-box"  ref="txtbox" @click="open = !open" @mouseleave="leaveTextTag">
           <div class="tag blank" v-show="!selectedItems.length">{{pleasechoosetext}}</div>
-          <div class="tag"  @click="tagClick($event)" ref='txttag' @mouseenter="sel_node_Index = idx"  @mouseleave="sel_node_Index = -1" 
-             v-for="(node,idx) in selectedItems" :key="idx">
-            <span v-html='node'></span><span class="rmNode" @click.stop="rmNode(node)" v-show="sel_node_Index === idx">x</span>
+          <div class="tag"  @click="tagClick($event)" ref='txttag' 
+             v-for="(node,idx) in selectedItems" :key="idx">{{node}}
+            <span  class="rmNode" @click.stop="rmNode(node)" >x</span>
           </div>
         </div>
       </div>
@@ -20,6 +19,7 @@
 </template>
 <script>
 import VTree from './tree'
+
 export default {
   name: 'selectTree',
   model: {
@@ -29,7 +29,6 @@ export default {
     return {
       searchword: '',
       open: false,
-      sel_node_Index: -1,
       selectedItems: []
     }
   },
@@ -189,8 +188,8 @@ export default {
 <style>
   .tree-container {
     position: relative;
-    width: 100%;
-    height: 40px;
+    width: 90%;
+    height: 36px;
     border: 1px solid #ccc;
     border-radius: 6px;
   }
@@ -198,29 +197,15 @@ export default {
   .tag-box-container {
     position: relative;
     width: 100%;
-    height: 40px;
+    height: 36px;
     overflow: hidden;
   }
 
   .tag-box {
     width: 2000%;
-    height: 40px;
+    height: 36px;
   }
 
-  .ding {
-    position: absolute;
-    z-index: 3;
-    right: 12px;
-    top: -15px;
-    height: 16px;
-    width: 16px;
-    border-radius: 50% 50% 50% 0;
-    text-indent: -1px;
-    font-size: 10px;
-    background: rgba(255, 0, 0, .5);
-    color: #fff;
-    cursor: default;
-  }
 
   .tree-box {
     margin-top: 3px;
@@ -236,9 +221,9 @@ export default {
 
   .search-input {
     width: 96%;
-    height: 40px;
+    height: 30px;
     box-sizing: border-box;
-    margin: 10px auto 0;
+    margin: 5px auto 0;
     border: 1px solid #ccc;
     font-size: 14px;
     text-indent: 1em;
@@ -250,16 +235,26 @@ export default {
     float: left;
     position: relative;
     min-width: 50px;
-    height: 30px;
+    height: 26px;
     margin: 4px;
-    padding: 0 25px 0 10px;
-    line-height: 30px;
+    padding: 0 10px;
+    line-height: 26px;
     text-align: center;
     border-radius: 6px;
     background-color: #ffffff;
     border: 1px solid #ccc;
     user-select: none;
     cursor: default;
+    transition: padding .3s;
+  }
+  .tag .rmNode{
+    display: none;
+  }
+  .tag:hover{
+    padding-right: 25px;
+  }
+  .tag:hover>.rmNode{
+     display: block!important;
   }
   .blank{
   background-color: #fff;
@@ -271,11 +266,11 @@ export default {
     top: 5px;
     width: 15px;
     height: 15px;
-    line-height: 13px;
+    line-height: 15px;
     font-size: 12px;
-    border: 1px solid #ccc;
-    background-color: #494949;
-    color: #ffffff;
+    /* border: 1px solid #ccc; */
+    background-color: #b3b3b3;
+    color: #ececec;
     border-radius: 50%;
     cursor: pointer;
   }

@@ -7,7 +7,9 @@
 `
 The document is poorly written and you are welcome to refine your documentation in the process of using it to better help others.
 `
-## last Version Update Log
+## Last Version Update Log
+  Adjusted some style problems, perfected the demo demo
+### (Version 1.5.4)
 1. fix bugs that are not selected by some nodes in the radio mode caused by the previous version (1.5.3) 
 2. perfect Domo Example
 ### (Version 1.5.3)
@@ -119,12 +121,27 @@ Vue.use(VTree)
 ```
 `JS`
 ```
+<template>
+ <div>
+    <div class="tree-block">
+      <input class="tree-search-input" type="text" v-model="searchword" placeholder="search..."/>
+      <button class=" tree-search-btn" type="button" @click="search">search</button>
+      <v-tree ref='tree1' :canDeleteRoot="true" :data='treeData1' :draggable='true' :tpl='tpl' :halfcheck='true' :multiple="true"/>
+    </div>
+   <div  class="tree-block"><v-tree ref="tree2" :data='treeData2' :multiple='false' @node-check='nodechekced' @async-load-nodes='asyncLoad2'/></div>
+    <div  class="tree-block"> <v-select-tree :data='treeData3' v-model='initSelected' :multiple="true"/></div>
+   
+ </div>
+</template>
+
+<script>
 export default {
-  name: 'vue-tree',
-   data () {
+  name: 'HelloWorld',
+  data () {
     return {
       searchword: '',
-      treeData: [{
+      initSelected: ['node-1'],
+      treeData1: [{
         title: 'node1',
         expanded: true,
         children: [{
@@ -145,38 +162,130 @@ export default {
             title: "<span style='color: red'>node 1-2-2</span>"
           }]
         }]
+      }],
+      treeData2: [{
+        title: 'node1',
+        expanded: false,
+        async: true
+      }],
+
+      treeData3: [{
+        title: 'node1',
+        expanded: true,
+        children: [{
+          title: 'node 1-1',
+          expanded: true,
+          children: [{
+            title: 'node 1-1-1'
+          }, {
+            title: 'node 1-1-2'
+          }, {
+            title: 'node 1-1-3'
+          }]
+        }]
       }]
     }
   },
   methods: {
+    nodechekced (node, v) {
+      alert('that a node-check envent ...' + node.title + v)
+    },
     tpl (node, ctx) {
       let titleClass = node.selected ? 'node-title node-selected' : 'node-title'
       if (node.searched) titleClass += ' node-searched'
       return <span>
-        <button style='color:blue; background-color:pink' onClick={() => this.$refs.tree.addNode(node, {title: 'sync loading'})}>+</button>
-      <span class={titleClass} domPropsInnerHTML={node.title} onClick={() => {
-        ctx.parent.nodeSelected(ctx.props.node)
-        console.log(ctx.parent.getSelectedNodes())
-      }}></span>
-      <button style='color:green; background-color:pink' onClick={() => this.asyncLoad(node)}>async loading</button>
-      <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.delNode(node.parent, node)}>delete</button>
+        <button class="treebtn1" onClick={() => this.$refs.tree1.addNode(node, {title: 'sync node'})}>+</button>
+
+         <span class={titleClass} domPropsInnerHTML={node.title} onClick={() => {
+           this.$refs.tree1.nodeSelected(node)
+         }}></span>
+      <button class="treebtn2" onClick={() => this.asyncLoad1(node)}>async</button>
+      <button class="treebtn3" onClick={() => this.$refs.tree1.delNode(node.parent, node)}>delete</button>
       </span>
     },
-    async asyncLoad (node) {
-      // method1:
-      this.$refs.tree.addNodes(node, await this.$api.demo.getChild()
-      // method2:
-      // this.$set(node, 'loading', true)
-      // let data = await this.$api.demo.getChild()
-      // this.$set(node, 'children', data)
-      // this.$set(node, 'loading', false)
-      // method3: use concat
+    async asyncLoad1 (node) {
+      this.$set(node, 'loading', true)
+      let pro = new Promise((resolve, reject) => {
+        setTimeout(resolve, 2000, ['async node1', 'async node2'])
+      })
+      this.$refs.tree1.addNodes(node, await pro)
+      this.$set(node, 'loading', false)
+    },
+    async asyncLoad2 (node) {
+      this.$set(node, 'loading', true)
+      let pro = await new Promise((resolve, reject) => {
+        setTimeout(resolve, 2000, [{title: 'test1', async: true}, {title: 'test2', async: true}, {title: 'test3'}])
+      })
+
+      pro.forEach((el) => {
+        if (!node.hasOwnProperty('children')) {
+          this.$set(node, 'children', [])
+        }
+        node.children.push(el)
+      })
+      this.$set(node, 'loading', false)
     },
     search () {
-      this.$refs.tree.searchNodes(this.searchword)
+      this.$refs.tree1.searchNodes(this.searchword)
     }
   }
 }
+</script>
+<style>
+.tree-block{
+  float: left;
+  width: 33%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px dotted #ccccdd;
+  overflow: auto;
+  height: 800px;
+}
+.treebtn1{
+  background-color: transparent;
+  border: 1px solid #ccc;
+  padding: 1px 3px;
+  border-radius: 5px;
+  margin-right: 5px;
+  color: rgb(148, 147, 147);
+
+}
+.treebtn2{
+   background-color: transparent;
+   border: 1px solid #ccc;
+   padding: 3px 5px;
+   border-radius: 5px;
+   margin-left: 5px;
+  color: rgb(97, 97, 97);
+
+}
+.treebtn3{
+ background-color: transparent;
+ border: 1px solid #ccc;
+ padding: 3px 5px;
+ border-radius: 5px;
+ margin-left: 5px;
+  color: rgb(63, 63, 63);
+
+}
+.tree-search-input{
+  width: 70%;
+  padding: 6px 8px;
+  outline: none;
+  border-radius: 6px;
+  border:1px solid #ccc;
+}
+.tree-search-btn{
+width: 25%;
+padding: 6px 8px;
+outline: none;
+border-radius: 6px;
+background-color: rgb(218, 218, 218);
+border:1px solid rgb(226, 225, 225);
+color: rgb(117, 117, 117);
+}
+</style>
+
 ```
 ### 如果你觉得这个项目帮助到了你，你可以帮作者买一杯果汁表示鼓励
 <img src="https://github.com/halower/vue2-tree/blob/master/src/assets/hello.png" width=256 height=256 />

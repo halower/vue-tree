@@ -13,14 +13,14 @@ import VueI18n from 'vue-i18n'
 import messages from '@/config/i18n'
 
 import 'vue-tree-halower/dist/halower-tree.min.css'
-import VTree from '@/components'
+import {VTree, VSelectTree} from '@/components'
 
 Vue.use(directive)
 Vue.use(Router)
 Vue.use(VModal, { dialog: true })
 Vue.use(VueI18n)
 Vue.use(VTree)
-
+Vue.use(VSelectTree)
 const router = new Router({
   routes: routestore,
   mode: 'history'
