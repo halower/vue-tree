@@ -13,6 +13,10 @@ export function hasClass (el, cls) {
   }
 };
 
+export function getMyAttr (el, attr) {
+  return window.getComponentStyle(el, null)[attr]
+}
+
 export function addClass (el, cls) {
   if (!el) return
   let curClass = el.className

@@ -5,13 +5,18 @@
       <input type="text" v-model="searchword" placeholder="searchword"/>
     <button type="button" @click="search">search node</button>
     </div>
-    <v-tree ref='tree1' :canDeleteRoot="true" :data='treeData1' :draggable='true' :tpl='tpl' :halfcheck='true' :multiple="true"/>
-   <div style="text-align: left"> <h1>Default</h1></div>
-    <v-tree ref="tree2" :data='treeData2' :multiple='false' @node-check='nodechekced' @async-load-nodes='asyncLoad2'/>
+    <v-tree ref='tree1' :canDeleteRoot="true" :data='treeData1' :draggable='true' :tpl='tpl' :halfcheck='true'/>
  </div>
 </template>
 
 <script>
+let child = []
+for (var i = 0; i < 300; i++) {
+  child.push({
+    title: `n-s-${i}`,
+    expanded: true
+  })
+}
 export default {
   name: 'HelloWorld',
   data () {
@@ -37,7 +42,7 @@ export default {
           }, {
             title: "<span style='color: red'>node 1-2-2</span>"
           }]
-        }]
+        }].concat(child)
       }],
       treeData2: [{
         title: 'node1',
@@ -56,7 +61,8 @@ export default {
       return <span>
         <button style='color:blue; background-color:pink' onClick={() => this.$refs.tree1.addNode(node, {title: 'sync loading'})}>+</button>
       <span class={titleClass} domPropsInnerHTML={node.title} onClick={() => {
-        this.$refs.tree1.nodeSelected(node)
+        ctx.parent.nodeClick(ctx.props.node)
+        console.log(ctx.parent.getSelectedNodes())
       }}></span>
       <button style='color:green; background-color:pink' onClick={() => this.asyncLoad1(node)}>async loading</button>
       <button style='color:red; background-color:pink' onClick={() => this.$refs.tree1.delNode(node.parent, node)}>delete</button>
