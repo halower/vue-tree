@@ -20,6 +20,7 @@
           @dropTreeNodeChecked='nodeCheckStatusChange'
           @async-load-nodes='asyncLoadNodes'
           @node-click='nodeClick'
+          @node-check='nodeCheck'
           @node-single-check = 'nodeCheck'
           @drag-node-end='dragNodeEnd'
           :dragAfterExpanded="dragAfterExpanded"

@@ -148,9 +148,7 @@ export default {
     * search nodes from  drop-down tree
     * */
     searchNodes () {
-      let predicate = node => node.title.indexOf(this.searchword) > -1
-      if (this.searchFilter) predicate = this.searchFilter
-      this.$refs.dropTree.searchNodes(predicate)
+      this.$refs.dropTree.searchNodes(this.searchword)
     },
 
    // click tag animation effects
