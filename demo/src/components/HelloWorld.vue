@@ -5,9 +5,8 @@
       <button class=" tree-search-btn" type="button" @click="search">search</button>
       <v-tree ref='tree1' :canDeleteRoot="true" :data='treeData1' :draggable='true' :tpl='tpl' :halfcheck='true' :multiple="true"/>
     </div>
-   <div  class="tree3"><v-tree ref="tree2" :data='treeData2' :multiple='false' @node-check='nodechekced' @async-load-nodes='asyncLoad2'/></div>
-    <div  class="tree3"> <v-select-tree :data='treeData3' v-model='initSelected' :multiple="true"/></div>
-   
+    <div class="tree3"><v-tree ref="tree2" :data='treeData2' :multiple='false' @node-check='nodechekced' @async-load-nodes='asyncLoad2'/></div>
+    <div class="tree3"> <v-select-tree :data='treeData3' v-model='initSelected' :multiple="true"/></div>
  </div>
 </template>
 
@@ -125,25 +124,22 @@ export default {
   border-radius: 5px;
   margin-right: 5px;
   color: rgb(148, 147, 147);
-
 }
 .treebtn2{
-   background-color: transparent;
-   border: 1px solid #ccc;
-   padding: 3px 5px;
-   border-radius: 5px;
-   margin-left: 5px;
+  background-color: transparent;
+  border: 1px solid #ccc;
+  padding: 3px 5px;
+  border-radius: 5px;
+  margin-left: 5px;
   color: rgb(97, 97, 97);
-
 }
 .treebtn3{
- background-color: transparent;
- border: 1px solid #ccc;
- padding: 3px 5px;
- border-radius: 5px;
- margin-left: 5px;
+  background-color: transparent;
+  border: 1px solid #ccc;
+  padding: 3px 5px;
+  border-radius: 5px;
+  margin-left: 5px;
   color: rgb(63, 63, 63);
-
 }
 .tree-search-input{
   width: 70%;
@@ -153,12 +149,12 @@ export default {
   border:1px solid #ccc;
 }
 .tree-search-btn{
-width: 25%;
-padding: 6px 8px;
-outline: none;
-border-radius: 6px;
-background-color: rgb(218, 218, 218);
-border:1px solid rgb(226, 225, 225);
-color: rgb(117, 117, 117);
+  width: 25%;
+  padding: 6px 8px;
+  outline: none;
+  border-radius: 6px;
+  background-color: rgb(218, 218, 218);
+  border:1px solid rgb(226, 225, 225);
+  color: rgb(117, 117, 117);
 }
 </style>

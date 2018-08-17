@@ -1,12 +1,21 @@
-## how to run start the demo
+# demo
 
-``` bash
-# install dependencies
-npm install
+## Project setup
+```
+yarn install
+```
 
-# serve with hot reload at localhost:8080
-npm run dev
+### Compiles and hot-reloads for development
+```
+yarn run serve
+```
 
-# build for production with minification  publish to npm
-npm run build
+### Compiles and minifies for production
+```
+yarn run build
+```
+
+### Lints and fixes files
+```
+yarn run lint
 ```
