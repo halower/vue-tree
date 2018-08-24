@@ -3,16 +3,21 @@ export default {
   functional: true,
   props: {
     node: Object,
-    tpl: Function
+    parent: null,
+    tpl: Function,
+    index: Number
   },
   render (h, ctx) {
-    let titleClass = ctx.props.node.selected ? 'node-title node-selected' : 'node-title'
-    if (ctx.props.node.searched) titleClass += ' node-searched'
-    return ctx.props.tpl ? ctx.props.tpl(ctx.props.node, ctx)
-     : <span domPropsInnerHTML={ctx.props.node.title} title={ctx.props.node.title} class={titleClass}
-        onMouseover={() => ctx.parent.nodeMouseOver(ctx.props.node)}
+    const {node, parent, tpl, index} = ctx.props
+    let titleClass = node.selected ? 'node-title node-selected' : 'node-title'
+    if (node.searched) titleClass += ' node-searched'
+    return tpl ? tpl(node, ctx, parent, index)
+     : <span domPropsInnerHTML={node.title} title={node.title} class={titleClass}
+        onMouseover={() => ctx.parent.nodeMouseOver(node)}
         style='user-select: none'
-        onClick={() => ctx.parent.nodeSelected(ctx.props.node)}>
+        onClick={() => {
+          ctx.parent.nodeSelected(node)
+        }}>
     </span>
   }
 }

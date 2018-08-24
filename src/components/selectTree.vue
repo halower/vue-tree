@@ -1,18 +1,33 @@
 <template>
    <div class="tree-container" >
       <div class="tag-box-container">
-        <div class="tag-box"  ref="txtbox" @click="open = !open" @mouseleave="leaveTextTag">
+        <div class="tag-box" ref="txtbox" @click="open = !open" @mouseleave="leaveTextTag">
           <div class="tag blank" v-show="!selectedItems.length">{{pleasechoosetext}}</div>
-          <div class="tag"  @click="tagClick($event)" ref='txttag' 
-             v-for="(node,idx) in selectedItems" :key="idx">{{node}}
-            <span  class="rmNode" @click.stop="rmNode(node)" >x</span>
+          <div class="tag" @click="tagClick($event)" ref='txttag' 
+             v-for="(node, idx) in selectedItems" :key="idx"
+          >
+            {{node}}
+            <span class="rmNode" @click.stop="rmNode(node)" >x</span>
           </div>
         </div>
       </div>
       <transition name="fade">
         <div class="tree-box" v-show="open">
-          <input class="search-input" v-model="searchword" v-show="searchable" @keyup.13="searchNodes" type="text" :placeholder="serchtext">
-          <v-tree ref='dropTree' :data='data' @dropTreeNodeChecked='nodeCheckStatusChange' @async-load-nodes='asyncLoadNodes' @node-expanded='asyncLoadNodes' @node-click='nodeClick' @drag-node-end='dragNodeEnd' :dragAfterExpanded="dragAfterExpanded" :draggable="draggable" :tpl ="tpl"  :halfcheck='halfcheck' :scoped='scoped' :multiple="multiple"/>
+          <input class="search-input" v-model="searchword" v-show="searchable" @keyup.enter="searchNodes" type="text" :placeholder="searchtext">
+          <v-tree ref='dropTree'
+            :data='data'
+            :dragAfterExpanded="dragAfterExpanded"
+            :draggable="draggable"
+            :tpl ="tpl"
+            :halfcheck='halfcheck'
+            :scoped='scoped'
+            :multiple="multiple"
+            @dropTreeNodeChecked='nodeCheckStatusChange'
+            @async-load-nodes='asyncLoadNodes'
+            @node-expanded='asyncLoadNodes'
+            @node-click='nodeClick'
+            @drag-node-end='dragNodeEnd'
+          />
         </div>
       </transition>
     </div>
@@ -25,6 +40,7 @@ export default {
   model: {
     event: 'value-change'
   },
+  components: { VTree },
   data () {
     return {
       searchword: '',
@@ -33,7 +49,7 @@ export default {
     }
   },
   watch: {
-    selectedItems: function (oldVal, newVal) {
+    selectedItems: function () {
       this.$emit('value-change', this.selectedItems)
     }
   },
@@ -44,7 +60,7 @@ export default {
   props: {
     value: {
       type: Array,
-      default: []
+      default: () => []
     },
     searchable: {
       type: Boolean,
@@ -54,7 +70,7 @@ export default {
       type: String,
       default: 'please choose...'
     },
-    serchtext: {
+    searchtext: {
       type: String,
       default: 'search...'
     },
@@ -124,18 +140,24 @@ export default {
     */
     rmNode (text, eventFromNode) {
       if (!eventFromNode) {
-        let node = this.$refs.dropTree.getCheckedNodes(true).find(x => x.title === text)
-        this.$set(node, 'selected', false)
-        this.$set(node, 'checked', false)
+        // let node = this.$refs.dropTree.getCheckedNodes(true).find(x => x.title === text)
+        const node = this.$refs.dropTree.getSelectedNodes(true).find(x => x.title === text)
+        if (node) {
+          this.$set(node, 'selected', false)
+          this.$set(node, 'checked', false)
+        }
       }
-      let idx = this.selectedItems.findIndex(x => x === text)
-      this.selectedItems.splice(idx, 1)
+      const idx = this.selectedItems.findIndex(x => x === text)
+      if (idx >= 0) {
+        this.selectedItems.splice(idx, 1)
+      }
     },
 
     /*
     * node check status change event
     */
-    nodeCheckStatusChange (node, checked) {
+    // nodeCheckStatusChange (node, checked) {
+    nodeCheckStatusChange () {
       let treeNodes = this.$refs.dropTree.getCheckedNodes(true)
       if (!treeNodes) this.selectedItems = []
       this.selectedItems = []
@@ -148,7 +170,8 @@ export default {
     * search nodes from  drop-down tree
     * */
     searchNodes () {
-      this.$refs.dropTree.searchNodes(this.searchword)
+      const filter = this.searchFilter ? this.searchFilter : this.searchword
+      this.$refs.dropTree.searchNodes(filter)
     },
 
    // click tag animation effects
@@ -179,8 +202,7 @@ export default {
         }
       }
     }
-  },
-  components: { VTree }
+  }
 }
 </script>
 <style>

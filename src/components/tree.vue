@@ -1,76 +1,32 @@
 <template>
-  <ul class="halo-tree">
-    <li v-for="(item, index) in data"
-        @drop="drop(item, $event)"
-        @dragover="dragover($event)"
-        :key="item.id ? item.id : item.title"
-        :class="{leaf: isLeaf(item), 'first-node': !parent && index === 0, 'only-node': !parent && data.length === 1, 'second-node': !parent && index === 1}"
-        v-show="item.hasOwnProperty('visible') ? item.visible : true">
-      <div class="tree-node-el" :draggable="draggable" @dragstart="drag(item, $event)">
-          <span @click="expandNode(item)" v-if="!item.parent ||item.children && item.children.length > 0 || item.async" :class="item.expanded ? 'tree-open' : 'tree-close'">
-          </span>
-          <span v-if='multiple && !item.nocheck' :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']">
-              <input :disabled="item.chkDisabled" :class="['check', item.chkDisabled ? 'chkDisabled' : '']" v-if='multiple' type="checkbox" @change="changeNodeCheckStatus(item, $event)" v-model="item.checked"/>
-          </span>
-           <loading v-if="item.loading && item.expanded"/>
-           <Render :node="item" :tpl ='tpl'/>
-      </div>
-      <collapse-transition>
-        <tree v-if="!isLeaf(item)"
-          @dropTreeNodeChecked='nodeCheckStatusChange'
-          @async-load-nodes='asyncLoadNodes'
-          @node-click='nodeClick'
-          @node-check='nodeCheck'
-          @node-single-check = 'nodeCheck'
-          @drag-node-end='dragNodeEnd'
-          :dragAfterExpanded="dragAfterExpanded"
-          :draggable="draggable"
-          v-show="item.expanded"
-          :tpl ="tpl"
-          :data="item.children"
-          :halfcheck='halfcheck'
-          :scoped ='scoped'
-          :parent ='item'
-          :canDeleteRoot ='canDeleteRoot'
-          :multiple="multiple" />
-      </collapse-transition>
-    </li>
-  </ul>
+  <TreeUl v-bind='childBind' />
 </template>
 <script>
-import mixins from './mixins'
-import Render from './render'
-import Loading from './loading'
-import CollapseTransition from './collapse-transition'
+import TreeUl from './treeUl'
 export default {
   name: 'Tree',
-  mixins: [mixins],
+  inheritAttrs: false,
+  components: {TreeUl},
+  provide(){
+    return {
+      isLeaf: this.isLeaf,
+      childChecked: this.childCheckedHandle,
+      parentChecked: this.parentCheckedHandle,
+      emitEventToTree: this.emitEventToParent,
+      nodeSelected: this.nodeSelected,
+      setAttr: this.setAttr
+    }
+  },
   props: {
     data: {
       type: Array,
       default: () => []
     },
-    parent: {
-      type: Object,
-      default: () => null
-    },
     multiple: {
       type: Boolean,
       default: false
     },
-    draggable: {
-      type: Boolean,
-      default: false
-    },
-    dragAfterExpanded: {
-      type: Boolean,
-      default: true
-    },
     halfcheck: {
-      type: Boolean,
-      default: false
-    },
-    scoped: {
       type: Boolean,
       default: false
     },
@@ -78,160 +34,120 @@ export default {
       type: Boolean,
       default: false
     },
-    tpl: Function
-  },
-  components: {Render, Loading, CollapseTransition},
-  watch: {
-    data () {
-      this.initHandle()
+    maxLevel: { // 最大层级
+      type: Number,
+      default: 1024
     }
   },
-  mounted () {
-    /*
-     * @event monitor the children nodes selected event
-     */
-    this.$on('childChecked', (node, checked) => {
-      if (node.children && node.children.length) {
-        for (let child of node.children) {
-          this.$set(child, 'checked', checked)
-          // this.$set(child, 'selected', checked)
-          this.$emit('node-check', child, checked)
-        }
-      }
-    })
-
-    /*
-     * @event monitor the parent nodes selected event
-     */
-    this.$on('parentChecked', (node, checked) => {
-      this.$set(node, 'checked', checked)
-      // this.$set(node, 'selected', checked)
-      if (!node.parent) return false
-      let someBortherNodeChecked = node.parent.children.some(node => node.checked)
-      let allBortherNodeChecked = node.parent.children.every(node => node.checked)
-      if (this.halfcheck) {
-        // all / some / none
-        allBortherNodeChecked ? this.$set(node.parent, 'halfcheck', false) : someBortherNodeChecked ? this.$set(node.parent, 'halfcheck', true) : this.$set(node.parent, 'halfcheck', false)
-        if (!checked && someBortherNodeChecked) {
-          this.$set(node.parent, 'halfcheck', true)
-          return false
-        }
-        this.$emit('parentChecked', node.parent, checked)
-      } else {
-        if (checked && allBortherNodeChecked) this.$emit('parentChecked', node.parent, checked)
-        if (!checked) this.$emit('parentChecked', node.parent, checked)
-      }
-    })
-
-    /*
-     * @event monitor the node selected event
-     */
-    this.$on('node-check', (node, checked) => {
-      if (!this.scoped) {
-        this.$emit('parentChecked', node, checked)
-        this.$emit('childChecked', node, checked)
-      } else {
-        this.$set(node, 'checked', checked)
-        // this.$set(node, 'selected', checked)
-      }
-
-      this.$emit('dropTreeNodeChecked', node, checked)
-    })
-
-     /*
-     * @event monitor the node visible event
-     */
-    this.$on('toggleshow', (node, isShow) => {
-      this.$set(node, 'visible', isShow)
-      if (isShow && node.parent) {
-        this.$emit('toggleshow', node.parent, isShow)
-      }
-    })
-
-    this.$on('cancelSelected', (root) => {
-      for (let child of root.$children) {
-        for (let node of child.data) {
-          child.$set(node, 'selected', false)
-        }
-        if (child.$children) child.$emit('cancelSelected', child)
-      }
-    })
-    this.initHandle()
+  beforeCreate () {
+    // 默认为false
+    this.$defVal = {
+      visible: true
+    }
+  },
+  computed: {
+    childBind () {
+      return Object.assign({},
+        this.$attrs,
+        this.$props
+      )
+    }
   },
   methods: {
-    /* @method drop node
-     * @param node droped node
-     * @param ev  $event
-    */
-    drop (node, ev) {
-      ev.preventDefault()
-      ev.stopPropagation()
-      let guid = ev.dataTransfer.getData('guid')
-      let drag = this.getDragNode(guid)
-      // if drag node's parent is enter node or root node
-      if (drag.parent === node || drag.parent === null || drag === node) return false
-      // drag from parent node to child node
-      if (this.hasInGenerations(drag, node)) return false
-      let dragHost = drag.parent.children
-      if (node.children && node.children.indexOf(drag) === -1) {
-        node.children.push(drag)
-        dragHost.splice(dragHost.indexOf(drag), 1)
-      } else {
-        this.$set(node, 'children', [drag])
-        dragHost.splice(dragHost.indexOf(drag), 1)
-      }
-      this.$set(node, 'expanded', this.dragAfterExpanded)
-      this.$emit('drag-node-end', {dragNode: drag, targetNode: node})
-    },
-    /* @method drag node
-     * @param node draged node
-     * @param ev  $event
-    */
-    drag (node, ev) {
-      let guid = this.guid()
-      this.setDragNode(guid, node)
-      ev.dataTransfer.setData('guid', guid)
-    },
-    /* @method dragover node
-     * @param ev  $event
-    */
-    dragover (ev) {
-      ev.preventDefault()
-      ev.stopPropagation()
-    },
-    /*
-    * @method dynamically add an 'parent' attribute for every node
-    */
-    initHandle () {
-      for (let node of this.data) {
-        this.$set(node, 'parent', this.parent)
-      }
-    },
-    /* @method expand or close node
-     * @param node current node
-    */
-    expandNode (node) {
-      this.$set(node, 'expanded', !node.expanded)
-      // this.$emit('node-expanded', node)
-      if (node.async && !node.children) {
-        this.$emit('async-load-nodes', node)
-      }
-    },
-    /* @event passing the async-load-nodes event to the parent component
-     * @param node clicked node
-     */
-    asyncLoadNodes (node) {
-      if (node.async && !node.children) {
-        this.$emit('async-load-nodes', node)
-      }
-    },
-
+    // 通过依赖注入共享的方法
     /* @method Determine whether it is a leaf node
      * @param node current node
     */
     isLeaf (node) {
-      return !(node.children && node.children.length) && node.parent
+      return !(node.children && node.children.length)
     },
+    childCheckedHandle(node, checked, halfcheck = false){
+      const {children} = node
+      if (children && children.length) {
+        children.forEach(child => {
+          this.$set(child, 'checked', checked)
+          if (halfcheck) {
+            this.$set(child, 'halfcheck', false)
+          }
+          this.childCheckedHandle(child, checked, halfcheck)
+        })
+      }
+    },
+    parentCheckedHandle (parentNode, checked, halfcheck = false) {
+      if (!parentNode) return false
+      let [someBortherNodeChecked, allBortherNodeChecked] = [checked, checked]
+      const childNodes = parentNode.children
+      if (checked) {
+        allBortherNodeChecked = childNodes.every(child => child.checked && !child.halfcheck)
+      } else {
+        someBortherNodeChecked = childNodes.some(child => child.checked)
+      }
+      if (halfcheck) {
+        // all / some / none
+        const nodeHalfcheck = checked ? !allBortherNodeChecked : someBortherNodeChecked
+        const {halfcheck: oldHalfCheck = false} = parentNode
+        if(oldHalfCheck !== nodeHalfcheck) {
+          this.$set(parentNode, 'halfcheck', nodeHalfcheck)
+        } else if(nodeHalfcheck) {
+          return false
+        }
+        const parentChecked = checked || nodeHalfcheck
+        this.$set(parentNode, 'checked', parentChecked)
+      } else {
+        this.$set(parentNode, 'checked', allBortherNodeChecked)
+      }
+      return true
+    },
+    emitEventToParent (eventName, ...args) {
+      if (!eventName) return
+      // 为了让接口更清晰
+      switch (eventName) {
+        case 'node-mouse-over': // 无法使用,不清楚加在哪里
+        case 'node-check':
+        case 'drag-node-end':
+        case 'delNode':
+        case 'node-click':
+        case 'node-select': // 和 'node-click'一样,为了更好的语义化
+        case 'async-load-nodes':
+          this.$emit(eventName, ...args)
+          break
+        default:
+          throw new ReferenceError(`the event of ${eventName} is not effective`)
+      }
+    },
+    // 设置node属性
+    setAttr (node, attr, val = true) {
+      const {[attr]: defVal = this._getDefVal(attr)} = node
+      if (defVal !== val) {
+        this.$set(node, attr, val)
+      }
+    },
+    setAttrs (node, attrs = [], val = true) {
+      const setAttr = this.setAttr
+      attrs.forEach(attr => setAttr(node, attr, val))
+    },
+    // 对外暴露的方法,通过ref访问
+
+    /*
+     *@method change the node selected  method
+     *@param node current node
+     */
+    nodeSelected (node) {
+      const isMultiple = this.multiple
+      const selected = !node.selected
+      if (isMultiple) {
+        this.$set(node, 'checked', selected)
+      } else {
+        if (selected) {
+          this.data.forEach(allNode => this.setAttr(allNode, 'selected', false))
+        }
+      }
+      this.$set(node, 'selected', selected) // 只对当前的selected属性有效
+      this.childCheckedHandle(node, selected, this.halfcheck)
+      this.emitEventToParent('node-click', node, selected)
+      this.emitEventToParent('node-select', node, selected)
+    },
+
     /* @method adding child node
      * @param node parent node
      * @param newnode  new node
@@ -239,26 +155,32 @@ export default {
     addNode (parent, newNode) {
       let addnode = null
       this.$set(parent, 'expanded', true)
-      if (typeof newNode === 'undefined') {
+      const newNodeType = typeof newNode
+      if (newNodeType === 'undefined') {
         throw new ReferenceError('newNode is required but undefined')
-      }
-      if (typeof newNode === 'string') {
+      } else if (newNodeType === 'string') {
         addnode = { title: newNode }
+      } else if (newNodeType === 'object') {
+        if (!newNode.hasOwnProperty('title')) {
+          throw new ReferenceError('the title property is missed')
+        } else {
+          addnode = newNode
+        }
+      } else {
+        throw new ReferenceError(`newNode type error, not allowed ${newNodeType}`)
       }
-      if (typeof newNode === 'object' && !newNode.hasOwnProperty('title')) {
-        throw new ReferenceError('the title property is missed')
-      }
-      if (typeof newNode === 'object' && newNode.hasOwnProperty('title')) {
-        addnode = newNode
-      }
+      const {halfcheck, checked} = parent
+      addnode = Object.assign({
+        checked: !halfcheck && checked
+      }, addnode)
       if (this.isLeaf(parent)) {
         this.$set(parent, 'children', [])
         parent.children.push(addnode)
       } else {
         parent.children.push(addnode)
       }
-      this.$emit('addNode', { parentNode: parent, newNode: newNode })
     },
+
     /* @method adding childlren nodes
      * @param node parent node
      * @param newnode  new node
@@ -268,82 +190,23 @@ export default {
         this.addNode(node, n)
       }
     },
-    /* @event passing the node-click event to the parent component
-     * @param node clicked node
-     */
-    nodeClick (node) {
-      this.$emit('node-click', node)
-    },
 
-    /* @event passing the node-check event to the parent component
-     * @param node clicked node
-     */
-    nodeCheck (node, checked) {
-      this.$emit('node-check', node, checked)
-    },
-     /* @event passing the nodeChecked event to the parent component
-     * @param node check status change node
-     */
-    nodeCheckStatusChange (node, checked) {
-      this.$emit('dropTreeNodeChecked', node, checked)
-    },
-    /* @event passing the node-mouse-over event to the parent component
-     * @param node overed node
-     */
-    nodeMouseOver (node) {
-      this.$emit('node-mouse-over', node)
-    },
-    /* @event passing the drag-node-end event to the parent component
-     * @param node clicked node
-     */
-    dragNodeEnd (event) {
-      this.$emit('drag-node-end', event)
-    },
     /* @method delete a node
      * @param  parent parent node
      * @param  node current node
      */
-    delNode (parent, node) {
+    delNode (node, parent, index) {
       if (parent === null || typeof parent === 'undefined') {
         if (this.canDeleteRoot) {
-          this.data.splice(0, 1)
+          this.data.splice(index, 1)
         } else {
           throw new ReferenceError('the root element can\'t deleted!')
         }
       } else {
-        parent.children.splice(parent.children.indexOf(node), 1)
+        parent.children.splice(index, 1)
       }
-      this.$emit('delNode', { parentNode: parent, delNode: node })
-    },
-    /*
-     *@method change the check box status method
-     *@param node current node
-     *@param $event event object
-     */
-    changeNodeCheckStatus (node, $event) {
-      this.$emit('node-check', node, $event.target.checked)
-      this.$emit('node-single-check', node, $event.target.checked)
-    },
-
-      /*
-     *@method change the node selected  method
-     *@param node current node
-     */
-    nodeSelected (node) {
-      const getRoot = (el) => {
-        if (el.$parent.$el.nodeName === 'UL') {
-          el = el.$parent
-          return getRoot(el)
-        } return el
-      }
-      let root = getRoot(this)
-      if (!this.multiple) {
-        for (let rn of root.data || []) this.$set(rn, 'selected', false)
-        this.$emit('cancelSelected', root)
-      }
-      if (this.multiple) this.$set(node, 'checked', !node.selected)
-      this.$set(node, 'selected', !node.selected)
-      this.$emit('node-click', node)
+      // this.$emit('delNode', { parentNode: parent, delNode: node })
+      this.emitEventToParent('delNode', { parentNode: parent, delNode: node })
     },
 
     /*
@@ -351,24 +214,54 @@ export default {
      *@param data nodes
      *@param opt the options that filter the node
      */
-    getNodes (opt, data, isOriginal) {
-      data = data || this.data
-      let res = []
-      for (const node of data) {
-        for (const [key, value] of Object.entries(opt)) {
-          if (node[key] === value) {
-            if (isOriginal) {
-              res.push(node)
-            } else {
-              let n = Object.assign({}, node)
-              delete n['parent']
-              delete n['children']
-              res.push(n)
-            }
-          }
+    getNodes (opt = {}, data, isOriginal) {
+      const optArr = Object.entries(opt)
+      const hasOpt = optArr.length > 0
+      return this._getNodes(optArr, hasOpt, data, isOriginal)
+    },
+
+    // opt: Array
+    _getNodes (opt, hasOpt, data = this.data, isOriginal = false, res = []) {
+      // let res = []
+      const _pushNode = (arr, node, isOrg) => {
+        if (isOrg) {
+          arr.push(node)
+        } else {
+          const n = Object.assign({}, node)
+          Reflect.deleteProperty(n, 'hasExpended')
+          Reflect.deleteProperty(n, 'children')
+          arr.push(n)
         }
-        if (node.children && node.children.length) {
-          res = res.concat(this.getNodes(opt, node.children, isOriginal))
+      }
+      const pushNode = (node) => _pushNode(res, node, isOriginal)
+      // is a node matched the condition
+      const getDefVal = this._getDefVal
+      const _isMatchedNode = (node, condition) => {
+        let matched = true
+        for(let [attr, val] of condition) {
+          if (node.hasOwnProperty(attr)) {
+            const {[attr]: nodeVal = getDefVal(attr)} = node
+            matched = nodeVal === val
+          } else {
+            matched = false
+          }
+          if (!matched) break
+        }
+        return matched
+      }
+      const isMatchedNode = (node) => _isMatchedNode(node, opt)
+
+      for (const node of data) {
+        if (hasOpt) {
+          if(isMatchedNode(node)) {
+            pushNode(node)
+          }
+        } else {
+          pushNode(node)
+        }
+        const {children} = node
+        if (children && children.length) {
+          this._getNodes(opt, hasOpt, children, isOriginal, res)
         }
       }
       return res
@@ -387,249 +280,112 @@ export default {
     getCheckedNodes (isOriginal) {
       return this.getNodes({checked: true}, this.data, isOriginal)
     },
-
-      /*
+    /*
      *@method filter nessary nodes methods
      *@param filter string or predicate expression
      *@param data current nodes
      */
-    searchNodes (filter, data) {
-      data = data || this.data
-      for (const node of data) {
-        let searched = filter ? (typeof filter === 'function' ? filter(node) : node.title.indexOf(filter) > -1) : false
-        this.$set(node, 'searched', searched)
-        this.$set(node, 'visible', false)
-        this.$emit('toggleshow', node, filter ? searched : true)
-        if (node.children && node.children.length) {
-          if (searched) this.$set(node, 'expanded', true)
-          this.searchNodes(filter, node.children)
+    searchNodes (filter, data = this.data) {
+      if (filter == null || (typeof filter === 'string' && filter.trim() === '')) {
+        data.forEach(node => this._modifyAllNode(node))
+        return
+      }
+      const filterFn = typeof filter === 'function' ? filter : ({title = ''} = {}) => title.includes(filter)
+      const searchRes = Array.from({length: data.length},() => [])
+      data.forEach((node, index) => {
+        const matched = searchRes[index]
+        this._searchNodes (filterFn, node, index, matched)
+        if (matched.length > 0) {
+          matched.sort((x, y) => x.length - y.length) // 根据长度升序
+          const attrs = ['visible', 'expanded']
+          if (matched.some(x => x.length === 1)) {
+            attrs.push('searched')
+          }
+          this.setAttrs(node, attrs)
+          this._showSearchNodes(node, matched.map(x => x.slice(1)).filter(x => x.length))
+        } else {
+          this.setAttr(node, 'visible', false)
         }
+      })
+    },
+    _searchNodes (filterFn, node, index, matched, path = []) {
+      const isMatched = filterFn(node)
+      path = [...path, index]
+      if (isMatched) {
+        // 如果titile的内容是html,html内容也能被搜索到
+        matched.push(path)
+      }
+      // this.$set(node, 'searched', searched)
+      // this.$set(node, 'visible', false)
+      const {children} = node
+      if (children && children.length) {
+        // if (searched) this.$set(node, 'expanded', true) // 展开
+        for(let [i, node] of children.entries()) {
+          this._searchNodes(filterFn, node, i, matched, path)
+        }
+      }
+    },
+    _getDefVal (attr) {
+      return this.$defVal[attr] || false
+    },
+    _dedupe (arr) {
+      return [...new Set(arr)]
+    },
+    _showSearchNodes (node, matched) {
+      matched = matched.map(path => [...path])
+      const setAttrs = this.setAttrs
+      const dedupe = this._dedupe
+      let isSame = true
+      while (isSame && matched.length > 0) {
+        const {children} = node
+        // 将长度为1的匹配路径设置为'searched'
+        const newMatched = []
+        const searchedPaths = matched.filter(x => {
+          const len = x.length
+          if ( len > 1) {
+            newMatched.push(x)
+          }
+          return len === 1
+        })
+        searchedPaths.forEach(path => {
+          setAttrs(children[path[0]], ['visible', 'expanded', 'searched'])
+        })
+        const samePaths = dedupe(matched.map(item => item[0]))
+        const len = samePaths.length
+        if (len !== children.length) {
+          children.forEach((childNode, i) => {
+            if (!samePaths.includes(i)) {
+              this.setAttr(childNode, 'visible', false)
+            }
+          })
+        }
+        if(newMatched.length > 0) {
+          if(len === 1) {
+            matched = newMatched.map(x => x.slice(1))
+            node = children[samePaths[0]]
+            setAttrs(node, ['visible', 'expanded'])
+          } else {
+            samePaths.forEach( pathIndex => {
+              let childNode = children[pathIndex]
+              setAttrs(childNode, ['visible', 'expanded'])
+              this._showSearchNodes(childNode, matched.filter(x => x[0] === pathIndex && x.length > 1).map(x => x.slice(1)))
+            })
+            isSame = false
+          }
+        } else {
+          isSame = false
+        }
+      }
+    },
+    _modifyAllNode (node, attrsObj = {'visible': true, 'searched': false}) {
+      for (let [key, val] of Object.entries(attrsObj)) {
+        this.setAttr(node, key, val)
+      }
+      const {children} = node
+      if (children && children.length > 0) {
+        children.forEach(node => this._modifyAllNode(node, attrsObj))
       }
     }
   }
 }
 </script>
-<style>
-.halo-tree li span:hover {
-  background-color: transparent;
-  /* padding: 6px 0; */
-}
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .2s
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active in below version 2.1.8 */ {
-  opacity: 0
-}
-.halo-tree .expand-enter-active {
-    transition:all 3s ease;
-    height:50px;
-    overflow:hidden;
-}
-.halo-tree .expand-leave-active {
-    transition:all 3s ease;
-    height:0px;
-    overflow:hidden;
-}
-.halo-tree .expand-enter, .halo-tree .expand-leave {
-    height:0;
-    opacity:0;
-}
-.halo-tree {
-    font-size:14px;
-    -webkit-transition: .3s height ease-in-out,.3s padding-top ease-in-out,.3s padding-bottom ease-in-out;
-            transition: .3s height ease-in-out,.3s padding-top ease-in-out,.3s padding-bottom ease-in-out;
-
-}
-.halo-tree ul {
-  box-sizing: border-box;
-}
-.halo-tree ul,.halo-tree li {
-    list-style-type:none;
-    text-align:left;
-}
-.halo-tree .inputCheck {
-    display:inline-block;
-    position:relative;
-    width:14px;
-    height:14px;
-    border:1px solid #888888;
-    border-radius:2px;
-    top:4px;
-    text-align:center;
-    font-size:14px;
-    line-height:14px;
-}
-.halo-tree .inputCheck.notAllNodes:before {
-    content:"\2713";
-    display:block;
-    position:absolute;
-    width:100%;
-    height:100%;
-    background-color:#888888;
-    z-index:1;
-    color:#ffffff;
-}
-.halo-tree .inputCheck.box-checked:after {
-    content:"\2713";
-    display:block;
-    position:absolute;
-    z-index:1;
-    width:100%;
-    text-align:center;
-}
-.halo-tree .box-halfchecked {
-    background-color: #888888;
-}
-.halo-tree .box-halfchecked:after {
-    content:"\2713";
-    display:block;
-    position:absolute;
-    z-index:1;
-    width:100%;
-    text-align:center;
-    color: #FFFFFF;
-}
-.halo-tree .check{
-    display:block;
-    position:absolute;
-    font-size:14px;
-    width:16px;
-    height:16px;
-    left:-5px;
-    top:-4px;
-    border:1px solid #000000;
-    opacity:0;
-    cursor:pointer;
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-    filter:alpha(opacity=0);
-    z-index:2;
-}
-.halo-tree .chkDisabled {
-  background-color: #F5F5F5;
-  opacity: 1;
-  cursor: not-allowed;
-}
-.halo-tree li {
-    margin: 0;
-    padding: 5px 5px 5px 15px;
-    position: relative;
-    list-style: none;
-}
-.halo-tree li:after,
-.halo-tree li:before {
-    content: '';
-    left: -8px;
-    position: absolute;
-    right: auto;
-    border-width: 1px
-}
-.halo-tree li:before {
-    border-left: 1px dashed #999;
-    bottom: 50px;
-    height: 100%;
-    top: -8px;
-    width: 1px;
-}
-.halo-tree li:after {
-    border-top: 1px dashed #999;
-    height: 20px;
-    top: 17px;
-    width: 28px
-}
-.halo-tree li:last-child::before {
-    height: 26px
-}
-.halo-tree>li.first-node:before {
-    top: 17px;
-}
-.halo-tree>li.second-node:before {
-    top: 4px;
-}
-.halo-tree>li.first-node.only-node::before {
-    border-left: none;
-}
-.halo-tree>li.only-node:after {
-    border-top: none;
-}
-.halo-tree > ul {
-    padding-left: 0
-}
-.halo-tree ul {
-    padding-left: 17px;
-    padding-top: 10px;
-}
-.halo-tree .tree-open,
-.halo-tree .tree-close {
-    display: inline-block;
-    width:14px;
-    height:14px;
-    text-align: center;
-    line-height: 13px;
-    border: 1px solid #888888;
-    border-radius: 2px;
-    background: #FFFFFF;
-}
-.halo-tree .tree-open {
-    line-height: 13px;
-}
-.halo-tree .tree-close:after {
-    content: "+";
-    font-style: normal;
-}
-.halo-tree .tree-open:after {
-    content: "\2013";
-    font-style: normal;
-}
-.halo-tree .tree-node-el {
-    background-color: #FFFFFF;
-    padding-left: 2px;
-    position: relative;
-    z-index: 3;
-}
-.halo-tree li.leaf {
-    padding-left: 15px;
-}
-.halo-tree li.leaf:after {
-    content: '';
-    left: -7px;
-    position: absolute;
-    right: auto;
-    border-width: 1px;
-    border-top: 1px dashed #999;
-    height: 20px;
-    top: 17px;
-    width: 25px;
-}
-/*Dynamic style part*/
-.halo-tree-search-box {
-    height: 18px;
-    line-height: 18px;
-    outline: none;
-    border: 1px solid #888888;
-    border-radius: 3px;
-}
-.halo-tree-search-box:focus {
-    border: 1px solid rgb(16, 142, 233);
-    -webkit-box-shadow: 0 2px 2px rgba(16, 142, 233, .2);
-    box-shadow: 0 2px 2px rgba(16, 142, 233,.2);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-}
-.halo-tree .node-title {
-    padding: 3px 3px;
-    border-radius: 3px;
-    cursor: pointer;
-    margin: 0 2px;
-}
-.halo-tree .node-title:hover{
-  background-color: #ccc;
-}
-.halo-tree .node-selected {
-    border: 1px solid #DDDDDD;
-    background-color: #DDDDDD;
-}
-.halo-tree .node-title.node-searched {
-    border: 1px solid #FF8247;
-}
-</style>

@@ -23,7 +23,6 @@ var Transition = {
       el.style.paddingTop = el.dataset.oldPaddingTop
       el.style.paddingBottom = el.dataset.oldPaddingBottom
     }
-
     el.style.overflow = 'hidden'
   },
   'after-enter'  (el) {
