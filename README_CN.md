@@ -59,6 +59,7 @@ Vue.use (VSelectTree)
 |loading | 开启加载效果 | Boolean | Y | false |
 |nocheck | 多复选框开启时指定某一节点不渲染复选框 | Boolean | Y | false |
 |chkDisabled | 禁用某一结点的复选框的功能 | Boolean | Y | false |
+|hasExpended | 某一结点是否已经展开过 | Boolean | Y | false |
 
 ###  Tree 属性
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
@@ -71,23 +72,30 @@ Vue.use (VSelectTree)
 |draggable | 是否支持拖拽 | Boolean | Y | false |
 |dragAfterExpanded | 拖拽后展开   | Boolean | Y | true |
 |canDeleteRoot |  是否可以删除根节点 | Boolean | Y | false |
+|maxLevel |  最大层级数 | Number | Y | 1024 |
 
 ### 方法
 | 方法名      | 说明    | 参数      |
 |---------- |-------- |---------- |
 | getSelectedNodes  | 返回目前被选中的节点所组成的数组 | - |
-| getCheckedNodes  |返回目前复选框选中的节点组成的数组 | - |
-| getNodes | options: 可以包含一些过滤属性对象如{selected: true}，如果为空，请使用 {} |options|
-| searchNodes | filter:function/string (如果是函数则最终会返回一个boolean类型) |node: Object|
+| getCheckedNodes  | 返回目前复选框选中的节点组成的数组 | - |
+| getNodes | options: 可以包含一些过滤属性对象如{selected: true}，如果为空，请使用 {}; data: 数组,内容为[node,...],默认为传入的data数据;isOriginal:获取的数据是否保持原样,默认为false,会去掉`children``hasExpended`属性|options: Object, data: Array,isOriginal: Boolean|
+| searchNodes | filter:function/string (如果是函数则最终会返回一个boolean类型);data:默认为this.data |filter:Function || String, data: Array|
+| nodeSelected | 选中节点方法 |node: Object|
+| addNode | 增加节点 |parentNode: Object(不能为空), node: Object|
+| addNodes | 增加多个节点 |parentNode: Object(不能为空), nodes: Array|
+|  |  |node: Object|
 
 ### 事件
 | 事件名      | 说明    | 参数      |
 |---------- |-------- |---------- |
 | node-click  | 单击节点触发的事件 | node: Object |
+| node-select  | 选择节点后触发的事件(和node-click是一样的) | node: Object, selected: boolean|
 | node-check | click the checkbox to trigger the event | node: Object, checked: boolean |
-| node-mouse-over | 鼠标滑过节点触发事件 | node: Object |
+| node-mouse-over | 鼠标滑过节点触发事件 | node: Object, index: Number, parentNode: node |
 | async-load-nodes | 用于实现异步加载 | node: Object |
 | drag-node-end | 节点拖拽结束后触发事件 | {dragNode: Object, targetNode: Object} |
+| delNode | 删除节点后触发事件 | { parentNode: Object || null, delNode: Object } |
 
 ### 如何使用
 
@@ -118,14 +126,16 @@ Vue.use(VTree)
 
 `Html`
 ```
-  <v-tree ref='tree' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'/>
-     <input type="text" v-model="searchword" />
-    <button type="button" @click="search">GO</button>
+  <div class="tree">
+    <input class="tree-search-input" type="text" v-model.lazy="searchword" placeholder="search..."/>
+    <button class=" tree-search-btn" type="button" @click="search">GO</button>
+    <v-tree ref='tree' :data='treeData' :multiple="true" :tpl='tpl' :halfcheck='true' />
+  </div>
 ```
 `JS`
 ```
 export default {
-  name: 'HelloWorld',
+  name: 'DemoTree',
   data () {
     return {
       lang: 'zh',
@@ -155,28 +165,27 @@ export default {
     }
   },
   methods: {
-    tpl (node, ctx) {
+    // tpl (node, ctx, parent, index, props) {
+    tpl (...args) {
+      let {0: node, 2: parent, 3: index} = args
       let titleClass = node.selected ? 'node-title node-selected' : 'node-title'
       if (node.searched) titleClass += ' node-searched'
       return <span>
-        <button style='color:blue; background-color:pink' onClick={() => this.$refs.tree.addNode(node, {title: '同步节点'})}>+</button>
-      <span class={titleClass} domPropsInnerHTML={node.title} onClick={() => {
-        ctx.parent.nodeSelected(ctx.props.node)
-        console.log(ctx.parent.getSelectedNodes())
-      }}></span>
-      <button style='color:green; background-color:pink' onClick={() => this.asyncLoad(node)}>异步加载</button>
-      <button style='color:red; background-color:pink' onClick={() => this.$refs.tree.delNode(node.parent, node)}>删除</button>
+        <button class="treebtn1" onClick={() => this.$refs.tree.addNode(node, {title: 'sync node'})}>+</button>
+         <span class={titleClass} domPropsInnerHTML={node.title} onClick={() => {
+           this.$refs.tree.nodeSelected(node)
+         }}></span>
+      <button class="treebtn2" onClick={() => this.asyncLoad(node)}>async</button>
+      <button class="treebtn3" onClick={() => this.$refs.tree.delNode(node, parent, index)}>delete</button>
       </span>
     },
     async asyncLoad (node) {
-      // method1:
-      // this.$refs.tree.addNodes(node, await this.$api.demo.getChild()
-      // method2:
       this.$set(node, 'loading', true)
-      let data = await this.$api.demo.getChild())
-      this.$set(node, 'children', data)
+      let pro = new Promise(resolve => {
+        setTimeout(resolve, 2000, ['async node1', 'async node2'])
+      })
+      this.$refs.tree1.addNodes(node, await pro)
       this.$set(node, 'loading', false)
-      // method3: use concat 
     },
     search () {
       this.$refs.tree.searchNodes(this.searchword)
