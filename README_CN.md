@@ -84,7 +84,6 @@ Vue.use (VSelectTree)
 | nodeSelected | 选中节点方法 |node: Object|
 | addNode | 增加节点 |parentNode: Object(不能为空), node: Object|
 | addNodes | 增加多个节点 |parentNode: Object(不能为空), nodes: Array|
-|  |  |node: Object|
 
 ### 事件
 | 事件名      | 说明    | 参数      |

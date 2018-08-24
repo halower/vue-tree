@@ -59,6 +59,7 @@ Vue.use (VSelectTree)
 |nocheck | specifies that a node does not render check box when multiple checkboxes are open | Boolean | Y | false |
 |loading | open load effect | Boolean | Y | false |
 |chkDisabled | disable the function of a check box for a node | Boolean | Y | false |
+|hasExpended | node has expended| Boolean | Y | false |
 
 ### Tree Property
 | Parameters | Description | Type | Optional values | default value |
@@ -71,6 +72,7 @@ Vue.use (VSelectTree)
 |draggable | support drag? | Boolean | Y | false |
 |dragafterexpanded | ro expand after dragging | Boolean | Y | true |
 |canDeleteRoot |  can delete the root node  | Boolean | Y | false |
+|maxLevel |  node max level | Number | Y | 1024 |
 ### method
 | Method name | Description | Parameters |
 |---------- |-------- |---------- |
@@ -78,15 +80,19 @@ Vue.use (VSelectTree)
 | getCheckedNodes | returns the array of nodes selected by the current check box | - |
 | getNodes |the options objects such as {selected:true}, if empty, use {} | options|
 | searchNodes | filter:function/string (if it is a function, it will eventually return a Boolean type) |node|
+| nodeSelected | to select a node |node: Object|
+| addNode | add a node |parentNode: Object, node: Object|
+| addNodes | add some nodes |parentNode: Object, nodes: Array|
 
 ### events
 | Event name | Description | Parameters |
 |---------- |-------- |---------- |
 | node-click | click the node to trigger the event | node: Object |
 | node-check | click the checkbox to trigger the event | node: Object, checked: boolean |
-| node-mouse-over | over the node to trigger the event | node: Object |
+| node-mouse-over | over the node to trigger the event | node: Object, index: Number, parentNode: node |
 | async-load-nodes | event used to implement asynchronous loading | node: Object |
 | drag-node-end | drag node end trigger the event | {dragNode: Object, targetNode: Object} |
+| delNode | after delete a node | { parentNode: Object || null, delNode: Object } |
 ### How to use
 
 Step1: install plugins
@@ -115,26 +121,14 @@ Vue.use(VTree)
 
 `Html`
 ```
-  <v-tree ref='tree' :data='treeData' :multiple='true' :tpl='tpl' :halfcheck='true'/>
-     <input type="text" v-model="searchword" />
-    <button type="button" @click="search">GO</button>
+  <div class="tree">
+    <input class="tree-search-input" type="text" v-model.lazy="searchword" placeholder="search..."/>
+    <button class=" tree-search-btn" type="button" @click="search">GO</button>
+    <v-tree ref='tree' :data='treeData' :multiple="true" :tpl='tpl' :halfcheck='true' />
+  </div>
 ```
 `JS`
 ```
-<template>
- <div>
-    <div class="tree-block">
-      <input class="tree-search-input" type="text" v-model="searchword" placeholder="search..."/>
-      <button class=" tree-search-btn" type="button" @click="search">search</button>
-      <v-tree ref='tree1' :canDeleteRoot="true" :data='treeData1' :draggable='true' :tpl='tpl' :halfcheck='true' :multiple="true"/>
-    </div>
-   <div  class="tree-block"><v-tree ref="tree2" :data='treeData2' :multiple='false' @node-check='nodechekced' @async-load-nodes='asyncLoad2'/></div>
-    <div  class="tree-block"> <v-select-tree :data='treeData3' v-model='initSelected' :multiple="true"/></div>
-   
- </div>
-</template>
-
-<script>
 export default {
   name: 'HelloWorld',
   data () {
@@ -187,105 +181,34 @@ export default {
     }
   },
   methods: {
-    nodechekced (node, v) {
-      alert('that a node-check envent ...' + node.title + v)
-    },
-    tpl (node, ctx) {
+    // tpl (node, ctx, parent, index, props) {
+    tpl (...args) {
+      let {0: node, 2: parent, 3: index} = args
       let titleClass = node.selected ? 'node-title node-selected' : 'node-title'
       if (node.searched) titleClass += ' node-searched'
       return <span>
-        <button class="treebtn1" onClick={() => this.$refs.tree1.addNode(node, {title: 'sync node'})}>+</button>
-
+        <button class="treebtn1" onClick={() => this.$refs.tree.addNode(node, {title: 'sync node'})}>+</button>
          <span class={titleClass} domPropsInnerHTML={node.title} onClick={() => {
-           this.$refs.tree1.nodeSelected(node)
+           this.$refs.tree.nodeSelected(node)
          }}></span>
-      <button class="treebtn2" onClick={() => this.asyncLoad1(node)}>async</button>
-      <button class="treebtn3" onClick={() => this.$refs.tree1.delNode(node.parent, node)}>delete</button>
+      <button class="treebtn2" onClick={() => this.asyncLoad(node)}>async</button>
+      <button class="treebtn3" onClick={() => this.$refs.tree.delNode(node, parent, index)}>delete</button>
       </span>
     },
-    async asyncLoad1 (node) {
+    async asyncLoad (node) {
       this.$set(node, 'loading', true)
-      let pro = new Promise((resolve, reject) => {
+      let pro = new Promise(resolve => {
         setTimeout(resolve, 2000, ['async node1', 'async node2'])
       })
       this.$refs.tree1.addNodes(node, await pro)
       this.$set(node, 'loading', false)
     },
-    async asyncLoad2 (node) {
-      this.$set(node, 'loading', true)
-      let pro = await new Promise((resolve, reject) => {
-        setTimeout(resolve, 2000, [{title: 'test1', async: true}, {title: 'test2', async: true}, {title: 'test3'}])
-      })
-
-      pro.forEach((el) => {
-        if (!node.hasOwnProperty('children')) {
-          this.$set(node, 'children', [])
-        }
-        node.children.push(el)
-      })
-      this.$set(node, 'loading', false)
-    },
     search () {
-      this.$refs.tree1.searchNodes(this.searchword)
+      this.$refs.tree.searchNodes(this.searchword)
     }
   }
 }
 </script>
-<style>
-.tree-block{
-  float: left;
-  width: 33%;
-  padding: 10px;
-  box-sizing: border-box;
-  border: 1px dotted #ccccdd;
-  overflow: auto;
-  height: 800px;
-}
-.treebtn1{
-  background-color: transparent;
-  border: 1px solid #ccc;
-  padding: 1px 3px;
-  border-radius: 5px;
-  margin-right: 5px;
-  color: rgb(148, 147, 147);
-
-}
-.treebtn2{
-   background-color: transparent;
-   border: 1px solid #ccc;
-   padding: 3px 5px;
-   border-radius: 5px;
-   margin-left: 5px;
-  color: rgb(97, 97, 97);
-
-}
-.treebtn3{
- background-color: transparent;
- border: 1px solid #ccc;
- padding: 3px 5px;
- border-radius: 5px;
- margin-left: 5px;
-  color: rgb(63, 63, 63);
-
-}
-.tree-search-input{
-  width: 70%;
-  padding: 6px 8px;
-  outline: none;
-  border-radius: 6px;
-  border:1px solid #ccc;
-}
-.tree-search-btn{
-width: 25%;
-padding: 6px 8px;
-outline: none;
-border-radius: 6px;
-background-color: rgb(218, 218, 218);
-border:1px solid rgb(226, 225, 225);
-color: rgb(117, 117, 117);
-}
-</style>
-
 ```
 ### 如果你觉得这个项目帮助到了你，你可以帮作者买一杯果汁表示鼓励
 <img src="https://github.com/halower/vue2-tree/blob/master/src/assets/hello.png" width=256 height=256 />
