@@ -14,7 +14,7 @@
           v-if='multiple' type="checkbox" @change="changeNodeCheckStatus(item, $event)" :checked="item.checked"/>
       </span>
       <loading v-if="item.loading && item.expanded"/>
-      <Render :node="item" :parent='parent' :index='index' :tpl ='tpl'/>
+      <Render :node="item" :parent='parent' :index='index' :tpl ='tpl' :nodeMouseOver='nodeMouseOver'/>
     </div>
     <template v-if="showNextUl">
       <collapse-transition>
@@ -182,8 +182,8 @@ export default {
     /* @event passing the node-mouse-over event to the parent component
      * @param node overed node
      */
-    nodeMouseOver (node) { // 不知道放在那里触发(未处理)
-      this.emitEventToTree('node-mouse-over', node)
+    nodeMouseOver (node, index, parent) {
+      this.emitEventToTree('node-mouse-over', node, index, parent)
       // this.$emit('node-mouse-over', node)
     },
     /*

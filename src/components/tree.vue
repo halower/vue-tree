@@ -102,7 +102,7 @@ export default {
       if (!eventName) return
       // 为了让接口更清晰
       switch (eventName) {
-        case 'node-mouse-over': // 无法使用,不清楚加在哪里
+        case 'node-mouse-over':
         case 'node-check':
         case 'drag-node-end':
         case 'delNode':
@@ -153,6 +153,7 @@ export default {
      * @param newnode  new node
     */
     addNode (parent, newNode) {
+      if(!parent) return
       let addnode = null
       this.$set(parent, 'expanded', true)
       const newNodeType = typeof newNode
@@ -185,9 +186,10 @@ export default {
      * @param node parent node
      * @param newnode  new node
     */
-    addNodes (node, children) {
+    addNodes (parent, children) {
+      if(!parent) return
       for (let n of children) {
-        this.addNode(node, n)
+        this.addNode(parent, n)
       }
     },
 
