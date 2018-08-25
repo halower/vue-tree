@@ -1,7 +1,7 @@
 {
   "name": "vue-tree-halower",
   "description": "This tree and treeSelect component is based on the Vue.js 2.0",
-  "version": "1.6.1",
+  "version": "1.7.1",
   "author": "halower (youzisoft@qq.com)",
   "license": "MIT",
   "private": false,
