@@ -208,7 +208,7 @@ export default {
         parent.children.splice(index, 1)
       }
       // this.$emit('delNode', { parentNode: parent, delNode: node })
-      this.emitEventToParent('delNode', { parentNode: parent, delNode: node })
+      this.emitEventToParent('del-node', { parentNode: parent, delNode: node })
     },
 
     /*
