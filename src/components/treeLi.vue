@@ -45,7 +45,10 @@ export default {
   name: 'TreeLi',
   mixins: [mixins],
   components: {Render, Loading, CollapseTransition, 
-    TreeUl: () => import('./treeUl.vue') // 解决循环引用的问题
+    // TreeUl: () => import('./treeUl.vue') // 解决循环引用的问题
+  },
+  beforeCreate() {
+    this.$options.components.TreeUl = require('./treeUl.vue').default
   },
   props: {
     item: {
