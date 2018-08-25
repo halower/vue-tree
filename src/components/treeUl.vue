@@ -12,7 +12,7 @@
 </template>
 <script>
 import TreeLi from './treeLi'
-import './tree.css'
+// import './tree.css'
 import mixins from './mixins'
 export default {
   name: 'TreeUl',
