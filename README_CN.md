@@ -1,5 +1,5 @@
 [![npm](https://img.shields.io/npm/v/vue-tree-halower.svg )](https://www.npmjs.com/package/vue-tree-halower)
-[![npm](https://img.shields.io/npm/dm/vue-tree-halower.svg)](https://www.npmjs.com/package/vue-tree-halower)
+[![npm](https://img.shields.io/npm/dt/vue-tree-halower.svg)](https://www.npmjs.com/package/vue-tree-halower)
 [![GitHub stars](https://img.shields.io/github/stars/halower/vue-tree.svg?style=social&label=Stars&style=for-the-badge)](https://github.com/halower/vue-tree/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/halower/vue-tree.svg?style=social&label=Fork&style=for-the-badge)](https://github.com/halower/vue-tree/network)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
@@ -94,7 +94,7 @@ Vue.use (VSelectTree)
 | node-mouse-over | 鼠标滑过节点触发事件 | node: Object, index: Number, parentNode: node |
 | async-load-nodes | 用于实现异步加载 | node: Object |
 | drag-node-end | 节点拖拽结束后触发事件 | {dragNode: Object, targetNode: Object} |
-| delNode | 删除节点后触发事件 | { parentNode: Object || null, delNode: Object } |
+| del-node | 删除节点后触发事件 | { parentNode: Object || null, delNode: Object } |
 
 ### 如何使用
 
