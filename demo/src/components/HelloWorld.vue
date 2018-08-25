@@ -66,17 +66,18 @@ export default {
     nodechekced (node, v) {
       alert('that a node-check envent ...' + node.title + v)
     },
-    tpl (node, ctx) {
+    tpl (...args) {
+      // console.dir(args)
+      const {0: node, 2:parent} = args
       let titleClass = node.selected ? 'node-title node-selected' : 'node-title'
       if (node.searched) titleClass += ' node-searched'
       return <span>
         <button class="treebtn1" onClick={() => this.$refs.tree1.addNode(node, {title: 'sync node'})}>+</button>
-
          <span class={titleClass} domPropsInnerHTML={node.title} onClick={() => {
            this.$refs.tree1.nodeSelected(node)
          }}></span>
       <button class="treebtn2" onClick={() => this.asyncLoad1(node)}>async</button>
-      <button class="treebtn3" onClick={() => this.$refs.tree1.delNode(node.parent, node)}>delete</button>
+      <button class="treebtn3" onClick={() => this.$refs.tree1.delNode(parent, node)}>delete</button>
       </span>
     },
     async asyncLoad1 (node) {
