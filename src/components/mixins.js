@@ -6,9 +6,10 @@ function guid () {
   })
 }
 
-function setDragNode (guid, node) {
+function setDragNode (guid, node, parent) {
   window['treeDrag'] = {}
-  window['treeDrag'][guid] = node
+  // window['treeDrag'][guid] = node
+  window['treeDrag'][guid] = {node, parent}
 }
 
 function getDragNode (guid) {
