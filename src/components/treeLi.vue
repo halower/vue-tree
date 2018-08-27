@@ -125,7 +125,7 @@ export default {
     },
     showExpand () {
       const item = this.item
-      return !item.parent || this.hasChildren || item.async
+      return !this.parent || this.hasChildren || item.async
     },
     showNextUl () {
       return !this.isLeaf(this.item) && this.maxLevel > this.level && this.hasExpended
