@@ -105,7 +105,7 @@ export default {
         case 'node-mouse-over':
         case 'node-check':
         case 'drag-node-end':
-        case 'delNode':
+        case 'del-node':
         case 'node-click':
         case 'node-select': // 和 'node-click'一样,为了更好的语义化
         case 'async-load-nodes':
