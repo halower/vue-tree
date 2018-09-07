@@ -60,7 +60,7 @@ Vue.use (VSelectTree)
 |nocheck | 多复选框开启时指定某一节点不渲染复选框 | Boolean | Y | false |
 |chkDisabled | 禁用某一结点的复选框的功能 | Boolean | Y | false |
 |hasExpended | 某一结点是否已经展开过 | Boolean | Y | false |
-
+|parent | 获取父节点(当allowGetParentNode=true时,增加parent方法,若父节点不存在时,会返回null)) | Function | - | undefined |
 ###  Tree 属性
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
 |---------- |-------- |---------- |---------- |---------- |
@@ -73,6 +73,8 @@ Vue.use (VSelectTree)
 |dragAfterExpanded | 拖拽后展开   | Boolean | Y | true |
 |canDeleteRoot |  是否可以删除根节点 | Boolean | Y | false |
 |maxLevel |  最大层级数 | Number | Y | 1024 |
+|topMustExpand |  首层是否必须可展开 | Boolean | Y | true |
+|allowGetParentNode |  是否允许节点获取父节点 | Boolean | Y | false |
 
 ### 方法
 | 方法名      | 说明    | 参数      |

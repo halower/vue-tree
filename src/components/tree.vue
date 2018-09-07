@@ -37,6 +37,14 @@ export default {
     maxLevel: { // 最大层级
       type: Number,
       default: 1024
+    },
+    topMustExpand: { // 首层必须可以展开
+      type: Boolean,
+      default: true
+    },
+    allowGetParentNode: { // 允许获取父节点
+      type: Boolean,
+      default: false
     }
   },
   beforeCreate () {
@@ -128,6 +136,15 @@ export default {
     },
     // 对外暴露的方法,通过ref访问
 
+    // set node attr
+    setNodeAttr (node, attr, val = true) {
+      if(!node || !attr) return
+      if(node.hasOwnProperty(attr)) {
+        this.setAttr(node, attr, val)
+      } else {
+        this.$set(node, attr, val)
+      }
+    },
     /*
      *@method change the node selected  method
      *@param node current node

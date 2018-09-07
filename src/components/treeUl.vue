@@ -36,6 +36,10 @@ export default {
     level: {
       type: Number,
       default: 0
+    },
+    allowGetParentNode: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -101,6 +105,18 @@ export default {
      */
     dragNodeEnd (obj = {}) {
       this.emitEventToTree('drag-node-end', obj)
+    }
+  },
+  created () {
+    if (this.allowGetParentNode === true) {
+      const data = this.data
+      const hasParent = data[0] && typeof data[0].parent === 'function'
+      if (!hasParent) {
+        const parent = this.parent
+        this.data.forEach(item => {
+          item.parent = () => parent
+        })
+      }
     }
   }
 }
