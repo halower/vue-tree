@@ -31,6 +31,8 @@
           :multiple="multiple"
           :level='level'
           :maxLevel='maxLevel'
+          :topMustExpand='topMustExpand'
+          :allowGetParentNode='allowGetParentNode'
         />
       </collapse-transition>
     </template>
@@ -90,7 +92,9 @@ export default {
     },
     tpl: Function,
     maxLevel: Number,
-    level: Number
+    level: Number,
+    topMustExpand: Boolean,
+    allowGetParentNode: Boolean,
   },
   inject:['isLeaf', 'childChecked', 'parentChecked', 'nodeSelected', 'emitEventToTree', 'setAttr'],
   computed: {
@@ -125,7 +129,8 @@ export default {
     },
     showExpand () {
       const item = this.item
-      return !this.parent || this.hasChildren || item.async
+      const isShow = this.topMustExpand || !!this.parent
+      return isShow || this.hasChildren || item.async
     },
     showNextUl () {
       return !this.isLeaf(this.item) && this.maxLevel > this.level && this.hasExpended
