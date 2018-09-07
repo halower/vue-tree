@@ -129,7 +129,8 @@ export default {
     },
     showExpand () {
       const item = this.item
-      const isShow = this.topMustExpand || !!this.parent
+      const hasParent = !!this.parent
+      const isShow = hasParent ? !hasParent : this.topMustExpand
       return isShow || this.hasChildren || item.async
     },
     showNextUl () {
