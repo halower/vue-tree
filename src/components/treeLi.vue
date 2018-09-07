@@ -129,7 +129,7 @@ export default {
     },
     showExpand () {
       const item = this.item
-      const isShow = this.topMustExpand || !!this.parent
+      const isShow = !this.parent ? this.topMustExpand : false
       return isShow || this.hasChildren || item.async
     },
     showNextUl () {
