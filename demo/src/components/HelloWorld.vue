@@ -66,9 +66,9 @@ export default {
     nodechekced (node, v) {
       alert('that a node-check envent ...' + node.title + v)
     },
+    // tpl (node, ctx, parent, index, props) {
     tpl (...args) {
-      // console.dir(args)
-      const {0: node, 2:parent} = args
+      let {0: node, 2: parent, 3: index} = args
       let titleClass = node.selected ? 'node-title node-selected' : 'node-title'
       if (node.searched) titleClass += ' node-searched'
       return <span>
@@ -77,12 +77,12 @@ export default {
            this.$refs.tree1.nodeSelected(node)
          }}></span>
       <button class="treebtn2" onClick={() => this.asyncLoad1(node)}>async</button>
-      <button class="treebtn3" onClick={() => this.$refs.tree1.delNode(parent, node)}>delete</button>
+      <button class="treebtn3" onClick={() => this.$refs.tree1.delNode(node, parent, index)}>delete</button>
       </span>
     },
     async asyncLoad1 (node) {
       this.$set(node, 'loading', true)
-      let pro = new Promise((resolve, reject) => {
+      let pro = new Promise(resolve => {
         setTimeout(resolve, 2000, ['async node1', 'async node2'])
       })
       this.$refs.tree1.addNodes(node, await pro)
@@ -90,16 +90,13 @@ export default {
     },
     async asyncLoad2 (node) {
       this.$set(node, 'loading', true)
-      let pro = await new Promise((resolve, reject) => {
+      let pro = await new Promise(resolve => {
         setTimeout(resolve, 2000, [{title: 'test1', async: true}, {title: 'test2', async: true}, {title: 'test3'}])
       })
-
-      pro.forEach((el) => {
-        if (!node.hasOwnProperty('children')) {
-          this.$set(node, 'children', [])
-        }
-        node.children.push(el)
-      })
+      if (!node.hasOwnProperty('children')) {
+        this.$set(node, 'children', [])
+      }
+      node.children.push(...pro)
       this.$set(node, 'loading', false)
     },
     search () {

@@ -60,6 +60,7 @@ Vue.use (VSelectTree)
 |loading | open load effect | Boolean | Y | false |
 |chkDisabled | disable the function of a check box for a node | Boolean | Y | false |
 |hasExpended | node has expended| Boolean | Y | false |
+|parent | get parent node(when `allowGetParentNode=true`,the node will add `parent`method)) | Function | - | undefined |
 
 ### Tree Property
 | Parameters | Description | Type | Optional values | default value |
@@ -73,6 +74,8 @@ Vue.use (VSelectTree)
 |dragafterexpanded | ro expand after dragging | Boolean | Y | true |
 |canDeleteRoot |  can delete the root node  | Boolean | Y | false |
 |maxLevel |  node max level | Number | Y | 1024 |
+|topMustExpand |  the top level must can expand | Boolean | Y | true |
+|allowGetParentNode |  allow get the parent node | Boolean | Y | false |
 ### method
 | Method name | Description | Parameters |
 |---------- |-------- |---------- |
