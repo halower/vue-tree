@@ -26,6 +26,7 @@
             @async-load-nodes='asyncLoadNodes'
             @node-expanded='asyncLoadNodes'
             @node-click='nodeClick'
+            @node-check='nodeClick'
             @drag-node-end='dragNodeEnd'
           />
         </div>
@@ -123,17 +124,19 @@ export default {
     /* @event passing the node-click event to the parent component
      * @param node clicked node
      */
-    nodeClick (node) {
-      if (node.selected) {
-        this.$set(node, 'selected', true)
-        this.$set(node, 'checked', true)
-      }
-      if (!this.multiple) this.selectedItems = []
-      if (node.selected && this.selectedItems.findIndex(txt => txt === node.title) === -1) {
-        this.selectedItems.push(node.title)
-      }
-      if (!node.selected) this.rmNode(node.title, true)
+    nodeClick (node, selected) {
+      this.getNewSelectedNodes()
       this.$emit('node-click', node)
+    },
+    getNewSelectedNodes () {
+      this.$nextTick(() => {
+        let checkedNode = []
+        if (this.multiple) {
+          checkedNode = this.$refs.dropTree.getCheckedNodes(true)
+        }
+        const selectedNode = this.$refs.dropTree.getSelectedNodes(true)
+        this.selectedItems = [...new Set([...selectedNode, ...checkedNode])].map(x => x.title)
+      })
     },
     /*
     * delete node tag from input
@@ -147,10 +150,7 @@ export default {
           this.$set(node, 'checked', false)
         }
       }
-      const idx = this.selectedItems.findIndex(x => x === text)
-      if (idx >= 0) {
-        this.selectedItems.splice(idx, 1)
-      }
+      this.getNewSelectedNodes()
     },
 
     /*
