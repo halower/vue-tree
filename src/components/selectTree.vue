@@ -3,7 +3,7 @@
       <div class="tag-box-container">
         <div class="tag-box" ref="txtbox" @click="open = !open" @mouseleave="leaveTextTag">
           <div class="tag blank" v-show="!selectedItems.length">{{pleasechoosetext}}</div>
-          <div class="tag" @click="tagClick($event)" ref='txttag' 
+          <div class="tag" @click.stop="tagClick($event)" ref='txttag' 
              v-for="(node, idx) in selectedItems" :key="idx"
           >
             {{node}}
