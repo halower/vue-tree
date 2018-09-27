@@ -126,16 +126,19 @@ export default {
      */
     nodeClick (node, selected) {
       this.getNewSelectedNodes()
-      this.$emit('node-click', node)
+      this.$emit('node-click', node, selected)
+    },
+    getSelectedAndCheckedNodes () {
+      let checkedNode = []
+      if (this.multiple) {
+        checkedNode = this.$refs.dropTree.getCheckedNodes(true)
+      }
+      const selectedNode = this.$refs.dropTree.getSelectedNodes(true)
+      return [...new Set([...selectedNode, ...checkedNode])]
     },
     getNewSelectedNodes () {
       this.$nextTick(() => {
-        let checkedNode = []
-        if (this.multiple) {
-          checkedNode = this.$refs.dropTree.getCheckedNodes(true)
-        }
-        const selectedNode = this.$refs.dropTree.getSelectedNodes(true)
-        this.selectedItems = [...new Set([...selectedNode, ...checkedNode])].map(x => x.title)
+        this.selectedItems = this.getSelectedAndCheckedNodes().map(x => x.title)
       })
     },
     /*
@@ -143,8 +146,7 @@ export default {
     */
     rmNode (text, eventFromNode) {
       if (!eventFromNode) {
-        // let node = this.$refs.dropTree.getCheckedNodes(true).find(x => x.title === text)
-        const node = this.$refs.dropTree.getSelectedNodes(true).find(x => x.title === text)
+        const node = this.getSelectedAndCheckedNodes().find(x => x.title === text)
         if (node) {
           this.$set(node, 'selected', false)
           this.$set(node, 'checked', false)
