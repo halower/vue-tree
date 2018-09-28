@@ -3,7 +3,7 @@
       <div class="tag-box-container">
         <div class="tag-box" ref="txtbox" @click="open = !open" @mouseleave="leaveTextTag">
           <div class="tag blank" v-show="!selectedItems.length">{{pleasechoosetext}}</div>
-          <div class="tag" @click="tagClick($event)" ref='txttag' 
+          <div class="tag" @click.stop="tagClick($event)" ref='txttag' 
              v-for="(node, idx) in selectedItems" :key="idx"
           >
             {{node}}
@@ -26,6 +26,7 @@
             @async-load-nodes='asyncLoadNodes'
             @node-expanded='asyncLoadNodes'
             @node-click='nodeClick'
+            @node-check='nodeClick'
             @drag-node-end='dragNodeEnd'
           />
         </div>
@@ -123,34 +124,35 @@ export default {
     /* @event passing the node-click event to the parent component
      * @param node clicked node
      */
-    nodeClick (node) {
-      if (node.selected) {
-        this.$set(node, 'selected', true)
-        this.$set(node, 'checked', true)
+    nodeClick (node, selected) {
+      this.getNewSelectedNodes()
+      this.$emit('node-click', node, selected)
+    },
+    getSelectedAndCheckedNodes () {
+      let checkedNode = []
+      if (this.multiple) {
+        checkedNode = this.$refs.dropTree.getCheckedNodes(true)
       }
-      if (!this.multiple) this.selectedItems = []
-      if (node.selected && this.selectedItems.findIndex(txt => txt === node.title) === -1) {
-        this.selectedItems.push(node.title)
-      }
-      if (!node.selected) this.rmNode(node.title, true)
-      this.$emit('node-click', node)
+      const selectedNode = this.$refs.dropTree.getSelectedNodes(true)
+      return [...new Set([...selectedNode, ...checkedNode])]
+    },
+    getNewSelectedNodes () {
+      this.$nextTick(() => {
+        this.selectedItems = this.getSelectedAndCheckedNodes().map(x => x.title)
+      })
     },
     /*
     * delete node tag from input
     */
     rmNode (text, eventFromNode) {
       if (!eventFromNode) {
-        // let node = this.$refs.dropTree.getCheckedNodes(true).find(x => x.title === text)
-        const node = this.$refs.dropTree.getSelectedNodes(true).find(x => x.title === text)
+        const node = this.getSelectedAndCheckedNodes().find(x => x.title === text)
         if (node) {
           this.$set(node, 'selected', false)
           this.$set(node, 'checked', false)
         }
       }
-      const idx = this.selectedItems.findIndex(x => x === text)
-      if (idx >= 0) {
-        this.selectedItems.splice(idx, 1)
-      }
+      this.getNewSelectedNodes()
     },
 
     /*
