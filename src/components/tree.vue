@@ -293,14 +293,14 @@ export default {
      /*
      *@method get Nodes that selected
      */
-    getSelectedNodes (isOriginal, ignoreInvisibleNode) {
+    getSelectedNodes (isOriginal, ignoreInvisibleNode = false) {
       return this.getNodes({selected: true}, this.data, isOriginal, ignoreInvisibleNode)
     },
 
     /*
      *@method get Nodes that checked
      */
-    getCheckedNodes (isOriginal, ignoreInvisibleNode) {
+    getCheckedNodes (isOriginal, ignoreInvisibleNode = false) {
       return this.getNodes({checked: true}, this.data, isOriginal, ignoreInvisibleNode)
     },
     /*
