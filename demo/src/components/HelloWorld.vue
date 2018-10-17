@@ -5,7 +5,7 @@
       <button class=" tree-search-btn" type="button" @click="search">search</button>
       <v-tree ref='tree1' :canDeleteRoot="true" :data='treeData1' :draggable='true' :tpl='tpl' :halfcheck='true' :multiple="true"/>
     </div>
-    <div class="tree3"><v-tree ref="tree2" :data='treeData2' :multiple='false' @node-check='nodechekced' @async-load-nodes='asyncLoad2'/></div>
+    <div class="tree3"><v-tree ref="tree2" :data='treeData2' :multiple='true' @node-check='nodechekced' @async-load-nodes='asyncLoad2'/></div>
     <div class="tree3"> <v-select-tree :data='treeData3' v-model='initSelected' :multiple="true"/></div>
  </div>
 </template>
@@ -64,7 +64,12 @@ export default {
   },
   methods: {
     nodechekced (node, v) {
-      alert('that a node-check envent ...' + node.title + v)
+      // if(v){
+      //   console.log(node)
+      //   this.$set(node, 'expanded', v)
+      //   this.asyncLoad2(node)
+      // }
+      // alert('that a node-check envent ...' + node.title + v)
     },
     // tpl (node, ctx, parent, index, props) {
     tpl (...args) {
@@ -81,14 +86,19 @@ export default {
       </span>
     },
     async asyncLoad1 (node) {
+      const {checked = false} = node
       this.$set(node, 'loading', true)
       let pro = new Promise(resolve => {
         setTimeout(resolve, 2000, ['async node1', 'async node2'])
       })
       this.$refs.tree1.addNodes(node, await pro)
       this.$set(node, 'loading', false)
+      if (checked) {
+        this.$refs.tree2.childCheckedHandle(node, checked)
+      }
     },
     async asyncLoad2 (node) {
+      const {checked = false} = node
       this.$set(node, 'loading', true)
       let pro = await new Promise(resolve => {
         setTimeout(resolve, 2000, [{title: 'test1', async: true}, {title: 'test2', async: true}, {title: 'test3'}])
@@ -98,6 +108,9 @@ export default {
       }
       node.children.push(...pro)
       this.$set(node, 'loading', false)
+      if (checked) {
+        this.$refs.tree2.childCheckedHandle(node, checked)
+      }
     },
     search () {
       this.$refs.tree1.searchNodes(this.searchword)
