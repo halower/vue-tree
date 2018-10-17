@@ -5,7 +5,7 @@
       <button class=" tree-search-btn" type="button" @click="search">search</button>
       <v-tree ref='tree1' :canDeleteRoot="true" :data='treeData1' :draggable='true' :tpl='tpl' :halfcheck='true' :multiple="true"/>
     </div>
-    <div class="tree3"><v-tree ref="tree2" :data='treeData2' :multiple='true' @node-check='nodechekced' @async-load-nodes='asyncLoad2'/></div>
+    <div class="tree3"><v-tree ref="tree2" :data='treeData2' :multiple='false' @node-check='nodechekced' @async-load-nodes='asyncLoad2'/></div>
     <div class="tree3"> <v-select-tree :data='treeData3' v-model='initSelected' :multiple="true"/></div>
  </div>
 </template>
@@ -64,12 +64,7 @@ export default {
   },
   methods: {
     nodechekced (node, v) {
-      // if(v){
-      //   console.log(node)
-      //   this.$set(node, 'expanded', v)
-      //   this.asyncLoad2(node)
-      // }
-      // alert('that a node-check envent ...' + node.title + v)
+      alert('that a node-check envent ...' + node.title + v)
     },
     // tpl (node, ctx, parent, index, props) {
     tpl (...args) {
