@@ -89,7 +89,7 @@ export default {
       this.$refs.tree1.addNodes(node, await pro)
       this.$set(node, 'loading', false)
       if (checked) {
-        this.$refs.tree2.childCheckedHandle(node, checked)
+        this.$refs.tree1.childCheckedHandle(node, checked)
       }
     },
     async asyncLoad2 (node) {
