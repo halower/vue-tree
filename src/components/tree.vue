@@ -233,15 +233,15 @@ export default {
      *@param data nodes
      *@param opt the options that filter the node
      */
-    getNodes (opt = {}, data, isOriginal) {
+    getNodes (opt = {}, data, isOriginal, ignoreInvisibleNode = false) {
       const optArr = Object.entries(opt)
       const hasOpt = optArr.length > 0
-      return this._getNodes(optArr, hasOpt, data, isOriginal)
+      return this._getNodes(optArr, hasOpt, data, isOriginal, ignoreInvisibleNode)
     },
 
     // opt: Array
-    _getNodes (opt, hasOpt, data = this.data, isOriginal = false, res = []) {
-      // let res = []
+    _getNodes (opt, hasOpt, data = this.data, isOriginal = false, ignoreInvisibleNode, res = []) {
+      // let res = [] 
       const _pushNode = (arr, node, isOrg) => {
         if (isOrg) {
           arr.push(node)
@@ -249,6 +249,7 @@ export default {
           const n = Object.assign({}, node)
           Reflect.deleteProperty(n, 'hasExpended')
           Reflect.deleteProperty(n, 'children')
+          Reflect.deleteProperty(n, 'parent')
           arr.push(n)
         }
       }
@@ -271,6 +272,10 @@ export default {
       const isMatchedNode = (node) => _isMatchedNode(node, opt)
 
       for (const node of data) {
+        const {children, visible = true} = node
+        if (ignoreInvisibleNode && !visible) {
+          continue
+        }
         if (hasOpt) {
           if(isMatchedNode(node)) {
             pushNode(node)
@@ -278,7 +283,6 @@ export default {
         } else {
           pushNode(node)
         }
-        const {children} = node
         if (children && children.length) {
           this._getNodes(opt, hasOpt, children, isOriginal, res)
         }
@@ -289,15 +293,15 @@ export default {
      /*
      *@method get Nodes that selected
      */
-    getSelectedNodes (isOriginal) {
-      return this.getNodes({selected: true}, this.data, isOriginal)
+    getSelectedNodes (isOriginal, ignoreInvisibleNode = false) {
+      return this.getNodes({selected: true}, this.data, isOriginal, ignoreInvisibleNode)
     },
 
     /*
      *@method get Nodes that checked
      */
-    getCheckedNodes (isOriginal) {
-      return this.getNodes({checked: true}, this.data, isOriginal)
+    getCheckedNodes (isOriginal, ignoreInvisibleNode = false) {
+      return this.getNodes({checked: true}, this.data, isOriginal, ignoreInvisibleNode)
     },
     /*
      *@method filter nessary nodes methods

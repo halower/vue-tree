@@ -79,8 +79,8 @@ Vue.use (VSelectTree)
 ### method
 | Method name | Description | Parameters |
 |---------- |-------- |---------- |
-| getSelectedNodes | returns an array of currently selected nodes | - |
-| getCheckedNodes | returns the array of nodes selected by the current check box | - |
+| getSelectedNodes | returns an array of currently selected nodes,isOriginal:false,ignoreInvisibleNode:false | isOriginal: Boolean,ignoreInvisibleNode: Boolean |
+| getCheckedNodes | returns the array of nodes selected by the current check box,isOriginal:false,ignoreInvisibleNode:false | isOriginal: Boolean,ignoreInvisibleNode: Boolean |
 | getNodes |the options objects such as {selected:true}, if empty, use {} | options|
 | searchNodes | filter:function/string (if it is a function, it will eventually return a Boolean type) |node|
 | nodeSelected | to select a node |node: Object|

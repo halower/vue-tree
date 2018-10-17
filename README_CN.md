@@ -79,9 +79,9 @@ Vue.use (VSelectTree)
 ### 方法
 | 方法名      | 说明    | 参数      |
 |---------- |-------- |---------- |
-| getSelectedNodes  | 返回目前被选中的节点所组成的数组 | - |
-| getCheckedNodes  | 返回目前复选框选中的节点组成的数组 | - |
-| getNodes | options: 可以包含一些过滤属性对象如{selected: true}，如果为空，请使用 {}; data: 数组,内容为[node,...],默认为传入的data数据;isOriginal:获取的数据是否保持原样,默认为false,会去掉`children``hasExpended`属性|options: Object, data: Array,isOriginal: Boolean|
+| getSelectedNodes  | 返回目前被选中的节点所组成的数组,isOriginal:默认false, ignoreInvisibleNode:默认false| isOriginal: Boolean,ignoreInvisibleNode: Boolean |
+| getCheckedNodes  | 返回目前复选框选中的节点组成的数组 | isOriginal: Boolean,ignoreInvisibleNode: Boolean |
+| getNodes | options: 可以包含一些过滤属性对象如{selected: true}，如果为空，请使用 {}; data: 数组,内容为[node,...],默认为传入的data数据;isOriginal:获取的数据是否保持原样,默认为false,会去掉`children``hasExpended``parent`属性,ignoreInvisibleNode:忽略不可见节点,默认false|options: Object, data: Array,isOriginal: Boolean,ignoreInvisibleNode: Boolean|
 | searchNodes | filter:function/string (如果是函数则最终会返回一个boolean类型);data:默认为this.data |filter:Function || String, data: Array|
 | nodeSelected | 选中节点方法 |node: Object|
 | addNode | 增加节点 |parentNode: Object(不能为空), node: Object|
