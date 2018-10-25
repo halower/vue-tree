@@ -160,7 +160,9 @@ export default {
         }
       }
       this.$set(node, 'selected', selected) // 只对当前的selected属性有效
-      this.childCheckedHandle(node, selected, this.halfcheck)
+      if (isMultiple) {
+        this.childCheckedHandle(node, selected, this.halfcheck)
+      }
       this.emitEventToParent('node-click', node, selected)
       this.emitEventToParent('node-select', node, selected)
     },
