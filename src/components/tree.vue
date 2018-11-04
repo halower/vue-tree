@@ -286,7 +286,7 @@ export default {
           pushNode(node)
         }
         if (children && children.length) {
-          this._getNodes(opt, hasOpt, children, isOriginal, res)
+          this._getNodes(opt, hasOpt, children, isOriginal, ignoreInvisibleNode, res)
         }
       }
       return res
