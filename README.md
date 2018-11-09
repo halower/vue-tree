@@ -76,12 +76,13 @@ Vue.use (VSelectTree)
 |maxLevel |  node max level | Number | Y | 1024 |
 |topMustExpand |  the top level must can expand | Boolean | Y | true |
 |allowGetParentNode |  allow get the parent node | Boolean | Y | false |
+|radio | the selected node only one | Boolean | Y | false |
 ### method
 | Method name | Description | Parameters |
 |---------- |-------- |---------- |
-| getSelectedNodes | returns an array of currently selected nodes,isOriginal:false,ignoreInvisibleNode:false | isOriginal: Boolean,ignoreInvisibleNode: Boolean |
-| getCheckedNodes | returns the array of nodes selected by the current check box,isOriginal:false,ignoreInvisibleNode:false | isOriginal: Boolean,ignoreInvisibleNode: Boolean |
-| getNodes |the options objects such as {selected:true}, if empty, use {} | options|
+| getSelectedNodes | returns an array of currently selected nodes,isOriginal:false, | isOriginal: Boolean, ignoreInvisibleNode: Boolean |
+| getCheckedNodes | returns the array of nodes selected by the current check box | isOriginal: Boolean,ignoreInvisibleNode: Boolean |
+| getNodes |the options objects such as {selected:true}, if empty, use {} | options: Object,data: Array, isOriginal: Boolean, ignoreInvisibleNode: Boolean|
 | searchNodes | filter:function/string (if it is a function, it will eventually return a Boolean type) |node|
 | nodeSelected | to select a node |node: Object|
 | addNode | add a node |parentNode: Object, node: Object|

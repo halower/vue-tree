@@ -14,7 +14,12 @@ export default {
       parentChecked: this.parentCheckedHandle,
       emitEventToTree: this.emitEventToParent,
       nodeSelected: this.nodeSelected,
-      setAttr: this.setAttr
+      setAttr: this.setAttr,
+    }
+  },
+  data () {
+    return {
+      radioNode: null // 单选节点
     }
   },
   props: {
@@ -43,6 +48,10 @@ export default {
       default: true
     },
     allowGetParentNode: { // 允许获取父节点
+      type: Boolean,
+      default: false
+    },
+    radio: { // 单选, selected节点至多可以选一个
       type: Boolean,
       default: false
     }
@@ -134,6 +143,15 @@ export default {
       const setAttr = this.setAttr
       attrs.forEach(attr => setAttr(node, attr, val))
     },
+    // 内部使用方法
+    updateRadioNode (node, selected = false ) {
+      if (!selected) return
+      const previousNode = this.radioNode
+      if (previousNode) {
+        this.setNodeAttr(previousNode, 'selected', !selected)
+      }
+      this.radioNode = node
+    },
     // 对外暴露的方法,通过ref访问
 
     // set node attr
@@ -158,6 +176,9 @@ export default {
         if (selected) {
           this.data.forEach(allNode => this.setAttr(allNode, 'selected', false))
         }
+      }
+      if (this.radio) {
+        this.updateRadioNode(node, selected)
       }
       this.$set(node, 'selected', selected) // 只对当前的selected属性有效
       if (isMultiple) {
