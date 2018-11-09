@@ -118,6 +118,8 @@ export default {
     emitEventToParent (eventName, ...args) {
       if (!eventName) return
       // 为了让接口更清晰
+      if('node-mouse-over' != eventName)
+      console.log('args', args)
       switch (eventName) {
         case 'node-mouse-over':
         case 'node-check':
@@ -167,7 +169,7 @@ export default {
      *@method change the node selected  method
      *@param node current node
      */
-    nodeSelected (node) {
+    nodeSelected (node, position) {
       const isMultiple = this.multiple
       const selected = !node.selected
       if (isMultiple) {
@@ -184,8 +186,8 @@ export default {
       if (isMultiple) {
         this.childCheckedHandle(node, selected, this.halfcheck)
       }
-      this.emitEventToParent('node-click', node, selected)
-      this.emitEventToParent('node-select', node, selected)
+      this.emitEventToParent('node-click', node, selected, position)
+      this.emitEventToParent('node-select', node, selected, position)
     },
 
     /* @method adding child node

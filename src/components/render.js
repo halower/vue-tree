@@ -6,10 +6,11 @@ export default {
     parent: null,
     tpl: Function,
     index: Number,
-    nodeMouseOver: Function
+    nodeMouseOver: Function,
+    level: Number,
   },
   render (h, ctx) {
-    const {node, parent, tpl, index, nodeMouseOver} = ctx.props
+    const {node, parent, tpl, index, nodeMouseOver, level} = ctx.props
     const {selected, selDisabled = false} = node
     let titleClass
     if (selDisabled) {
@@ -24,7 +25,7 @@ export default {
         style='user-select: none'
         onClick={() => {
           if (selDisabled) return
-          ctx.parent.nodeSelected(node)
+          ctx.parent.nodeSelected(node, {level, index})
         }}>
     </span>
   }

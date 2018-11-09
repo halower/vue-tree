@@ -93,9 +93,9 @@ Vue.use (VSelectTree)
 | 事件名      | 说明    | 参数      |
 |---------- |-------- |---------- |
 | node-click  | 单击节点触发的事件 | node: Object |
-| node-select  | 选择节点后触发的事件(和node-click是一样的) | node: Object, selected: boolean|
-| node-check | click the checkbox to trigger the event | node: Object, checked: boolean |
-| node-mouse-over | 鼠标滑过节点触发事件 | node: Object, index: Number, parentNode: node |
+| node-select  | 选择节点后触发的事件(和node-click是一样的)；position: 位置信息level：层级 | node: Object, selected: boolean, position: {level, index}|
+| node-check | click the checkbox to trigger the event | node: Object, checked: boolean, position: {level, index} |
+| node-mouse-over | 鼠标滑过节点触发事件 | node: Object, index: Number, parentNode: node, position: {level, index} |
 | async-load-nodes | 用于实现异步加载 | node: Object |
 | drag-node-end | 节点拖拽结束后触发事件 | {dragNode: Object, targetNode: Object} |
 | del-node | 删除节点后触发事件 | { parentNode: Object || null, delNode: Object } |

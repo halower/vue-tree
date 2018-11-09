@@ -14,7 +14,7 @@
           v-if='multiple' type="checkbox" @change="changeNodeCheckStatus(item, $event)" :checked="item.checked"/>
       </span>
       <loading v-if="item.loading && item.expanded"/>
-      <Render :node="item" :parent='parent' :index='index' :tpl ='tpl' :nodeMouseOver='nodeMouseOver'/>
+      <Render :node="item" :parent='parent' :index='index' :tpl ='tpl' :nodeMouseOver='nodeMouseOver' :level='level'/>
     </div>
     <template v-if="showNextUl">
       <collapse-transition>
@@ -202,7 +202,7 @@ export default {
     changeNodeCheckStatus (node, $event) {
       const checked = $event.target.checked
       this.nodeCheck(node, checked)
-      this.emitEventToTree('node-check', node, checked)
+      this.emitEventToTree('node-check', node, checked, {level: this.level, index: this.index})
     },
     theParentChecked(checked, halfcheck){
       const parentNode = this.parent
