@@ -78,6 +78,8 @@ Vue.use (VSelectTree)
 |topMustExpand |  the top level must can expand | Boolean | Y | true |
 |allowGetParentNode |  allow get the parent node | Boolean | Y | false |
 |radio | the selected node only one | Boolean | Y | false |
+|selectAlone | select is alone | Boolean | Y | false |
+
 ### method
 | Method name | Description | Parameters |
 |---------- |-------- |---------- |

@@ -76,7 +76,8 @@ Vue.use (VSelectTree)
 |maxLevel |  最大层级数 | Number | Y | 1024 |
 |topMustExpand |  首层是否必须可展开 | Boolean | Y | true |
 |allowGetParentNode |  是否允许节点获取父节点 | Boolean | Y | false |
-|radio | slected 只允许单选 | Boolean | Y | false |
+|radio | selected 只允许单选 | Boolean | Y | false |
+|selectAlone | select事件不影响checkbox | Boolean | Y | false |
 
 ### 方法
 | 方法名      | 说明    | 参数      |

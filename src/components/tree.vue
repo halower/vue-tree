@@ -54,6 +54,10 @@ export default {
     radio: { // 单选, selected节点至多可以选一个
       type: Boolean,
       default: false
+    },
+    selectAlone: { // select事件不影响checkbox
+      type: Boolean,
+      default: false
     }
   },
   beforeCreate () {
@@ -170,20 +174,16 @@ export default {
      *@param node current node
      */
     nodeSelected (node, position) {
-      const isMultiple = this.multiple
       const selected = !node.selected
-      if (isMultiple) {
+      const changeCheck = this.multiple && !this.selectAlone
+      if (changeCheck) {
         this.$set(node, 'checked', selected)
-      } else {
-        if (selected) {
-          this.data.forEach(allNode => this.setAttr(allNode, 'selected', false))
-        }
       }
       if (this.radio) {
         this.updateRadioNode(node, selected)
       }
       this.$set(node, 'selected', selected) // 只对当前的selected属性有效
-      if (isMultiple) {
+      if (changeCheck) {
         this.childCheckedHandle(node, selected, this.halfcheck)
       }
       this.emitEventToParent('node-click', node, selected, position)
