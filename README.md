@@ -95,7 +95,7 @@ Vue.use (VSelectTree)
 | node-click | click the node to trigger the event | node: Object |
 | node-select  | click the select to trigger the event | node: Object, selected: boolean, position: {level, index}|
 | node-check | click the checkbox to trigger the event | node: Object, checked: boolean, position: {level, index} |
-| node-mouse-over | over the node to trigger the event | node: Object, index: Number, parentNode: node |
+| node-mouse-over | over the node to trigger the event | node: Object, index: Number, parentNode: node, position: {level, index} |
 | async-load-nodes | event used to implement asynchronous loading | node: Object |
 | drag-node-end | drag node end trigger the event | {dragNode: Object, targetNode: Object} |
 | del-node | after delete a node | { parentNode: Object || null, delNode: Object } |
