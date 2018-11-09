@@ -652,6 +652,17 @@ export default {
 .halo-tree .node-title:hover{
   background-color: #ccc;
 }
+.halo-tree .node-title-disabled {
+    padding: 3px 3px;
+    border-radius: 3px;
+    background-color: #F5F5F5;
+    opacity: 1;
+    cursor: not-allowed;
+    margin: 0 2px;
+}
+.halo-tree .node-title-disabled:hover{
+  background-color: #F5F5F5;
+}
 .halo-tree .node-selected {
     border: 1px solid #DDDDDD;
     background-color: #DDDDDD;

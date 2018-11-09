@@ -61,6 +61,7 @@ Vue.use (VSelectTree)
 |chkDisabled | disable the function of a check box for a node | Boolean | Y | false |
 |hasExpended | node has expended| Boolean | Y | false |
 |parent | get parent node(when `allowGetParentNode=true`,the node will add `parent`method)) | Function | - | undefined |
+|selDisabled | disable the select function of a node| Boolean | Y | false |
 
 ### Tree Property
 | Parameters | Description | Type | Optional values | default value |

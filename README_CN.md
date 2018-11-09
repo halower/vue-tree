@@ -61,6 +61,7 @@ Vue.use (VSelectTree)
 |chkDisabled | 禁用某一结点的复选框的功能 | Boolean | Y | false |
 |hasExpended | 某一结点是否已经展开过 | Boolean | Y | false |
 |parent | 获取父节点(当allowGetParentNode=true时,增加parent方法,若父节点不存在时,会返回null)) | Function | - | undefined |
+|selDisabled | 禁用某一结点的select的功能 | Boolean | Y | false |
 ###  Tree 属性
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
 |---------- |-------- |---------- |---------- |---------- |
