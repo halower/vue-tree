@@ -61,6 +61,7 @@ Vue.use (VSelectTree)
 |chkDisabled | 禁用某一结点的复选框的功能 | Boolean | Y | false |
 |hasExpended | 某一结点是否已经展开过 | Boolean | Y | false |
 |parent | 获取父节点(当allowGetParentNode=true时,增加parent方法,若父节点不存在时,会返回null)) | Function | - | undefined |
+|selDisabled | 禁用某一结点的select的功能 | Boolean | Y | false |
 ###  Tree 属性
 | 参数      | 说明    | 类型      | 可选值 | 默认值  |
 |---------- |-------- |---------- |---------- |---------- |
@@ -75,6 +76,8 @@ Vue.use (VSelectTree)
 |maxLevel |  最大层级数 | Number | Y | 1024 |
 |topMustExpand |  首层是否必须可展开 | Boolean | Y | true |
 |allowGetParentNode |  是否允许节点获取父节点 | Boolean | Y | false |
+|radio | selected 只允许单选 | Boolean | Y | false |
+|selectAlone | select事件不影响checkbox | Boolean | Y | false |
 
 ### 方法
 | 方法名      | 说明    | 参数      |
@@ -91,9 +94,9 @@ Vue.use (VSelectTree)
 | 事件名      | 说明    | 参数      |
 |---------- |-------- |---------- |
 | node-click  | 单击节点触发的事件 | node: Object |
-| node-select  | 选择节点后触发的事件(和node-click是一样的) | node: Object, selected: boolean|
-| node-check | click the checkbox to trigger the event | node: Object, checked: boolean |
-| node-mouse-over | 鼠标滑过节点触发事件 | node: Object, index: Number, parentNode: node |
+| node-select  | 选择节点后触发的事件(和node-click是一样的)；position: 位置信息level：层级 | node: Object, selected: boolean, position: {level, index}|
+| node-check | click the checkbox to trigger the event | node: Object, checked: boolean, position: {level, index} |
+| node-mouse-over | 鼠标滑过节点触发事件 | node: Object, index: Number, parentNode: node, position: {level, index} |
 | async-load-nodes | 用于实现异步加载 | node: Object |
 | drag-node-end | 节点拖拽结束后触发事件 | {dragNode: Object, targetNode: Object} |
 | del-node | 删除节点后触发事件 | { parentNode: Object || null, delNode: Object } |

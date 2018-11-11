@@ -14,7 +14,12 @@ export default {
       parentChecked: this.parentCheckedHandle,
       emitEventToTree: this.emitEventToParent,
       nodeSelected: this.nodeSelected,
-      setAttr: this.setAttr
+      setAttr: this.setAttr,
+    }
+  },
+  data () {
+    return {
+      radioNode: null // 单选节点
     }
   },
   props: {
@@ -43,6 +48,14 @@ export default {
       default: true
     },
     allowGetParentNode: { // 允许获取父节点
+      type: Boolean,
+      default: false
+    },
+    radio: { // 单选, selected节点至多可以选一个
+      type: Boolean,
+      default: false
+    },
+    selectAlone: { // select事件不影响checkbox
       type: Boolean,
       default: false
     }
@@ -109,6 +122,8 @@ export default {
     emitEventToParent (eventName, ...args) {
       if (!eventName) return
       // 为了让接口更清晰
+      if('node-mouse-over' != eventName)
+      console.log('args', args)
       switch (eventName) {
         case 'node-mouse-over':
         case 'node-check':
@@ -134,6 +149,15 @@ export default {
       const setAttr = this.setAttr
       attrs.forEach(attr => setAttr(node, attr, val))
     },
+    // 内部使用方法
+    updateRadioNode (node, selected = false ) {
+      if (!selected) return
+      const previousNode = this.radioNode
+      if (previousNode) {
+        this.setNodeAttr(previousNode, 'selected', !selected)
+      }
+      this.radioNode = node
+    },
     // 对外暴露的方法,通过ref访问
 
     // set node attr
@@ -149,22 +173,21 @@ export default {
      *@method change the node selected  method
      *@param node current node
      */
-    nodeSelected (node) {
-      const isMultiple = this.multiple
+    nodeSelected (node, position) {
       const selected = !node.selected
-      if (isMultiple) {
+      const changeCheck = this.multiple && !this.selectAlone
+      if (changeCheck) {
         this.$set(node, 'checked', selected)
-      } else {
-        if (selected) {
-          this.data.forEach(allNode => this.setAttr(allNode, 'selected', false))
-        }
+      }
+      if (this.radio) {
+        this.updateRadioNode(node, selected)
       }
       this.$set(node, 'selected', selected) // 只对当前的selected属性有效
-      if (isMultiple) {
+      if (changeCheck) {
         this.childCheckedHandle(node, selected, this.halfcheck)
       }
-      this.emitEventToParent('node-click', node, selected)
-      this.emitEventToParent('node-select', node, selected)
+      this.emitEventToParent('node-click', node, selected, position)
+      this.emitEventToParent('node-select', node, selected, position)
     },
 
     /* @method adding child node
@@ -630,6 +653,17 @@ export default {
 }
 .halo-tree .node-title:hover{
   background-color: #ccc;
+}
+.halo-tree .node-title-disabled {
+    padding: 3px 3px;
+    border-radius: 3px;
+    background-color: #F5F5F5;
+    opacity: 1;
+    cursor: not-allowed;
+    margin: 0 2px;
+}
+.halo-tree .node-title-disabled:hover{
+  background-color: #F5F5F5;
 }
 .halo-tree .node-selected {
     border: 1px solid #DDDDDD;

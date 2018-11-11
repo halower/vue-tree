@@ -61,6 +61,7 @@ Vue.use (VSelectTree)
 |chkDisabled | disable the function of a check box for a node | Boolean | Y | false |
 |hasExpended | node has expended| Boolean | Y | false |
 |parent | get parent node(when `allowGetParentNode=true`,the node will add `parent`method)) | Function | - | undefined |
+|selDisabled | disable the select function of a node| Boolean | Y | false |
 
 ### Tree Property
 | Parameters | Description | Type | Optional values | default value |
@@ -76,12 +77,15 @@ Vue.use (VSelectTree)
 |maxLevel |  node max level | Number | Y | 1024 |
 |topMustExpand |  the top level must can expand | Boolean | Y | true |
 |allowGetParentNode |  allow get the parent node | Boolean | Y | false |
+|radio | the selected node only one | Boolean | Y | false |
+|selectAlone | select is alone | Boolean | Y | false |
+
 ### method
 | Method name | Description | Parameters |
 |---------- |-------- |---------- |
-| getSelectedNodes | returns an array of currently selected nodes,isOriginal:false,ignoreInvisibleNode:false | isOriginal: Boolean,ignoreInvisibleNode: Boolean |
-| getCheckedNodes | returns the array of nodes selected by the current check box,isOriginal:false,ignoreInvisibleNode:false | isOriginal: Boolean,ignoreInvisibleNode: Boolean |
-| getNodes |the options objects such as {selected:true}, if empty, use {} | options|
+| getSelectedNodes | returns an array of currently selected nodes,isOriginal:false, | isOriginal: Boolean, ignoreInvisibleNode: Boolean |
+| getCheckedNodes | returns the array of nodes selected by the current check box | isOriginal: Boolean,ignoreInvisibleNode: Boolean |
+| getNodes |the options objects such as {selected:true}, if empty, use {} | options: Object,data: Array, isOriginal: Boolean, ignoreInvisibleNode: Boolean|
 | searchNodes | filter:function/string (if it is a function, it will eventually return a Boolean type) |node|
 | nodeSelected | to select a node |node: Object|
 | addNode | add a node |parentNode: Object, node: Object|
@@ -91,8 +95,9 @@ Vue.use (VSelectTree)
 | Event name | Description | Parameters |
 |---------- |-------- |---------- |
 | node-click | click the node to trigger the event | node: Object |
-| node-check | click the checkbox to trigger the event | node: Object, checked: boolean |
-| node-mouse-over | over the node to trigger the event | node: Object, index: Number, parentNode: node |
+| node-select  | click the select to trigger the event | node: Object, selected: boolean, position: {level, index}|
+| node-check | click the checkbox to trigger the event | node: Object, checked: boolean, position: {level, index} |
+| node-mouse-over | over the node to trigger the event | node: Object, index: Number, parentNode: node, position: {level, index} |
 | async-load-nodes | event used to implement asynchronous loading | node: Object |
 | drag-node-end | drag node end trigger the event | {dragNode: Object, targetNode: Object} |
 | del-node | after delete a node | { parentNode: Object || null, delNode: Object } |
