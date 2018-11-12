@@ -99,8 +99,7 @@ export default {
   inject:['isLeaf', 'childChecked', 'parentChecked', 'nodeSelected', 'emitEventToTree', 'setAttr'],
   computed: {
     itemVisible() {
-      let {visible = true} = this.item
-      // visible = visible === false ? false : true
+      const {visible = true} = this.item
       return visible
     },
     hasExpended() { // 已经展开过
@@ -134,6 +133,9 @@ export default {
     },
     showNextUl () {
       return !this.isLeaf(this.item) && this.maxLevel > this.level && this.hasExpended
+    },
+    position () {
+      return {level: this.level, index: this.index}
     }
   },
   watch: {
@@ -167,11 +169,10 @@ export default {
       const expended = !node.expanded
       this.setAttr(node, 'expanded', expended)
       this.setAttr(node, 'hasExpended', true)
-      if(node.children || node.async) {
-        if (node.async && !node.children) {
-          this.emitEventToTree('async-load-nodes', node)
-        }
+      if (node.async && !node.children) {
+        this.emitEventToTree('async-load-nodes', node)
       }
+      this.emitEventToTree('node-expand', node, expended, this.position)
     },
     /* @event passing the node-check event to the parent component
      * @param node clicked node
@@ -202,7 +203,7 @@ export default {
     changeNodeCheckStatus (node, $event) {
       const checked = $event.target.checked
       this.nodeCheck(node, checked)
-      this.emitEventToTree('node-check', node, checked, {level: this.level, index: this.index})
+      this.emitEventToTree('node-check', node, checked, this.position)
     },
     theParentChecked(checked, halfcheck){
       const parentNode = this.parent

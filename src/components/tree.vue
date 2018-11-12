@@ -123,7 +123,6 @@ export default {
       if (!eventName) return
       // 为了让接口更清晰
       if('node-mouse-over' != eventName)
-      console.log('args', args)
       switch (eventName) {
         case 'node-mouse-over':
         case 'node-check':
@@ -132,6 +131,7 @@ export default {
         case 'node-click':
         case 'node-select': // 和 'node-click'一样,为了更好的语义化
         case 'async-load-nodes':
+        case 'node-expand':
           this.$emit(eventName, ...args)
           break
         default:

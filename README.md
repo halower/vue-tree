@@ -101,6 +101,8 @@ Vue.use (VSelectTree)
 | async-load-nodes | event used to implement asynchronous loading | node: Object |
 | drag-node-end | drag node end trigger the event | {dragNode: Object, targetNode: Object} |
 | del-node | after delete a node | { parentNode: Object || null, delNode: Object } |
+| node-expand  | click the expand to trigger the event | node: Object, expand: boolean, position: {level, index}|
+
 ### How to use
 
 Step1: install plugins
