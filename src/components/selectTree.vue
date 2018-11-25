@@ -15,19 +15,18 @@
         <div class="tree-box" v-show="open">
           <input class="search-input" v-model="searchword" v-show="searchable" @keyup.enter="searchNodes" type="text" :placeholder="searchtext">
           <v-tree ref='dropTree'
+            v-bind='vTreeObj'
+            v-on="$listeners"
             :data='data'
             :dragAfterExpanded="dragAfterExpanded"
             :draggable="draggable"
             :tpl ="tpl"
-            :halfcheck='halfcheck'
-            :scoped='scoped'
             :multiple="multiple"
             @dropTreeNodeChecked='nodeCheckStatusChange'
             @async-load-nodes='asyncLoadNodes'
             @node-expanded='asyncLoadNodes'
             @node-click='nodeClick'
             @node-check='nodeClick'
-            @drag-node-end='dragNodeEnd'
           />
         </div>
       </transition>
@@ -41,6 +40,7 @@ export default {
   model: {
     event: 'value-change'
   },
+  inheritAttrs: false,
   components: { VTree },
   data () {
     return {
@@ -95,16 +95,13 @@ export default {
       type: Boolean,
       default: true
     },
-    halfcheck: {
-      type: Boolean,
-      default: false
-    },
-    scoped: {
-      type: Boolean,
-      default: false
-    },
     tpl: Function,
     searchFilter: Function
+  },
+  computed: {
+    vTreeObj () {
+      return this.$attrs
+    }
   },
   methods: {
      /* @event passing the async-load-nodes event to the parent component
@@ -114,12 +111,6 @@ export default {
       if (node.async && !node.children) {
         this.$emit('async-load-nodes', node)
       }
-    },
-    /* @event passing the drag-node-end event to the parent component
-     * @param node clicked node
-    */
-    dragNodeEnd (event) {
-      this.$emit('drag-node-end', event)
     },
     /* @event passing the node-click event to the parent component
      * @param node clicked node
@@ -203,6 +194,9 @@ export default {
           this.initTreeStatus(node.children)
         }
       }
+    },
+    getTreeRef () {
+      return this.$refs.dropTree
     }
   }
 }
