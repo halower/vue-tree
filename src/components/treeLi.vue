@@ -207,14 +207,11 @@ export default {
     /* @event passing the node-check event to the parent component
      * @param node clicked node
      */
-    nodeCheck(node, checked) {
-      this.$set(node, "checked", checked);
-      if (!this.scoped) {
-        const halfcheck = this.halfcheck;
-        if (halfcheck) {
-          this.$set(node, "halfcheck", false);
-        }
-        this.childChecked(node, checked, halfcheck);
+    nodeCheck (node, checked) {
+      this.$set(node, 'checked', checked)
+      const halfcheck = this.halfcheck
+      if (halfcheck) {
+        this.$set(node, 'halfcheck', false)
       }
     },
     /* @event passing the node-mouse-over event to the parent component
@@ -239,11 +236,10 @@ export default {
       this.parentChecked(parentNode, checked, halfcheck);
     },
     checkedChange() {
-      const { checked = false } = this.item;
-      this.theParentChecked(checked, this.halfcheck);
-      // if (!checked) {
-      //   this.$set(this.item, 'selected', checked)
-      // }
+      if(!this.scoped) {
+       const { checked = false } = this.item;
+       this.theParentChecked(checked, this.halfcheck);
+      }
     }
   }
 };
