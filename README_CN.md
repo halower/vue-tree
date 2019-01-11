@@ -12,15 +12,6 @@
 [https://halower.github.io/vue-tree](http://120.77.84.4/)
 
 
-## Last Version Update Log
-1. 修复上一个版本（1.5.3）造成的单选模式下某些节点不能选中的bug
-2. 完善domo 示例
-### (Version 1.5.3)
-1. 新增 ```canDeleteRoot```选项，用以支持是否可以删除根节点
-2. 修复一级节点的```async```无效的bug
-### (Version 1.5.2)
-添加了一个 ```node-check``` 事件, 并移除了原有的```nodeChecked``` 事件，因为```nodeChecked``` 可能存在冒泡出发效果
-
 # SelectTree API （2018-4-15 ）
 最新的发布版本已经支持下拉树功能, 在基本属性和事件(与 [Tree API](https://github.com/halower/vue-tree/blob/master/README_CN.md#tree-api-%E6%96%87%E6%A1%A3)一致)不变的前提下扩展了如下 
 
