@@ -240,10 +240,9 @@ export default {
     },
     checkedChange() {
       const { checked = false } = this.item;
-      this.theParentChecked(checked, this.halfcheck);
-      // if (!checked) {
-      //   this.$set(this.item, 'selected', checked)
-      // }
+      if(!this.scoped) {
+        this.theParentChecked(checked, this.halfcheck);
+      }
     }
   }
 };
