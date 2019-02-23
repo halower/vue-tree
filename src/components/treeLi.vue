@@ -239,9 +239,12 @@ export default {
       this.parentChecked(parentNode, checked, halfcheck);
     },
     checkedChange() {
-      const { checked = false } = this.item;
-      if(!this.scoped) {
+      const { checked = false, parentCheckedToChildren = false } = this.item;
+      if(!this.scoped || !parentCheckedToChildren) {
         this.theParentChecked(checked, this.halfcheck);
+      }
+      if(parentCheckedToChildren) {
+        this.$delete(this.item, 'parentCheckedToChildren')
       }
     }
   }
