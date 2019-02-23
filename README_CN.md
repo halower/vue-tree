@@ -50,7 +50,7 @@ Vue.use (VSelectTree)
 |loading | 开启加载效果 | Boolean | Y | false |
 |nocheck | 多复选框开启时指定某一节点不渲染复选框 | Boolean | Y | false |
 |chkDisabled | 禁用某一结点的复选框的功能 | Boolean | Y | false |
-|hasExpended | 某一结点是否已经展开过 | Boolean | Y | false |
+|hasExpanded | 某一结点是否已经展开过(之前错误拼写成了hasExpended) | Boolean | Y | false |
 |parent | 获取父节点(当allowGetParentNode=true时,增加parent方法,若父节点不存在时,会返回null)) | Function | - | undefined |
 |selDisabled | 禁用某一结点的select的功能 | Boolean | Y | false |
 ###  Tree 属性
@@ -75,7 +75,7 @@ Vue.use (VSelectTree)
 |---------- |-------- |---------- |
 | getSelectedNodes  | 返回目前被选中的节点所组成的数组,isOriginal:默认false, ignoreInvisibleNode:默认false| isOriginal: Boolean,ignoreInvisibleNode: Boolean |
 | getCheckedNodes  | 返回目前复选框选中的节点组成的数组 | isOriginal: Boolean,ignoreInvisibleNode: Boolean |
-| getNodes | options: 可以包含一些过滤属性对象如{selected: true}，如果为空，请使用 {}; data: 数组,内容为[node,...],默认为传入的data数据;isOriginal:获取的数据是否保持原样,默认为false,会去掉`children``hasExpended``parent`属性,ignoreInvisibleNode:忽略不可见节点,默认false|options: Object, data: Array,isOriginal: Boolean,ignoreInvisibleNode: Boolean|
+| getNodes | options: 可以包含一些过滤属性对象如{selected: true}，如果为空，请使用 {}; data: 数组,内容为[node,...],默认为传入的data数据;isOriginal:获取的数据是否保持原样,默认为false,会去掉`children``hasExpanded``parent`属性,ignoreInvisibleNode:忽略不可见节点,默认false|options: Object, data: Array,isOriginal: Boolean,ignoreInvisibleNode: Boolean|
 | searchNodes | filter:function/string (如果是函数则最终会返回一个boolean类型);data:默认为this.data |filter:Function || String, data: Array|
 | nodeSelected | 选中节点方法 |node: Object|
 | addNode | 增加节点 |parentNode: Object(不能为空), node: Object|
