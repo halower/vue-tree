@@ -49,7 +49,7 @@ Vue.use (VSelectTree)
 |nocheck | specifies that a node does not render check box when multiple checkboxes are open | Boolean | Y | false |
 |loading | open load effect | Boolean | Y | false |
 |chkDisabled | disable the function of a check box for a node | Boolean | Y | false |
-|hasExpended | node has expended| Boolean | Y | false |
+|hasExpanded | node has expended| Boolean | Y | false |
 |parent | get parent node(when `allowGetParentNode=true`,the node will add `parent`method)) | Function | - | undefined |
 |selDisabled | disable the select function of a node| Boolean | Y | false |
 

@@ -126,10 +126,10 @@ export default {
       const { visible = true } = this.item;
       return visible;
     },
-    hasExpended() {
+    hasExpanded() {
       // 已经展开过
-      let { hasExpended = false, expanded = false } = this.item;
-      return this.itemVisible && (expanded || hasExpended);
+      let { hasExpanded = false, expanded = false } = this.item;
+      return this.itemVisible && (expanded || hasExpanded);
     },
     liClass() {
       const index = this.index;
@@ -161,7 +161,7 @@ export default {
       return (
         !this.isLeaf(this.item) &&
         this.maxLevel > this.level &&
-        this.hasExpended
+        this.hasExpanded
       );
     },
     position() {
@@ -198,7 +198,7 @@ export default {
     expandNode(node) {
       const expended = !node.expanded;
       this.setAttr(node, "expanded", expended);
-      this.setAttr(node, "hasExpended", true);
+      this.setAttr(node, "hasExpanded", true);
       if (node.async && !node.children) {
         this.emitEventToTree("async-load-nodes", node);
       }

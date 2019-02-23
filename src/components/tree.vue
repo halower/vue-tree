@@ -307,7 +307,7 @@ export default {
           arr.push(node);
         } else {
           const n = Object.assign({}, node);
-          Reflect.deleteProperty(n, "hasExpended");
+          Reflect.deleteProperty(n, "hasExpanded");
           Reflect.deleteProperty(n, "children");
           Reflect.deleteProperty(n, "parent");
           arr.push(n);
