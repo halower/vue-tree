@@ -7,16 +7,6 @@
 `
 The document is poorly written and you are welcome to refine your documentation in the process of using it to better help others.
 `
-## Last Version Update Log
-  adjusted some style problems, perfected the demo 
-### (Version 1.5.4)
-1. fix bugs that are not selected by some nodes in the radio mode caused by the previous version (1.5.3) 
-2. perfect Domo Example
-### (Version 1.5.3)
-1. add  ```canDeleteRoot``` option to support the removal of root nodes
-2. fix the ```async``` Invalid bug of the first level node
-### (Version 1.5.2)
-add a ```node-check``` event, ande remove ```nodeChecked``` event， because the ```nodeChecked``` event may be bubbling
 # Version: 2.x  ([中文文档](https://github.com/halower/vue2-tree/blob/master/README_CN.md))
 ```QQ Group: 255965810``` <br/>
 `we guess you may also see` [version 1.0](https://github.com/halower/vue2-tree/tree/1.x)
@@ -59,7 +49,7 @@ Vue.use (VSelectTree)
 |nocheck | specifies that a node does not render check box when multiple checkboxes are open | Boolean | Y | false |
 |loading | open load effect | Boolean | Y | false |
 |chkDisabled | disable the function of a check box for a node | Boolean | Y | false |
-|hasExpended | node has expended| Boolean | Y | false |
+|hasExpanded | node has expanded| Boolean | Y | false |
 |parent | get parent node(when `allowGetParentNode=true`,the node will add `parent`method)) | Function | - | undefined |
 |selDisabled | disable the select function of a node| Boolean | Y | false |
 
