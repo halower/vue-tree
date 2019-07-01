@@ -23,8 +23,8 @@ function hasInGenerations (root, node) {
       if (rn === node) return true
       if (rn.children) ret |= hasInGenerations(rn, node)
     }
-    return ret
   }
+  return ret
 }
 
 export default {
