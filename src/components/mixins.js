@@ -17,13 +17,14 @@ function getDragNode (guid) {
 }
 
 function hasInGenerations (root, node) {
+  let ret = false
   if (root.hasOwnProperty('children') && root.children) {
     for (let rn of root.children) {
       if (rn === node) return true
-      if (rn.children) return hasInGenerations(rn, node)
+      if (rn.children) ret |= hasInGenerations(rn, node)
     }
-    return false
   }
+  return ret
 }
 
 export default {
