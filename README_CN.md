@@ -95,14 +95,14 @@ Vue.use (VSelectTree)
 
 ### 如何使用
 
-Step1: install plugins
+Step1: install plugins （Vue Cli3 不需要,请查看demo）
 ```
 npm install babel-plugin-syntax-jsx babel-plugin-transform-vue-jsx babel-helper-vue-jsx-merge-props babel-preset-env --save-dev
 
 npm install vue-tree-halower  --save
 ```
 ```
-Step2: In your .babelrc
+Step2: In your .babelrc （Vue Cli3 不需要,请查看demo）
 ```
 {
   "presets": ["env"],
