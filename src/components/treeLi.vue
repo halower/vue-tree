@@ -171,7 +171,9 @@ export default {
   watch: {
     "item.checked": {
       handler() {
-        this.checkedChange();
+        if(!this.scoped) {
+          this.checkedChange();
+        }
       },
       immediate: true
     },
