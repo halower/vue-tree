@@ -9,7 +9,8 @@
       ></span>
       <span
         v-if="multiple && !item.nocheck"
-        :class="[item.checked ? (item.halfcheck ? 'box-halfchecked' : 'box-checked') : 'box-unchecked', 'inputCheck']"
+        class='inputCheck'
+        :class="spanInputClass"
       >
         <input
           :disabled="item.chkDisabled"
@@ -17,7 +18,7 @@
           v-if="multiple"
           type="checkbox"
           @change="changeNodeCheckStatus(item, $event)"
-          :checked="item.checked"
+          :checked="checkboxChecked"
         >
       </span>
       <loading v-if="item.loading && item.expanded"/>
@@ -166,6 +167,14 @@ export default {
     },
     position() {
       return { level: this.level, index: this.index };
+    },
+    checkboxChecked() {
+      const { checked, halfcheck } = this.item
+      return checked || halfcheck
+    },
+    spanInputClass () {
+      const { checked, halfcheck } = this.item
+      return checked ? 'box-checked' : halfcheck ? 'box-halfchecked' : 'box-unchecked'
     }
   },
   watch: {
