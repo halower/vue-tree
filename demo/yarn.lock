@@ -6121,6 +6121,9 @@ schema-utils@1.0.0, schema-utils@^1.0.0:
 schema-utils@^0.4.0, schema-utils@^0.4.2, schema-utils@^0.4.4, schema-utils@^0.4.5:
   version "0.4.7"
   resolved "http://registry.npm.taobao.org/schema-utils/download/schema-utils-0.4.7.tgz#ba74f597d2be2ea880131746ee17d0a093c68187"
+  dependencies:
+    ajv "^6.1.0"
+    ajv-keywords "^3.1.0"
 
 select-hose@^2.0.0:
   version "2.0.0"
@@ -7008,9 +7011,10 @@ vue-template-es2015-compiler@^1.6.0:
   version "1.6.0"
   resolved "http://registry.npm.taobao.org/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.6.0.tgz#dc42697133302ce3017524356a6c61b7b69b4a18"
 
-vue-tree-halower@^1.6.1:
-  version "1.6.1"
-  resolved "http://registry.npm.taobao.org/vue-tree-halower/download/vue-tree-halower-1.6.1.tgz#00ce725c68c74b96523fdf5d38b1f6b5f7a74eb5"
+vue-tree-halower@^1.8.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/vue-tree-halower/-/vue-tree-halower-1.8.1.tgz#813d3de1f6f7bc8a87fc514b2c3ffd8334bdc159"
+  integrity sha512-bMM3nF80aLpwMwxnKObJLLert/EozvSOQeOCHZsOKGItlH5vzmqo3sLWikPTdF8tmF1cLZYi1phUuC2IJXOjvg==
   dependencies:
     vue "^2.4.4"
 

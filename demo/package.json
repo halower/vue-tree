@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start": "vue-cli-service serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "vue": "^2.5.17",
-    "vue-tree-halower": "^1.7.2"
+    "vue-tree-halower": "^1.8.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.1",

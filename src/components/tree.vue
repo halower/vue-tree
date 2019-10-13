@@ -106,15 +106,15 @@ export default {
       }
     },
     parentCheckedHandle(parentNode, checked, halfcheck = false) {
-      if (!parentNode || parentNode.chkDisabled || !!parentNode.checked === checked ) return false;
-      let [someBortherNodeChecked, allBortherNodeChecked] = [checked, checked];
+      if (!parentNode || parentNode.chkDisabled ) return false;
+      let someBortherNodeChecked = checked, allBortherNodeChecked = checked;
       const childNodes = parentNode.children
       if (checked) {
-        allBortherNodeChecked = childNodes.every(
-          child => child.checked && !child.halfcheck
-        );
+        allBortherNodeChecked = childNodes.every(child => child.checked);
       } else {
-        someBortherNodeChecked = childNodes.some(child => child.checked);
+        someBortherNodeChecked = childNodes.some(({ checked, halfcheck: itemHalfCheck }) => {
+          return checked || ( halfcheck && itemHalfCheck)
+        });
       }
       if (halfcheck) {
         // all / some / none
@@ -127,8 +127,7 @@ export default {
         } else if (nodeHalfcheck) {
           return false;
         }
-        const parentChecked = checked || nodeHalfcheck;
-        this.$set(parentNode, "checked", parentChecked);
+        this.$set(parentNode, "checked", allBortherNodeChecked);
       } else {
         this.$set(parentNode, "checked", allBortherNodeChecked);
       }
