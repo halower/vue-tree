@@ -21,7 +21,7 @@ The document is poorly written and you are welcome to refine your documentation 
 |searchable | Search Functionality Required | Boolean | Y |true |
 |pleasechoosetext | Dropdown box default prompts this article | String | Y |Please choose ... |
 |searchtext | Search box default prompts this article | String | Y |Search ... | 
-|searchfilter | Custom search pull down tree filter function | Function | Y |Node => mode.title.indexOf (This.searchworld) > 1 | 
+|searchfilter | Custom search pull down tree filter function | Function | Y |node => node.title.indexOf (This.searchworld) > 1 | 
  ## Effect Chart (no demo here, other effects like Onlinedemo)
 ![](https://github.com/halower/vue-tree/blob/master/screenshots/selectTree.png)
 ### How to use
