@@ -13,7 +13,7 @@ The document is poorly written and you are welcome to refine your documentation 
 # Online Demo
 [https://halower.github.io/vue-tree](http://120.77.84.4/)
 
-# SelectTree API (2018-4-15)
+# SelectTree API
  The latest release has the ability to support the dropdown tree, extending the following with the same basic attributes and events (consistent with the [Tree API](https://github.com/halower/vue-tree#tree-api-doc)) 
  
 | Parameters | Description | Type | Optional value |Default value |
